@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac;
 
-
-namespace Infrastructure.UI.Core
+namespace Infrastructure.Kernel
 {
-	public class UIContainer : Module
+	public interface IStartStop
 	{
-
+		public void Start();
+		public void Stop();
 	}
 }
