@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Infrastructure.UI.Core.Interfaces;
+using Infrastructure.UI.TelegramBot;
+using System;
 
 namespace MultiBot
 {
@@ -6,7 +8,15 @@ namespace MultiBot
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			IHandlerInstance telegramBot = new TelegramBotHandlerInstance();
+
+			LoopConsoleClosing();
+		}
+		static void LoopConsoleClosing()
+		{
+			while (Console.ReadKey().Key != ConsoleKey.Escape)
+			{ }
+			Console.WriteLine("");
 		}
 	}
 }
