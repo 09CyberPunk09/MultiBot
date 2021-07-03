@@ -9,7 +9,8 @@ namespace MultiBot
 		static void Main(string[] args)
 		{
 			IHandlerInstance telegramBot = new TelegramBotHandlerInstance();
-
+			telegramBot.Start();
+			Console.WriteLine("The bot started succesfully");
 			LoopConsoleClosing();
 		}
 		static void LoopConsoleClosing()

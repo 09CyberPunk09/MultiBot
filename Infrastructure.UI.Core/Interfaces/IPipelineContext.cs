@@ -10,5 +10,7 @@ namespace Infrastructure.UI.Core.Interfaces
 	{
 		object Message { get; set; }
 		DateTime TimeStamp { get; set; }
+		bool MoveNext { get; set; }
+		object Recipient { get; set; }
 	}
 }

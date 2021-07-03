@@ -1,10 +1,7 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 
 namespace Infrastructure.UI.TelegramBot
 {
@@ -12,9 +9,16 @@ namespace Infrastructure.UI.TelegramBot
 	{
 		ITelegramBotClient _uiClient;
 
-		public int SendMessage(IContentResult message)
+		public MessageSender(ITelegramBotClient uiClient)
 		{
-
+			_uiClient = uiClient;
+		}
+		public int SendMessage(IContentResult message,IPipelineContext ctx)
+		{
+			var chat = ctx.Recipient as ChatId;
+			_uiClient.SendTextMessageAsync(
+				chatId: chat, 
+				text: message.Text as string);
 			return 0;
 		}
 

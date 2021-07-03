@@ -1,9 +1,7 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
+using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.UI.TelegramBot.MessagePipelines;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Telegram.Bot;
 
 namespace Infrastructure.UI.TelegramBot
@@ -11,13 +9,28 @@ namespace Infrastructure.UI.TelegramBot
 	public class TelegramBotMessageReceiver : IMessageReceiver
 	{
 		ITelegramBotClient _uiClient;
+		IResultSender _sender;
 
-		public TelegramBotMessageReceiver(ITelegramBotClient uiClient)
-			=> (_uiClient) = (uiClient);
+		public TelegramBotMessageReceiver(ITelegramBotClient uiClient, IResultSender sender)
+		{
+			(_uiClient, _sender) = (uiClient, sender);
+			DefaultPipeline.IsLooped = true;
+			DefaultPipeline.RegisterPipelineStages();
 
+		}
+		public IMessagePipeline DefaultPipeline = new HelloMessagePipeline();
 		public void ConsumeMessage(object message)
 		{
-			throw new NotImplementedException();
+			var tgMessage = message as Telegram.Bot.Types.Message;
+			PipelineContext ctx = new PipelineContext()
+			{
+				Message = tgMessage.Text,
+				MoveNext = true,
+				Recipient = new Telegram.Bot.Types.ChatId(tgMessage.Chat.Id),
+				TimeStamp = DateTime.Now
+			};
+			var result =  DefaultPipeline.ExecuteCurrent(ctx);
+			_sender.SendMessage(result, ctx);
 		}
 
 		public void Start()
