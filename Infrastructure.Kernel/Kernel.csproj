@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
@@ -29,11 +28,6 @@
     </PackageReference>
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.UI.Core.csproj" />
-    <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.UI.TelegramBot.csproj" />
   </ItemGroup>
 
 </Project>

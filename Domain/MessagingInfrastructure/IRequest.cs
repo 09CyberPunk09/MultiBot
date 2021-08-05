@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Features.DataStructures
+namespace Domain.MessagingInfrastructure
 {
-	public class ListDataStructure
+	public interface IRequest
 	{
-		
 	}
 }

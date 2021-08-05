@@ -23,7 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{08958154-A89B-4AEE-9E54-F028076E530A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Kernel", "Infrastructure.Kernel\Infrastructure.Kernel.csproj", "{61C35052-3E7C-4F08-8673-5CC0249BF898}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Infrastructure.Kernel\Kernel.csproj", "{61C35052-3E7C-4F08-8673-5CC0249BF898}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Caching.Redis", "Persistence.Caching.Redis\Persistence.Caching.Redis.csproj", "{EF069282-47EA-4529-8C2F-EB0235D508D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{61C35052-3E7C-4F08-8673-5CC0249BF898}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C35052-3E7C-4F08-8673-5CC0249BF898}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C35052-3E7C-4F08-8673-5CC0249BF898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{08958154-A89B-4AEE-9E54-F028076E530A} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{61C35052-3E7C-4F08-8673-5CC0249BF898} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
+		{EF069282-47EA-4529-8C2F-EB0235D508D1} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}
