@@ -10,10 +10,10 @@ namespace Infrastructure.UI.Core.MessagePipelines
 	//todo: create an attrinute with a number which will indicate the position in the list of stages instead of manual adding them into the list
 	public class MessagePipelineBase : IMessagePipeline
 	{
-		public Func<IPipelineContext, IContentResult> Current { get; set; }
-		public List<Func<IPipelineContext, IContentResult>> Stages { get; set; }
+		public Func<IMessageContext, IContentResult> Current { get; set; }
+		public List<Func<IMessageContext, IContentResult>> Stages { get; set; }
 		public bool IsLooped { get; set; }
-		public Action<IContentResult, IPipelineContext> StagePostAction { get; set; }
+		public Action<IContentResult, IMessageContext> StagePostAction { get; set; }
 		public int CurrentActionIndex { get; set; }
 		public bool IsDone { get; set; }
 
@@ -32,7 +32,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 			ConfigureBasicPostAction();
 		}
 
-		public IContentResult ExecuteCurrent(IPipelineContext ctx)
+		public IContentResult ExecuteCurrent(IMessageContext ctx)
 		{
 			//try
 			//{
@@ -49,7 +49,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 
 		public void ConfigureBasicPostAction()
 		{
-			StagePostAction = (IContentResult r, IPipelineContext ctx) =>
+			StagePostAction = (IContentResult r, IMessageContext ctx) =>
 			{
 				ctx.MoveNext = true;
 				if (CurrentActionIndex+1 == Stages.Count)

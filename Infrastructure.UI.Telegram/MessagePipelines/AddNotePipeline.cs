@@ -12,7 +12,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
 	public class AddNotePipeline : MessagePipelineBase
 	{
-		MediatR.IMediator _mediator;
+		private readonly MediatR.IMediator _mediator;
 		public AddNotePipeline(MediatR.IMediator mediator) =>
 			(_mediator) = (mediator);
 		public override void RegisterPipelineStages()
@@ -23,7 +23,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 			IsLooped = true;
 		}
 
-		private IContentResult SaveNote(IPipelineContext ctx)
+		private IContentResult SaveNote(IMessageContext ctx)
 		{
 
 			_mediator.Send(new CreateNoteRequest());

@@ -9,6 +9,6 @@ namespace Infrastructure.UI.Core.Interfaces
 {
 	public interface IResultSender : IStartStop
 	{
-		int SendMessage(IContentResult message, IPipelineContext ctx);
+		int SendMessage(IContentResult message, IMessageContext ctx);
 	}
 }

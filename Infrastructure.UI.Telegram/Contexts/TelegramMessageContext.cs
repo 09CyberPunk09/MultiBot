@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.UI.TelegramBot
 {
-	public class PipelineContext : IPipelineContext
+	public class TelegramMessageContext : IMessageContext
 	{
 		public object Message { get ; set; }
 		public DateTime TimeStamp { get; set; }

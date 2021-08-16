@@ -13,7 +13,7 @@ namespace Infrastructure.UI.TelegramBot
 		{
 			_uiClient = uiClient;
 		}
-		public int SendMessage(IContentResult message,IPipelineContext ctx)
+		public int SendMessage(IContentResult message,IMessageContext ctx)
 		{
 			var chat = ctx.Recipient as ChatId;
 			_uiClient.SendTextMessageAsync(

@@ -22,7 +22,7 @@ namespace Infrastructure.UI.TelegramBot
 		public void ConsumeMessage(object message)
 		{
 			var tgMessage = message as Telegram.Bot.Types.Message;
-			PipelineContext ctx = new PipelineContext()
+			TelegramMessageContext ctx = new TelegramMessageContext()
 			{
 				Message = tgMessage.Text,
 				MoveNext = true,

@@ -20,9 +20,9 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 			CurrentActionIndex = 0;
 		}
 
-		private IContentResult SayHello(IPipelineContext ctx) => new TextResult() { Text = "1.Hello" };
-		private IContentResult SayGoodbye(IPipelineContext ctx) => new TextResult() { Text = "3.Bye" };
-		private IContentResult SayWhatsUp(IPipelineContext ctx) => new TextResult() { Text = "2.What's Up?" };
+		private IContentResult SayHello(IMessageContext ctx) => new TextResult() { Text = "1.Hello" };
+		private IContentResult SayGoodbye(IMessageContext ctx) => new TextResult() { Text = "3.Bye" };
+		private IContentResult SayWhatsUp(IMessageContext ctx) => new TextResult() { Text = "2.What's Up?" };
 
 	}
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.UI.Core.Interfaces
 {
-	public interface IPipelineContext
+	public interface IMessageContext
 	{
 		object Message { get; set; }
 		DateTime TimeStamp { get; set; }

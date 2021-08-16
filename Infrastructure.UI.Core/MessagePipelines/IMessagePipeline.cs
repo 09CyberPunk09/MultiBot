@@ -11,13 +11,13 @@ namespace Infrastructure.UI.Core.MessagePipelines
 	/// </summary>
 	public interface IMessagePipeline
 	{
-		Func<IPipelineContext, IContentResult> Current { get; set; }
+		Func<IMessageContext, IContentResult> Current { get; set; }
 
-		List<Func<IPipelineContext, IContentResult>> Stages { get; set; }
+		List<Func<IMessageContext, IContentResult>> Stages { get; set; }
 
-		Action<IContentResult, IPipelineContext> StagePostAction { get; set; }
+		Action<IContentResult, IMessageContext> StagePostAction { get; set; }
 
-		IContentResult ExecuteCurrent(IPipelineContext ctx);
+		IContentResult ExecuteCurrent(IMessageContext ctx);
 		//todo: move call to ctor
 		void RegisterPipelineStages();
 
