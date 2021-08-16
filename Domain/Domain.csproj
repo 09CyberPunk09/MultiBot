@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Commands\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <None Remove="Commands\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
@@ -32,11 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.Kernel\Kernel.csproj" />
-    <ProjectReference Include="..\Infrastructure\Persistence.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\" />
+    <ProjectReference Include="..\Infrastructure.Sql\Persistence.Sql.csproj" />
   </ItemGroup>
 
 </Project>
