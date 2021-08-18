@@ -8,6 +8,5 @@ namespace Infrastructure.UI.Core.Interfaces
 {
 	public interface IContentResult
 	{
-		public string Text { get; set; }
 	}
 }

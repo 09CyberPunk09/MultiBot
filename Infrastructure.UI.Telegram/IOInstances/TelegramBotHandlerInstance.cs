@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Domain;
 using Infrastructure.UI.Core.Interfaces;
-using Kernel;
 using Microsoft.Extensions.Configuration;
 using Persistence.Sql;
 using System;
@@ -34,11 +33,12 @@ namespace Infrastructure.UI.TelegramBot
 			_ = _containerBuider.RegisterType<MessageSender>().As<IResultSender>().SingleInstance();
 
 
+			_ = _containerBuider.RegisterModule<PersistenceModule>();
 			_ = _containerBuider.RegisterModule<PipelinesModule>();
 			//handlers
 			_ = _containerBuider.RegisterModule<DomainModule>();
 
-			_ = _containerBuider.RegisterModule<PersistenceModule>();
+
 		}
 
 

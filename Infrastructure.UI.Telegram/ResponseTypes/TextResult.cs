@@ -4,6 +4,6 @@ namespace Infrastructure.UI.TelegramBot.ResponseTypes
 {
 	public class TextResult : IContentResult
 	{
-		public string Text { get; set; }
+		public Message TextMessage { get; set; }
 	}
 }

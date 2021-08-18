@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core.Lifetime;
+using Domain.Features.Notes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
@@ -17,7 +18,7 @@ namespace Infrastructure.UI.TelegramBot
 		{
 
 			(_uiClient, _sender, _lifetimeScope) = (uiClient, sender,scope);
-			DefaultPipeline = scope.Resolve<AddNotePipeline>();
+			DefaultPipeline = scope.Resolve<GetNotesPipeline>();
 			DefaultPipeline.IsLooped = true;
 			DefaultPipeline.RegisterPipelineStages();
 

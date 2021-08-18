@@ -11,10 +11,9 @@ namespace Persistence.Sql.Repositories
 	public class NoteRepositry : IRepository<Note>
 	{
 		private readonly SqlServerDbContext _context;
-		public NoteRepositry(SqlServerDbContext context)
-		{
-			_context = context;
-		}
+		public NoteRepositry(SqlServerDbContext context) =>
+			(_context) = (context);
+		
 		public void Add(Note note)
 		{
 			//todo: set as default in entityconfigs
@@ -33,14 +32,8 @@ namespace Persistence.Sql.Repositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<Note> GetAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public int SaveChanges()
-		{
-			return _context.SaveChanges();
-		}
+		public IEnumerable<Note> GetAll() => _context.Notes.AsEnumerable();
+		
+		public int SaveChanges() => _context.SaveChanges();
 	}
 }
