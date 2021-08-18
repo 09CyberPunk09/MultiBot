@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using Domain;
 using Infrastructure.UI.Core.Interfaces;
+using Kernel;
 using Microsoft.Extensions.Configuration;
+using Persistence.Sql;
 using System;
 using Telegram.Bot;
 
@@ -12,23 +15,43 @@ namespace Infrastructure.UI.TelegramBot
 
 		public IMessageReceiver Receiver { get; }
 
-		public void Start()
+		//todo: remove 
+		private ContainerBuilder _containerBuider;
+
+
+		private void LoadModules()
 		{
-			ContainerBuilder scopeBuilder = new ContainerBuilder();
-			
+			_containerBuider = new ContainerBuilder();
+
 			var configurationBuilder = new ConfigurationBuilder()
 				.AddJsonFile("config.json");
 
-			_ = scopeBuilder.RegisterInstance(configurationBuilder.Build()).SingleInstance();
-		
-			//Telegram bot direct deps
-			_ = scopeBuilder.RegisterInstance<TelegramBotClient>(ConfigureApiClient()).As<ITelegramBotClient>().SingleInstance();
-			_ = scopeBuilder.RegisterType<TelegramBotMessageReceiver>().As<IMessageReceiver>().SingleInstance();
-			_ = scopeBuilder.RegisterType<MessageSender>().As<IResultSender>().SingleInstance();
+			_ = _containerBuider.RegisterInstance(configurationBuilder.Build()).SingleInstance();
 
-			var container = scopeBuilder.Build();
+			//Telegram bot direct deps
+			_ = _containerBuider.RegisterInstance<TelegramBotClient>(ConfigureApiClient()).As<ITelegramBotClient>().SingleInstance();
+			_ = _containerBuider.RegisterType<TelegramBotMessageReceiver>().As<IMessageReceiver>().SingleInstance();
+			_ = _containerBuider.RegisterType<MessageSender>().As<IResultSender>().SingleInstance();
+
+
+			_ = _containerBuider.RegisterModule<PipelinesModule>();
+			//handlers
+			_ = _containerBuider.RegisterModule<DomainModule>();
+
+			_ = _containerBuider.RegisterModule<PersistenceModule>();
+		}
+
+
+		public void Start()
+		{
+			LoadModules();
+			var container = _containerBuider.Build();
+			//TODO: Resolve
+			var accessor = container.Resolve<DependencyAccessor>();
+
+
 			container.Resolve<IMessageReceiver>().Start();
-		//	container.Resolve<IResultSender>().Start();
+			//container.Resolve<IResultSender>().Start();
 
 		}
 

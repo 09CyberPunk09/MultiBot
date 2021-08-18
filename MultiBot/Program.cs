@@ -1,4 +1,5 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Domain;
+using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.TelegramBot;
 using System;
 
@@ -8,8 +9,9 @@ namespace MultiBot
 	{
 		static void Main(string[] args)
 		{
-			IHandlerInstance telegramBot = new TelegramBotHandlerInstance();
+			var telegramBot = new TelegramBotHandlerInstance();
 			telegramBot.Start();
+
 			Console.WriteLine("The bot started succesfully");
 			LoopConsoleClosing();
 		}

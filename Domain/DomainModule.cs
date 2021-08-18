@@ -1,18 +1,16 @@
 ﻿using Autofac;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain
 {
-	public class DomainModule : Module
+	public class DomainModule : Autofac.Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterMediatR(typeof(DomainModule).Assembly);
+			_ = builder.RegisterMediatR(GetType().Assembly);
+			_ = builder.RegisterType<DependencyAccessor>().SingleInstance();
+	
 			base.Load(builder);
 		}
 	}

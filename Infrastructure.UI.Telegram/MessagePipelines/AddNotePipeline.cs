@@ -1,6 +1,7 @@
 ﻿using Domain.Features.Notes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.UI.TelegramBot.ResponseTypes;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 		public override void RegisterPipelineStages()
 		{
 			InitBaseComponents();
+			Stages.Add(SaveNote);
 			Current = Stages.First();
 			CurrentActionIndex = 0;
 			IsLooped = true;
@@ -26,9 +28,9 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 		private IContentResult SaveNote(IMessageContext ctx)
 		{
 
-			_mediator.Send(new CreateNoteRequest());
+			_mediator.Send(new CreateNoteRequest() { Text = ctx.Message as string });
 			//new CreateNoteRequest() { Text = (ctx.Message as Telegram.Bot.Types.Message).Text }
-			return null;
+			return new TextResult() { Text = "Yeah" };
 		}
 
 

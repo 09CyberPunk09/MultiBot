@@ -1,10 +1,7 @@
 ﻿using Autofac;
-using Persistence.Sql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Persistence.Core;
+using Persistence.Core.Entites;
+using Persistence.Sql.Repositories;
 
 namespace Persistence.Sql
 {
@@ -12,7 +9,9 @@ namespace Persistence.Sql
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SqlServerDbContext>().InstancePerLifetimeScope();
+			_ = builder.RegisterType<SqlServerDbContext>().InstancePerLifetimeScope();
+			//todo: change to gettin all types from assembly which implements a iface
+			_ = builder.RegisterType<NoteRepositry>().As<IRepository<Note>>().InstancePerLifetimeScope();
 			base.Load(builder);
 		}
 	}

@@ -10,16 +10,17 @@ namespace Persistence.Sql.Repositories
 {
 	public class NoteRepositry : IRepository<Note>
 	{
-		//injecvt context
-		public NoteRepositry()
+		private readonly SqlServerDbContext _context;
+		public NoteRepositry(SqlServerDbContext context)
 		{
-
+			_context = context;
 		}
 		public void Add(Note note)
 		{
 			//todo: set as default in entityconfigs
 			note.Id = Guid.NewGuid();
 			note.LastModification = DateTime.Now;
+			_context.Notes.Add(note);
 		}
 
 		public Note Find(Guid Id)
@@ -39,7 +40,7 @@ namespace Persistence.Sql.Repositories
 
 		public int SaveChanges()
 		{
-			throw new NotImplementedException();
+			return _context.SaveChanges();
 		}
 	}
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Sql
 {
-	class SqlServerDbContext : DbContext
+	public class SqlServerDbContext : DbContext
     {
         //todo: put into config.json
         private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-devDb;";

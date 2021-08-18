@@ -1,4 +1,6 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Autofac;
+using Autofac.Core.Lifetime;
+using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
 using System;
@@ -8,17 +10,19 @@ namespace Infrastructure.UI.TelegramBot
 {
 	public class TelegramBotMessageReceiver : IMessageReceiver
 	{
-		ITelegramBotClient _uiClient;
-		IResultSender _sender;
-
-		public TelegramBotMessageReceiver(ITelegramBotClient uiClient, IResultSender sender)
+		private readonly ITelegramBotClient _uiClient;
+		private readonly IResultSender _sender;
+		private readonly ILifetimeScope _lifetimeScope;
+		public TelegramBotMessageReceiver(ITelegramBotClient uiClient, IResultSender sender, ILifetimeScope scope)
 		{
-			(_uiClient, _sender) = (uiClient, sender);
+
+			(_uiClient, _sender, _lifetimeScope) = (uiClient, sender,scope);
+			DefaultPipeline = scope.Resolve<AddNotePipeline>();
 			DefaultPipeline.IsLooped = true;
 			DefaultPipeline.RegisterPipelineStages();
 
 		}
-		public IMessagePipeline DefaultPipeline = new HelloMessagePipeline();
+		public IMessagePipeline DefaultPipeline;
 		public void ConsumeMessage(object message)
 		{
 			var tgMessage = message as Telegram.Bot.Types.Message;
@@ -41,6 +45,7 @@ namespace Infrastructure.UI.TelegramBot
 
 		private void _uiClient_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
 		{
+			
 			ConsumeMessage(e?.Message);
 		}
 
