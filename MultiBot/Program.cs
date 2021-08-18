@@ -1,6 +1,4 @@
-﻿using Domain;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.TelegramBot;
+﻿using Infrastructure.UI.TelegramBot;
 using System;
 
 namespace MultiBot

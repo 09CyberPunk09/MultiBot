@@ -1,11 +1,10 @@
-﻿using MediatR;
+﻿using Autofac;
+using MediatR;
 using Persistence.Core;
+using Persistence.Core.Entites;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
-using System.Linq;
-using Persistence.Sql.Repositories;
-using Persistence.Core.Entites;
 
 namespace Domain.Features.Notes
 {

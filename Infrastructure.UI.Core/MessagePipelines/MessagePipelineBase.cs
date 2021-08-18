@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.UI.Core.MessagePipelines
 {
@@ -52,7 +50,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 			StagePostAction = (IContentResult r, IMessageContext ctx) =>
 			{
 				ctx.MoveNext = true;
-				if (CurrentActionIndex+1 == Stages.Count)
+				if (CurrentActionIndex + 1 == Stages.Count)
 				{
 					if (IsLooped)
 					{

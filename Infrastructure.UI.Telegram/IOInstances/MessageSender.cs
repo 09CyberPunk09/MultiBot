@@ -15,7 +15,7 @@ namespace Infrastructure.UI.TelegramBot
 			_uiClient = uiClient;
 		}
 		//TODO: change type to void
-		public int SendMessage(IContentResult message,IMessageContext ctx)
+		public int SendMessage(IContentResult message, IMessageContext ctx)
 		{
 			void SendTextMessage(string text)
 			{

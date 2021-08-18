@@ -1,8 +1,5 @@
-﻿using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.TelegramBot.ResponseTypes;
+﻿using Infrastructure.UI.Core.MessagePipelines;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
@@ -10,7 +7,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 	[Obsolete]
 	public class HelloMessagePipeline : MessagePipelineBase
 	{
-		
+
 		public override void RegisterPipelineStages()
 		{
 			InitBaseComponents();

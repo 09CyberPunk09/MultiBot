@@ -5,13 +5,13 @@ using Persistence.Core.Entites;
 namespace Persistence.Sql.EntityConfig
 {
 	public class NoteEC : IEntityTypeConfiguration<Note>
-    {
-        public void Configure(EntityTypeBuilder<Note> builder)
-        {
-            builder.ToTable("Notes");
+	{
+		public void Configure(EntityTypeBuilder<Note> builder)
+		{
+			builder.ToTable("Notes");
 
-            builder.HasKey(e => e.Id);
-            
-        }
-    }
+			builder.HasKey(e => e.Id);
+
+		}
+	}
 }

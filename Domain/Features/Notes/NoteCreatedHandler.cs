@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace Domain.Features.Notes
 {
-	public class  CreateNoteRequest : IRequest<SuccessResult>
+	public class CreateNoteRequest : IRequest<SuccessResult>
 	{
 		public string Text { get; set; }
 	}

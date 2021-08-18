@@ -1,7 +1,6 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 //todo: extend interface structure for error handling
 namespace Infrastructure.UI.Core.MessagePipelines

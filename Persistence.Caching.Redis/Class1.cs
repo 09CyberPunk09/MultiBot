@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Persistence.Caching.Redis
+﻿namespace Persistence.Caching.Redis
 {
 	public class Class1
 	{

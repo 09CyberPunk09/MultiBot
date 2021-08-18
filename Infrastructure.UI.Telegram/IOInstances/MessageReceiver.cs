@@ -1,17 +1,10 @@
 ﻿using Autofac;
-using Autofac.Core.Lifetime;
-using Domain.Features.Notes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.UI.TelegramBot.IOInstances;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
 using Telegram.Bot;
-using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types;
-using Domain;
-using Telegram.Bot.Types.Enums;
 
 namespace Infrastructure.UI.TelegramBot
 {
@@ -23,7 +16,7 @@ namespace Infrastructure.UI.TelegramBot
 		public MessageReceiver(ITelegramBotClient uiClient, IResultSender sender, ILifetimeScope scope)
 		{
 
-			(_uiClient, _sender, _lifetimeScope) = (uiClient, sender,scope);
+			(_uiClient, _sender, _lifetimeScope) = (uiClient, sender, scope);
 			DefaultPipeline = scope.Resolve<GetNotesPipeline>();
 			DefaultPipeline.IsLooped = true;
 			DefaultPipeline.RegisterPipelineStages();
@@ -40,7 +33,7 @@ namespace Infrastructure.UI.TelegramBot
 				Recipient = new Telegram.Bot.Types.ChatId(tgMessage.Chat.Id),
 				TimeStamp = DateTime.Now
 			};
-			var result =  DefaultPipeline.ExecuteCurrent(ctx);
+			var result = DefaultPipeline.ExecuteCurrent(ctx);
 			_sender.SendMessage(result, ctx);
 		}
 
@@ -48,7 +41,7 @@ namespace Infrastructure.UI.TelegramBot
 		{
 			_uiClient.StartReceiving<MessageUpdateHandler>();
 		}
-	
+
 		public void Stop()
 		{
 		}

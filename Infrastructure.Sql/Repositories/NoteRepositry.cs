@@ -3,8 +3,6 @@ using Persistence.Core.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Sql.Repositories
 {
@@ -13,7 +11,7 @@ namespace Persistence.Sql.Repositories
 		private readonly SqlServerDbContext _context;
 		public NoteRepositry(SqlServerDbContext context) =>
 			(_context) = (context);
-		
+
 		public void Add(Note note)
 		{
 			//todo: set as default in entityconfigs
@@ -33,7 +31,7 @@ namespace Persistence.Sql.Repositories
 		}
 
 		public IEnumerable<Note> GetAll() => _context.Notes.AsEnumerable();
-		
+
 		public int SaveChanges() => _context.SaveChanges();
 	}
 }

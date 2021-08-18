@@ -1,12 +1,10 @@
 ﻿using Domain.Features.Notes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
@@ -35,9 +33,9 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 
 			messagesToSend.AddRange(result.Result.Select(x => new Message() { Text = x.Text }));
 
-			return new MultiMessageResult() 
-			{ 
-			 Messages = messagesToSend
+			return new MultiMessageResult()
+			{
+				Messages = messagesToSend
 			};
 		}
 	}
