@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Domain;
 using Infrastructure.UI.Core.Interfaces;
+using Infrastructure.UI.TelegramBot.IOInstances;
 using Microsoft.Extensions.Configuration;
 using Persistence.Sql;
 using System;
@@ -29,9 +30,9 @@ namespace Infrastructure.UI.TelegramBot
 
 			//Telegram bot direct deps
 			_ = _containerBuider.RegisterInstance<TelegramBotClient>(ConfigureApiClient()).As<ITelegramBotClient>().SingleInstance();
-			_ = _containerBuider.RegisterType<TelegramBotMessageReceiver>().As<IMessageReceiver>().SingleInstance();
+			_ = _containerBuider.RegisterType<MessageReceiver>().As<IMessageReceiver>().SingleInstance();
 			_ = _containerBuider.RegisterType<MessageSender>().As<IResultSender>().SingleInstance();
-
+			_ = _containerBuider.RegisterType<QueryReceiver>().As<IQueryReceiver>().SingleInstance();
 
 			_ = _containerBuider.RegisterModule<PersistenceModule>();
 			_ = _containerBuider.RegisterModule<PipelinesModule>();

@@ -5,16 +5,22 @@ using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
 using System;
+using System.Threading.Tasks;
+using System.Threading;
 using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Domain;
+using Telegram.Bot.Types.Enums;
 
 namespace Infrastructure.UI.TelegramBot
 {
-	public class TelegramBotMessageReceiver : IMessageReceiver
+	public class MessageReceiver : IMessageReceiver
 	{
 		private readonly ITelegramBotClient _uiClient;
 		private readonly IResultSender _sender;
 		private readonly ILifetimeScope _lifetimeScope;
-		public TelegramBotMessageReceiver(ITelegramBotClient uiClient, IResultSender sender, ILifetimeScope scope)
+		public MessageReceiver(ITelegramBotClient uiClient, IResultSender sender, ILifetimeScope scope)
 		{
 
 			(_uiClient, _sender, _lifetimeScope) = (uiClient, sender,scope);
@@ -40,20 +46,12 @@ namespace Infrastructure.UI.TelegramBot
 
 		public void Start()
 		{
-			_uiClient.OnMessage += _uiClient_OnMessage;
-			_uiClient.StartReceiving();
+			_uiClient.StartReceiving<MessageUpdateHandler>();
 		}
-
-		private void _uiClient_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
-		{
-			
-			ConsumeMessage(e?.Message);
-		}
-
+	
 		public void Stop()
 		{
-			_uiClient.StopReceiving();
-			_uiClient.OnMessage -= _uiClient_OnMessage;
 		}
 	}
+
 }
