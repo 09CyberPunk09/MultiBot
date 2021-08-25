@@ -1,12 +1,16 @@
 ﻿using Domain.Features.Notes;
+using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
+	[Route("/create-note")]
+	[Description("Use this command for creating notes")]
+	//TODO: REQWRITE TO: FIRST WE TELL THE USER TO ADD A MESSAGE AND THEN WE SAVE IT
 	public class AddNotePipeline : MessagePipelineBase
 	{
 		private readonly MediatR.IMediator _mediator;
@@ -25,12 +29,12 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 		{
 
 			_mediator.Send(new CreateNoteRequest() { Text = ctx.Message as string });
-			//new CreateNoteRequest() { Text = (ctx.Message as Telegram.Bot.Types.Message).Text }
+
 			return new TextResult()
 			{
-				TextMessage = new Message()
+				TextMessage = new BotMessage()
 				{
-					Text = "Yeah"
+					Text = "✅Note saved"
 				}
 			};
 		}
