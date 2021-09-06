@@ -19,10 +19,22 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 		public override void RegisterPipelineStages()
 		{
 			InitBaseComponents();
+			Stages.Add(SuggestToEnterANote);
 			Stages.Add(SaveNote);
 			Current = Stages.First();
 			CurrentActionIndex = 0;
 			IsLooped = true;
+		}
+
+		private IContentResult SuggestToEnterANote(IMessageContext ctx)
+        {
+			return new TextResult()
+			{
+				TextMessage = new BotMessage()
+				{
+					Text = "Enter Note text:"
+				}
+			};
 		}
 
 		private IContentResult SaveNote(IMessageContext ctx)
@@ -34,7 +46,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 			{
 				TextMessage = new BotMessage()
 				{
-					Text = "✅Note saved"
+					Text = "✅ Note saved"
 				}
 			};
 		}

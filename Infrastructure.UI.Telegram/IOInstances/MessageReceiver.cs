@@ -53,8 +53,11 @@ namespace Infrastructure.UI.TelegramBot
 			{
 				if (DefaultPipeline == null)
 					DefaultPipeline = MatchPipeline(tgMessage.Text);
-				var result = DefaultPipeline.ExecuteCurrent(ctx);
-				_sender.SendMessage(result, ctx);
+				if (DefaultPipeline != null)
+                {
+					var result = DefaultPipeline.ExecuteCurrent(ctx);
+					_sender.SendMessage(result, ctx);
+                }
 			}
 			catch (Exception ex)
 			{

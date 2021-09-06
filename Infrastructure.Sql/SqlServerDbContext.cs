@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.Core.Entites;
+using Persistence.Sql.Entites;
 
 namespace Persistence.Sql
 {
@@ -9,6 +10,7 @@ namespace Persistence.Sql
 		private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-devDb;";
 
 		public DbSet<Note> Notes { get; set; }
+		public DbSet<Set> Sets { get; set; }
 
 		public SqlServerDbContext() : base()
 		{
