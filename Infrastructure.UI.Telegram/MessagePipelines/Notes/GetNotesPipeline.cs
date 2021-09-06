@@ -1,13 +1,18 @@
 ﻿using Domain.Features.Notes;
+using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
+	[Route("/get-notes")]
+	[Description("Get's all your notes")]
 	public class GetNotesPipeline : MessagePipelineBase
 	{
 		private readonly MediatR.IMediator _mediator;
@@ -26,12 +31,22 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 		{
 			var result = _mediator.Send(new GetNoteRequest()).Result;
 			//todo: add markup
-			var messagesToSend = new List<Message>()
+			var messagesToSend = new List<BotMessage>()
 			{
-				new Message(){ Text = "Here are your notes:"}
+				new BotMessage(){ Text = "Here are your notes:"}
 			};
 
-			messagesToSend.AddRange(result.Result.Select(x => new Message() { Text = x.Text }));
+			messagesToSend.AddRange(result.Result.Select(x => new BotMessage() { 
+				Text = x.Text,
+				Buttons = new InlineKeyboardMarkup(
+						new[]
+						{
+							new[]
+							{
+								InlineKeyboardButton.WithCallbackData("Delete","")
+							}
+						})
+			}));
 
 			return new MultiMessageResult()
 			{

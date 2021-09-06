@@ -17,7 +17,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 
 		public MessagePipelineBase()
 		{
-
+			RegisterPipelineStages();
 		}
 		public virtual void RegisterPipelineStages()
 		{

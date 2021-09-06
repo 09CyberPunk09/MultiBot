@@ -1,10 +1,14 @@
 ﻿using Autofac;
+using Autofac.Core.Resolving.Pipeline;
 using Domain;
 using Infrastructure.UI.Core.Interfaces;
+using Infrastructure.UI.Core.MessagePipelines;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -16,6 +20,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 	{
 		private static IMessageReceiver _messageReceiver;
 		private static IQueryReceiver _queryReceiver;
+
 		static MessageUpdateHandler()
 		{
 			var scope = DependencyAccessor.LifetimeScope.BeginLifetimeScope();
@@ -24,7 +29,6 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 		}
 		public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
 		{
-			//throw new NotImplementedException();
 			return null;
 		}
 

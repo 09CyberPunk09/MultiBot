@@ -6,6 +6,6 @@ namespace Infrastructure.UI.TelegramBot.ResponseTypes
 {
 	public class MultiMessageResult : IContentResult
 	{
-		public List<Message> Messages { get; set; }
+		public List<BotMessage> Messages { get; set; }
 	}
 }
