@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
+using Infrastructure.UI.TelegramBot.MessagePipelines.Sets;
 
 namespace Infrastructure.UI.TelegramBot
 {
@@ -9,6 +10,7 @@ namespace Infrastructure.UI.TelegramBot
 		{
 			// todo:rewrite to assembly scanning
 			builder.RegisterType<AddNotePipeline>();
+			builder.RegisterType<AddSetPipeline>();
 			builder.RegisterType<GetNotesPipeline>();
 			base.Load(builder);
 		}

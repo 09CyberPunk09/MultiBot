@@ -23,6 +23,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Sets
 		{
 			InitBaseComponents();
 			Stages.Add(AskForSetName);
+			Stages.Add(AcceptSetName);
 
 			Current = Stages.First();
 			CurrentActionIndex = 0;
