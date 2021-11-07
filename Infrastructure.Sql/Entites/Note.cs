@@ -1,8 +1,8 @@
 ﻿using Persistence.Core.BaseTypes;
 
-namespace Persistence.Core.Entites
+namespace Persistence.Sql.Entites
 {
-	public class Note : AuditableEntity
+    public class Note : AuditableEntity
 	{
 		public string Text { get; set; }
 	}

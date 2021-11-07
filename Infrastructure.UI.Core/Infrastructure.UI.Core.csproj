@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.Kernel\Kernel.csproj" />
+    <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
 
 </Project>

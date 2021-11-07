@@ -2,9 +2,12 @@
 
 namespace Domain
 {
-	public class QueryResult<T> : IResponse
+    public class QueryResult<T> : IResponse
 	{
 		public List<T> Result { get; set; }
-		public QueryResult(List<T> result) => Result = result;
-	}
+        public QueryResult(List<T> result)
+        {
+            Result = result;
+        }
+    }
 }

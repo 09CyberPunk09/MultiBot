@@ -1,6 +1,6 @@
 ﻿namespace Domain.MessagingInfrastructure
 {
-	public interface IRequest
+    public interface IRequest
 	{
 	}
 }

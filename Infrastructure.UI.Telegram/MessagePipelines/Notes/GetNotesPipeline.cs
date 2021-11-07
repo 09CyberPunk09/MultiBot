@@ -11,23 +11,23 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
-	[Route("/get-notes")]
+    [Route("/get-notes")]
 	[Description("Get's all your notes")]
 	public class GetNotesPipeline : MessagePipelineBase
 	{
 		private readonly MediatR.IMediator _mediator;
-		public GetNotesPipeline(MediatR.IMediator mediator) =>
-			(_mediator) = (mediator);
-		public override void RegisterPipelineStages()
+        public GetNotesPipeline(MediatR.IMediator mediator)
+        {
+            (_mediator) = (mediator);
+        }
+
+        public override void RegisterPipelineStages()
 		{
-			InitBaseComponents();
 			Stages.Add(GetNotes);
-			Current = Stages.First();
-			CurrentActionIndex = 0;
 			IsLooped = true;
 		}
 
-		private IContentResult GetNotes(IMessageContext ctx)
+		private ContentResult GetNotes(MessageContext ctx)
 		{
 			var result = _mediator.Send(new GetNoteRequest()).Result;
 			//todo: add markup

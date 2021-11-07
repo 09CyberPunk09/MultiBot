@@ -1,9 +1,10 @@
 ﻿using Infrastructure.Kernel;
+using Infrastructure.UI.Core.Types;
 
 namespace Infrastructure.UI.Core.Interfaces
 {
-	public interface IResultSender : IStartStop
+    public interface IResultSender : IStartStop
 	{
-		int SendMessage(IContentResult message, IMessageContext ctx);
+		void SendMessage(ContentResult message, MessageContext ctx);
 	}
 }

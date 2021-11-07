@@ -1,22 +1,18 @@
 ﻿using Autofac;
-using Autofac.Core.Resolving.Pipeline;
 using Domain;
 using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Infrastructure.UI.TelegramBot.IOInstances
 {
-	//todo: segregate into new file
-	public class MessageUpdateHandler : IUpdateHandler
+    //todo: segregate into new file
+    public class MessageUpdateHandler : IUpdateHandler
 	{
 		private static IMessageReceiver _messageReceiver;
 		private static IQueryReceiver _queryReceiver;
@@ -29,7 +25,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 		}
 		public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
 		{
-			return null;
+			return Task.CompletedTask;
 		}
 
 		public Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -39,15 +35,36 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 				case UpdateType.Unknown:
 					break;
 				case UpdateType.Message:
-					_messageReceiver.ConsumeMessage(update.Message);
+                    {
+						var message = new Core.Types.Message()
+						{
+							ChatId = update.Message.Chat.Id,
+							Text = update.Message.Text
+						};
+						_messageReceiver.ConsumeMessage(message);
+                    }
 					break;
 				case UpdateType.InlineQuery:
-					_queryReceiver.ConsumeQuery(update.InlineQuery);
-					break;
-				case UpdateType.ChosenInlineResult:
+					{
+						var message = new Core.Types.Message()
+						{
+							Text = update.CallbackQuery.Data,
+							ChatId = update.CallbackQuery.Message.Chat.Id
+						};
+						_queryReceiver.ConsumeQuery(message); break;
+					}
+					case UpdateType.ChosenInlineResult:
 					break;
 				case UpdateType.CallbackQuery:
-					_queryReceiver.ConsumeQuery(update.CallbackQuery);
+					{
+						var message = new Infrastructure.UI.Core.Types.Message()
+						{
+							Text = update.CallbackQuery.Data,
+							ChatId = update.CallbackQuery.Message.Chat.Id
+						};
+						_queryReceiver.ConsumeQuery(message);
+						//_messageReceiver.ConsumeMessage(update.CallbackQuery);
+					}
 					break;
 				case UpdateType.EditedMessage:
 					break;
@@ -72,5 +89,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 			}
 			return Task.FromResult(new object());
 		}
+
+
 	}
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace Persistence.Sql.Migrations
 {
-	public partial class Notes_Added : Migration
+    public partial class Notes_Added : Migration
 	{
 		protected override void Up(MigrationBuilder migrationBuilder)
 		{

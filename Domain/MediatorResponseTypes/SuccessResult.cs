@@ -1,7 +1,6 @@
 ﻿namespace Domain
 {
-	//todo: rename
-	public class SuccessResult : IResponse
+    public class SuccessResult : IResponse
 	{
 		public SuccessResult()
 		{

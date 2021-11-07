@@ -1,24 +1,24 @@
 ﻿using Autofac;
 using MediatR;
-using Persistence.Core;
-using Persistence.Core.Entites;
+using Persistence.Sql.BaseTypes;
+using Persistence.Sql.Entites;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Domain.Features.Notes
 {
-	public class GetNoteRequest : IRequest<QueryResult<Note>>
+    public class GetNoteRequest : IRequest<QueryResult<Note>>
 	{
 		public string Text { get; set; }
 	}
 	public class GetNoteHandler : IRequestHandler<GetNoteRequest, QueryResult<Note>>
 	{
-		private readonly IRepository<Note> _noterepository;
+		private readonly Repository<Note> _noterepository;
 		public GetNoteHandler()
 		{
 			var scope = DependencyAccessor.LifetimeScope.BeginLifetimeScope();
-			_noterepository = scope.Resolve<IRepository<Note>>();
+			_noterepository = scope.Resolve<Repository<Note>>();
 		}
 
 		Task<QueryResult<Note>> IRequestHandler<GetNoteRequest, QueryResult<Note>>.Handle(GetNoteRequest request, CancellationToken cancellationToken)

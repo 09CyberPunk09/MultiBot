@@ -3,7 +3,7 @@ using MediatR.Extensions.Autofac.DependencyInjection;
 
 namespace Domain
 {
-	public class DomainModule : Autofac.Module
+    public class DomainModule : Autofac.Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

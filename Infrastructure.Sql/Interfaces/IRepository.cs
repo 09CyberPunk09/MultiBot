@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Persistence.Core.BaseTypes;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Persistence.Core
 {
-	public interface IRepository<TEntity>
+    public interface IRepository<TEntity> 
+		where TEntity : AuditableEntity
 	{
 		int SaveChanges();
-		Task<int> SaveChangesAsync()
-		{
-			return Task.Run(() => SaveChanges());
-		}
-		void Add(TEntity entity);
-		TEntity Get();
+		TEntity Add(TEntity entity);
 		IEnumerable<TEntity> GetAll();
-		TEntity Find(Guid Id);
-	}
+		TEntity Get(Guid Id);
+		TEntity Update(TEntity entity);
+		IQueryable<TEntity> GetQuery();
+    }
 }

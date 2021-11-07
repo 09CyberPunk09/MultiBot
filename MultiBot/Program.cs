@@ -3,13 +3,13 @@ using System;
 
 namespace MultiBot
 {
-	class Program
+    class Program
 	{
 		static void Main(string[] args)
 		{
 			var telegramBot = new TelegramBotHandlerInstance();
 			telegramBot.Start();
-
+			//todo:change all models to table per type
 			Console.WriteLine("The bot started succesfully");
 			LoopConsoleClosing();
 		}

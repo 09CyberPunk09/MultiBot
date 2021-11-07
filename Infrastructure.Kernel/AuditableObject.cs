@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Kernel
 {
-	public class AuditableObject
+    public class AuditableObject
 	{
 		public Guid Id { get; set; }
 		public DateTime DateCreated { get; set; }

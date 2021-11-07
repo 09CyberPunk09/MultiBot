@@ -1,17 +1,14 @@
 ﻿using Autofac;
-using Infrastructure.UI.TelegramBot.MessagePipelines;
-using Infrastructure.UI.TelegramBot.MessagePipelines.Sets;
+using Infrastructure.UI.Core.MessagePipelines;
+using System.Linq;
 
 namespace Infrastructure.UI.TelegramBot
 {
-	public class PipelinesModule : Autofac.Module
+    public class PipelinesModule : Autofac.Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			// todo:rewrite to assembly scanning
-			builder.RegisterType<AddNotePipeline>();
-			builder.RegisterType<AddSetPipeline>();
-			builder.RegisterType<GetNotesPipeline>();
+			_ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MessagePipelineBase))).ToArray());
 			base.Load(builder);
 		}
 	}

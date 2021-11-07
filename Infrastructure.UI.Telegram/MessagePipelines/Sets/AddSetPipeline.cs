@@ -1,14 +1,10 @@
-﻿using Domain.Features.Notes;
-using Domain.Features.Sets;
+﻿using Domain.Features.Sets;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines.Sets
 {
@@ -16,51 +12,34 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Sets
     public class AddSetPipeline : MessagePipelineBase
     {
 		private readonly MediatR.IMediator _mediator;
-		public AddSetPipeline(MediatR.IMediator mediator) =>
-			(_mediator) = (mediator);
+        public AddSetPipeline(MediatR.IMediator mediator)
+        {
+            (_mediator) = (mediator);
+        }
 
-		public override void RegisterPipelineStages()
+        public override void RegisterPipelineStages()
 		{
-			InitBaseComponents();
 			Stages.Add(AskForSetName);
 			Stages.Add(AcceptSetName);
-
-			Current = Stages.First();
-			CurrentActionIndex = 0;
 		}
 
-		private IContentResult AskForSetName(IMessageContext ctx)
+		private ContentResult AskForSetName(MessageContext ctx)
         {
 			return new TextResult()
 			{
-				TextMessage = new BotMessage()
-				{
-					Text = "You are creating a new set.Enter it's name:"
-				}
+				Text = "You are creating a new set.Enter it's name:"
 			};
 		}
-		private IContentResult AcceptSetName(IMessageContext ctx)
+		private ContentResult AcceptSetName(MessageContext ctx)
 		{
             try
             {
-				_mediator.Send(new CreateSetRequest() { Name = ctx.Message as string });
-				return new TextResult()
-				{
-					TextMessage = new BotMessage()
-					{
-						Text = "✅ Set created."
-					}
-				};
+				_mediator.Send(new CreateSetRequest() { Name = ctx.Message.Text });
+				return Text("✅ Set created.");
 			}
             catch (Exception)
             {
-				return new TextResult()
-				{
-					TextMessage = new BotMessage()
-					{
-						Text = "Invalid set name or something else went wrong."
-					}
-				};
+				return Text("Invalid set name or something else went wrong.");
 				throw;
             }
 			

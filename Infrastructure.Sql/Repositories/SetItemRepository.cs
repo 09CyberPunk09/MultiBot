@@ -3,12 +3,10 @@ using Persistence.Sql.Entites;
 
 namespace Persistence.Sql.Repositories
 {
-    public class SetRepository : Repository<Set>
+    public class SetItemRepository : Repository<SetItem>
     {
-        public SetRepository(SqlServerDbContext context) : base(context)
+        public SetItemRepository(SqlServerDbContext context): base(context)
         {
-
         }
-
     }
 }

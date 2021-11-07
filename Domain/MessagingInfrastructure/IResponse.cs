@@ -1,6 +1,6 @@
 ﻿namespace Domain
 {
-	public interface IResponse
+    public interface IResponse
 	{
 	}
 }

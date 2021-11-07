@@ -1,12 +1,14 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
+using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
 using System;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.UI.TelegramBot
 {
-	public class MessageSender : IResultSender
+    public class MessageSender : IResultSender
 	{
 		ITelegramBotClient _uiClient;
 
@@ -14,31 +16,34 @@ namespace Infrastructure.UI.TelegramBot
 		{
 			_uiClient = uiClient;
 		}
-		//TODO: change type to void
-		public int SendMessage(IContentResult message, IMessageContext ctx)
+		public void SendMessage(ContentResult message, MessageContext ctx)
 		{
-			void SendTextMessage(string text)
+			void SendTextMessage(string text = "", IReplyMarkup markup = null)
 			{
 				_uiClient.SendTextMessageAsync(
-				chatId: ctx.Recipient as ChatId,
-				text: text);
+				chatId: new ChatId(ctx.Message.ChatId),
+				text: text,
+				replyMarkup: markup);
 			}
 
 			//TODO: Rewrite to more extensible way
 			switch (message)
 			{
 				case TextResult textResult:
-					SendTextMessage(textResult.TextMessage.Text);
+					SendTextMessage(textResult.Text);
 					break;
 				case MultiMessageResult multi:
 					multi.Messages.ForEach(x => SendTextMessage(x.Text));
 					break;
+				case BotMessage botMessage:
+					SendTextMessage(botMessage.Text, botMessage.Buttons);
+					break;
+				case ContentResult textResult:
+					SendTextMessage(textResult.Text);
+					break;
 				default:
 					throw new NotImplementedException("The method to concrete response type is not implemented!");
 			}
-
-
-			return 0;
 		}
 
 		public void Start()

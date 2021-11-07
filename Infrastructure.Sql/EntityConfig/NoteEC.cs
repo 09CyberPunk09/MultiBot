@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Persistence.Core.Entites;
+using Persistence.Sql.Entites;
 
 namespace Persistence.Sql.EntityConfig
 {
-	public class NoteEC : IEntityTypeConfiguration<Note>
+    public class NoteEC : IEntityTypeConfiguration<Note>
 	{
 		public void Configure(EntityTypeBuilder<Note> builder)
 		{

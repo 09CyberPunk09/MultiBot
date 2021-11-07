@@ -42,4 +42,8 @@
     <ProjectReference Include="..\Infrastructure.Sql\Persistence.Sql.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
