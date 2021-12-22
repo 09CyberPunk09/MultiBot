@@ -2,9 +2,12 @@
 using Infrastructure.UI.Core.Types;
 using Newtonsoft.Json;
 using Persistence.Caching.Redis;
+using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Telegram.Bot.Types;
+using SystemUser = Persistence.Sql.Entites.User;
 
 namespace Infrastructure.UI.Core.MessagePipelines
 {
@@ -117,7 +120,18 @@ namespace Infrastructure.UI.Core.MessagePipelines
 
         protected static ContentResult Text(string text)
         {
+			//todo: implement delayd messages and fire-and-forget messages
             return new() { Text = text };
+        }
+
+		protected SystemUser GetCurrentUser()
+        {
+            //todo: implement getting from cache
+            //todo: add caching library
+            using (var ctx = new SqlServerDbContext())
+            {
+				return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == _context.Recipient);
+            }
         }
     }
 }

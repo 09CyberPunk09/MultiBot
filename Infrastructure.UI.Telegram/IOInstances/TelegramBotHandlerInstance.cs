@@ -50,9 +50,7 @@ namespace Infrastructure.UI.TelegramBot
 		{
 			LoadModules();
 			var container = _containerBuider.Build();
-			//TODO: Resolve
-			var accessor = container.Resolve<DependencyAccessor>();
-
+			MessageUpdateHandler.SetAccessObjects(container.BeginLifetimeScope());
 
 			container.Resolve<IMessageReceiver>().Start();
 			//container.Resolve<IResultSender>().Start();

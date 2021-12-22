@@ -1,12 +1,11 @@
 ﻿using Persistence.Core.BaseTypes;
-using System.Collections.Generic;
+using System;
 
 namespace Persistence.Sql.Entites
 {
-    public class Set : AuditableEntity
+    public class Tag : AuditableEntity
     {
+        public Guid? UserId { get; set; }
         public string Name { get; set; }
-        public List<SetItem> ListNotes { get; set; }
     }
-
 }

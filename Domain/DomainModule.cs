@@ -1,5 +1,6 @@
-﻿using Autofac;
-using MediatR.Extensions.Autofac.DependencyInjection;
+﻿using Application;
+using Autofac;
+using System.Linq;
 
 namespace Domain
 {
@@ -7,9 +8,7 @@ namespace Domain
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			_ = builder.RegisterMediatR(GetType().Assembly);
-			_ = builder.RegisterType<DependencyAccessor>().SingleInstance();
-
+			_ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(AppService))).ToArray());
 			base.Load(builder);
 		}
 	}

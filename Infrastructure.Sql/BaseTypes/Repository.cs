@@ -22,7 +22,9 @@ namespace Persistence.Sql.BaseTypes
         public virtual TEntity Add(TEntity entity)
         {
             SetCreationAuditionFields(entity);
-            return _context.Add(entity).Entity;
+            var result = _context.Add(entity).Entity;
+            _context.SaveChanges();
+            return result;
         }
 
         public virtual TEntity Find(Guid id)
@@ -47,7 +49,9 @@ namespace Persistence.Sql.BaseTypes
 
         public virtual TEntity Update(TEntity entity)
         {
-            return _context.Update(entity).Entity;
+            var result = _context.Update(entity).Entity;
+            _context.SaveChanges();
+            return result;
         }
 
         public virtual IQueryable<TEntity> GetQuery()

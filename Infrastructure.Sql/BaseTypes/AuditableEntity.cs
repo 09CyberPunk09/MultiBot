@@ -6,6 +6,6 @@ namespace Persistence.Core.BaseTypes
 	{
 		public Guid Id { get; set; }
 		public DateTime CreationDate { get; set; }
-		public DateTime ModificationTime { get; set; }
+
 	}
 }

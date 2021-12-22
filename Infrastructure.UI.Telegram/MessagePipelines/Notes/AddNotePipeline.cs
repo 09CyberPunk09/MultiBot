@@ -1,4 +1,4 @@
-﻿using Domain.Features.Notes;
+﻿using Application;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -12,32 +12,29 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 	//TODO: REQWRITE TO: FIRST WE TELL THE USER TO ADD A MESSAGE AND THEN WE SAVE IT
 	public class AddNotePipeline : MessagePipelineBase
 	{
-		private readonly MediatR.IMediator _mediator;
-        public AddNotePipeline(MediatR.IMediator mediator)
+		private readonly NoteAppService _noteService;
+        public AddNotePipeline(NoteAppService noteService)
         {
-            (_mediator) = (mediator);
+			_noteService = noteService;
         }
 
         public override void RegisterPipelineStages()
 		{
-			Stages.Add(SuggestToEnterANote);
+			Stages.Add(AskToEnterANote);
 			Stages.Add(SaveNote);
 			IsLooped = true;
 		}
 
-		private ContentResult SuggestToEnterANote(MessageContext ctx)
+		private ContentResult AskToEnterANote(MessageContext ctx)
         {
 			return Text("Enter Note text:");
 		}
 
 		private ContentResult SaveNote(MessageContext ctx)
 		{
-
-			_mediator.Send(new CreateNoteRequest() { Text = ctx.Message.Text });
-
+			_noteService.Create(ctx.Message.Text, GetCurrentUser().Id);
 			return Text("✅ Note saved");
 		}
-
 
 	}
 }

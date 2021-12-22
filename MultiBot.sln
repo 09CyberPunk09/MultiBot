@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiBot", "MultiBot\MultiBot.csproj", "{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostApp", "MultiBot\HostApp.csproj", "{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{BC1651EA-3E72-49FF-B3A7-A65E3BAA4C56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Domain\Application.csproj", "{BC1651EA-3E72-49FF-B3A7-A65E3BAA4C56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Sql", "Infrastructure.Sql\Persistence.Sql.csproj", "{E336F49E-5E34-420C-B528-FCA69D4D0ABD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UI.TelegramBot", "Infrastructure.UI.Telegram\Infrastructure.UI.TelegramBot.csproj", "{AC731A4E-EEF8-4BF1-8319-D7B9A437381D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UI.Core", "Infrastructure.UI.Core\Infrastructure.UI.Core.csproj", "{FEA9B573-FE4B-432B-99AC-FC1AA2E24FEB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{BD685E8E-D9A1-4982-9F57-6C5DC4C92B52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}"
 EndProject
@@ -64,7 +62,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50} = {BD685E8E-D9A1-4982-9F57-6C5DC4C92B52}
 		{E336F49E-5E34-420C-B528-FCA69D4D0ABD} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
 		{AC731A4E-EEF8-4BF1-8319-D7B9A437381D} = {08958154-A89B-4AEE-9E54-F028076E530A}
 		{FEA9B573-FE4B-432B-99AC-FC1AA2E24FEB} = {08958154-A89B-4AEE-9E54-F028076E530A}

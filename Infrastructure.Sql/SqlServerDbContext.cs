@@ -6,11 +6,11 @@ namespace Persistence.Sql
     public class SqlServerDbContext : DbContext
 	{
 		//todo: put into config.json
-		private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-devDb;";
+		private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-Db;";
 
 		public DbSet<Note> Notes { get; set; }
-		public DbSet<Set> Sets { get; set; }
-		public DbSet<SetItem> SetDatas { get; set; }
+		public DbSet<Tag> Tags { get; set; }
+		public DbSet<User> Users { get; set; }
 
 		public SqlServerDbContext() : base()
 		{

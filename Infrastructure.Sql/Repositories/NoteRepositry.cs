@@ -6,9 +6,7 @@ namespace Persistence.Sql.Repositories
     public class NoteRepositry : Repository<Note>
 	{
 		public NoteRepositry(SqlServerDbContext context) : base(context)
-        {
-
-        }
+        {}
 
 	}
 }

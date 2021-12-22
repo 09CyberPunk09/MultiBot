@@ -17,9 +17,8 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 		private static IMessageReceiver _messageReceiver;
 		private static IQueryReceiver _queryReceiver;
 
-		static MessageUpdateHandler()
+		public static void SetAccessObjects(ILifetimeScope scope)
 		{
-			var scope = DependencyAccessor.LifetimeScope.BeginLifetimeScope();
 			_messageReceiver = scope.Resolve<IMessageReceiver>();
 			_queryReceiver = scope.Resolve<IQueryReceiver>();
 		}

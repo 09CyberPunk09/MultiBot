@@ -1,4 +1,4 @@
-﻿using Domain.Features.Notes;
+﻿using Application;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -15,11 +15,11 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 	[Description("Get's all your notes")]
 	public class GetNotesPipeline : MessagePipelineBase
 	{
-		private readonly MediatR.IMediator _mediator;
-        public GetNotesPipeline(MediatR.IMediator mediator)
+		private readonly NoteAppService _noteService;
+        public GetNotesPipeline(NoteAppService noteService)
         {
-            (_mediator) = (mediator);
-        }
+			_noteService = noteService;
+		}
 
         public override void RegisterPipelineStages()
 		{
@@ -29,14 +29,14 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 
 		private ContentResult GetNotes(MessageContext ctx)
 		{
-			var result = _mediator.Send(new GetNoteRequest()).Result;
+			var result = _noteService.GetByUserId(GetCurrentUser().Id);
 			//todo: add markup
 			var messagesToSend = new List<BotMessage>()
 			{
 				new BotMessage(){ Text = "Here are your notes:"}
 			};
 
-			messagesToSend.AddRange(result.Result.Select(x => new BotMessage() { 
+			messagesToSend.AddRange(result.Select(x => new BotMessage() { 
 				Text = x.Text,
 				Buttons = new InlineKeyboardMarkup(
 						new[]

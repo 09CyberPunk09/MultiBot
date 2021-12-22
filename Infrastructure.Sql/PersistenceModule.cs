@@ -12,8 +12,8 @@ namespace Persistence.Sql
 			_ = builder.RegisterType<SqlServerDbContext>().InstancePerLifetimeScope();
 
 			_ = builder.RegisterType<NoteRepositry>().As<Repository<Note>>().InstancePerLifetimeScope();
-			_ = builder.RegisterType<SetRepository>().As<Repository<Set>>().InstancePerLifetimeScope();
-			_ = builder.RegisterType<SetItemRepository>().As<Repository<SetItem>>().InstancePerLifetimeScope();
+			_ = builder.RegisterType<UserRepositry>().As<Repository<User>>().InstancePerLifetimeScope();
+			//_ = builder.RegisterType<TagRepository>().As<Repository<Tag>>().InstancePerLifetimeScope();
 			base.Load(builder);
 		}
 	}
