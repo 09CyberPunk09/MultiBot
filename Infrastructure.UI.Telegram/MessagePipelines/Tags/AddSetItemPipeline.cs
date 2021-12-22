@@ -49,12 +49,12 @@
 //        {
 //			string setId = ctx.Message.Text;
 //			var datas = _mediator.Send(new GetSetDataRequest() { SetId = Guid.Parse(setId) });
-			
+
 //			if (datas != null)
 //			{
 //				var newLine = Environment.NewLine;
 //				StringBuilder messageBuilder = new();
-				
+
 //				var set = _mediator.Send(new GetUserSetsRequest()).Result.Result.FirstOrDefault(x => x.Id == Guid.Parse(setId));
 
 //				messageBuilder.Append(set.Name + newLine + newLine);

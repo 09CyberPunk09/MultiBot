@@ -6,7 +6,6 @@ using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Telegram.Bot.Types;
 using SystemUser = Persistence.Sql.Entites.User;
 
 namespace Infrastructure.UI.Core.MessagePipelines

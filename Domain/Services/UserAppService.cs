@@ -2,7 +2,7 @@
 using Persistence.Sql.Entites;
 using System.Linq;
 
-namespace Application
+namespace Application.Services
 {
     public class UserAppService : AppService
     {

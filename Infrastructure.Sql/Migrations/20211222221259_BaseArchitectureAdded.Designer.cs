@@ -10,7 +10,7 @@ using Persistence.Sql;
 namespace Persistence.Sql.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20211222215447_BaseArchitectureAdded")]
+    [Migration("20211222221259_BaseArchitectureAdded")]
     partial class BaseArchitectureAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,21 @@ namespace Persistence.Sql.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("NoteTag", b =>
+                {
+                    b.Property<Guid>("NotesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("NotesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("NoteTag");
+                });
 
             modelBuilder.Entity("Persistence.Sql.Entites.Note", b =>
                 {
@@ -55,15 +70,10 @@ namespace Persistence.Sql.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("NoteId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NoteId");
 
                     b.ToTable("Tags");
                 });
@@ -91,6 +101,21 @@ namespace Persistence.Sql.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("NoteTag", b =>
+                {
+                    b.HasOne("Persistence.Sql.Entites.Note", null)
+                        .WithMany()
+                        .HasForeignKey("NotesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Persistence.Sql.Entites.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Persistence.Sql.Entites.Note", b =>
                 {
                     b.HasOne("Persistence.Sql.Entites.User", "User")
@@ -100,18 +125,6 @@ namespace Persistence.Sql.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Persistence.Sql.Entites.Tag", b =>
-                {
-                    b.HasOne("Persistence.Sql.Entites.Note", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("NoteId");
-                });
-
-            modelBuilder.Entity("Persistence.Sql.Entites.Note", b =>
-                {
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

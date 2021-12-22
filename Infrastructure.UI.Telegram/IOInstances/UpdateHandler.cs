@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Domain;
 using Infrastructure.UI.Core.Interfaces;
 using System;
 using System.Threading;
