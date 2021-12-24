@@ -35,6 +35,5 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 			_noteService.Create(ctx.Message.Text, GetCurrentUser().Id);
 			return Text("✅ Note saved");
 		}
-
 	}
 }

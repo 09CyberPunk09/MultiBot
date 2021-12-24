@@ -17,6 +17,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 		Action<ContentResult, MessageContext> StagePostAction { get; set; }
 
 		ContentResult ExecuteCurrent(MessageContext ctx);
+		ContentResult ExecuteByIndex(MessageContext ctx,int index);
 		void RegisterPipelineStages();
 
 		public int CurrentActionIndex { get; set; }

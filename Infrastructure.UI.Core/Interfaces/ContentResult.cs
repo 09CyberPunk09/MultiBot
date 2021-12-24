@@ -2,6 +2,11 @@
 {
     public class ContentResult
 	{
-		public string Text { get; set; }
+        public bool Succeeded { get; set; }
+        public ContentResult()
+        {
+            Succeeded = true;
+        }
+        public string Text { get; set; }
 	}
 }

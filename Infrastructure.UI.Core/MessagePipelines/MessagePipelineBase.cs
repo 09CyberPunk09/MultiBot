@@ -1,6 +1,5 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.Types;
-using Newtonsoft.Json;
 using Persistence.Caching.Redis;
 using Persistence.Sql;
 using System;
@@ -12,6 +11,8 @@ namespace Infrastructure.UI.Core.MessagePipelines
 {
     public class MessagePipelineBase : IMessagePipeline
 	{
+		protected Cache cache = new();
+
 		private MessageContext _context;
 		public Func<MessageContext, ContentResult> Current { get; set; }
 		public List<Func<MessageContext, ContentResult>> Stages { get; set; }
@@ -20,16 +21,16 @@ namespace Infrastructure.UI.Core.MessagePipelines
 		public int CurrentActionIndex { get; set; }
 		public bool IsDone { get; set; }
 
-		public MessagePipelineBase()
+		public MessagePipelineBase(int currentActionIndex = 0)
 		{
 			InitBaseComponents();
 			RegisterPipelineStages();
 			Current = Stages.First();
-			CurrentActionIndex = 0;
+			CurrentActionIndex = currentActionIndex;
 		}
 		public virtual void RegisterPipelineStages()
 		{
-			
+
 		}
 
 		protected void InitBaseComponents()
@@ -38,12 +39,13 @@ namespace Infrastructure.UI.Core.MessagePipelines
 			ConfigureBasicPostAction();
 		}
 
-		public ContentResult ExecuteCurrent(MessageContext ctx)
+		private ContentResult Execute(MessageContext ctx,int index = -1)
 		{
 			//try
 			//{
 			_context = ctx;
-			var result = Current(ctx);
+			CurrentActionIndex = index != -1 ? index : 0;
+			var result = index == -1 ? Current(ctx) : Stages[index](ctx);
 			StagePostAction?.Invoke(result, ctx);
 			_context = null;
 			return result;
@@ -55,67 +57,25 @@ namespace Infrastructure.UI.Core.MessagePipelines
 			//}
 		}
 
+		public ContentResult ExecuteByIndex(MessageContext ctx, int index) 
+			=> Execute(ctx, index);
+
+		public ContentResult ExecuteCurrent(MessageContext ctx)
+			=> Execute(ctx);
+
 		public void ConfigureBasicPostAction()
 		{
 			StagePostAction = (ContentResult r, MessageContext ctx) =>
 			{
-				ctx.MoveNext = true;
-				if (CurrentActionIndex + 1 == Stages.Count)
-				{
-					if (IsLooped)
-					{
-						Current = Stages.First();
-						CurrentActionIndex = 0;
-					}
-					else
-					{
-						CurrentActionIndex = 0;
-						IsDone = true;
-					}
-				}
-				else
-				{
-					CurrentActionIndex++;
-					Current = Stages[CurrentActionIndex];
-				}
+				IsDone = false;
+				if(!(CurrentActionIndex + 1 < Stages.Count))
+                {
+					ctx.MoveNext = false;
+					IsDone = true;
+                }
 			};
 		}
 
-		protected ICache _cache;
-
-		[Serializable]
-		class CachePayload
-        {
-            public string TypeName { get; set; }
-            public long ChatId { get; set; }
-            public string Key { get; set; }
-        }
-
-		protected T GetCachedValue<T>(string key)
-        {
-			if(_cache == null)
-				throw new Exception("You are trying to use the caching feature but you didnt initialize a cache in the constructor");
-			CachePayload get = new()
-			{
-				ChatId = Convert.ToInt64(_context.Recipient),
-				Key = key,
-				TypeName = GetType().FullName
-			};
-			return _cache.Get<T>(JsonConvert.SerializeObject(get));
-		}
-
-		protected void SetValueToCache(string key,object value)
-        {
-			if (_cache == null)
-				throw new Exception("You try to Use the caching feature but you didnt initialize a cache in the constructor");
-			CachePayload cacheKey = new()
-			{
-				ChatId = Convert.ToInt64(_context.Recipient),
-				Key = key,
-				TypeName = GetType().FullName
-			};
-			_cache.Set(JsonConvert.SerializeObject(cacheKey),value);
-		}
 
         protected static ContentResult Text(string text)
         {

@@ -24,8 +24,6 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
         public void Start()
 		{
 			_started = true;
-
-
 		}
 
 		public void Stop()
