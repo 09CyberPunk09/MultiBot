@@ -77,11 +77,11 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 
 				var result = current == null ? pipeline.ExecuteCurrent(ctx) : pipeline.ExecuteByIndex(ctx,current.Value);
 
-                if (result.Succeeded)
+                if (ctx.PipelineStageSucceeded)
                 {
 					int setIdx = current != null ? current.Value + 1 : 1;
 
-					if(!ctx.MoveNext && pipeline.IsLooped)
+					if(pipeline.IsLooped && ctx.PipelineEnded)
                     {
 						setIdx = 0;
 					}
@@ -90,7 +90,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 				}
 
 				string commandToSet = null;
-                if (ctx.MoveNext)
+                if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
                 {
 					commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route;
 				}

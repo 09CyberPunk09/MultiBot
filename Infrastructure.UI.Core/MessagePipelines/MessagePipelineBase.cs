@@ -72,7 +72,8 @@ namespace Infrastructure.UI.Core.MessagePipelines
                 {
 					ctx.MoveNext = false;
 					IsDone = true;
-                }
+					ctx.PipelineEnded = true;
+				}
 			};
 		}
 

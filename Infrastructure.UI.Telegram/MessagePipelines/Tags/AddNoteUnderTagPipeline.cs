@@ -7,17 +7,16 @@ using Infrastructure.UI.TelegramBot.ResponseTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
 {
-    [Route("/get-tag-data")]
-    [Description("Use this command for getting tag data")]
-    public class GetTagDataPipeline : MessagePipelineBase
+    [Route("/new-tagged-note")]
+    [Description("Use this command for creating notes")]
+    public class AddNoteUnderTagPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
-        public GetTagDataPipeline(TagAppService tagService)
+        public AddNoteUnderTagPipeline(TagAppService tagService)
         {
             _tagService = tagService;
         }
@@ -25,8 +24,10 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
         public override void RegisterPipelineStages()
         {
             Stages.Add(AskForSetName);
-            Stages.Add(ReturnNotes);
+            Stages.Add(AskForNoteText);
+            Stages.Add(SaveNote);
         }
+
 
         public ContentResult AskForSetName(MessageContext ctx)
         {
@@ -40,23 +41,28 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
 
             return new BotMessage()
             {
-                Text = "Choose the set you want to open:",
+                Text = "Choose the set you want to extend:",
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())
             };
         }
 
-        public ContentResult ReturnNotes(MessageContext ctx)
+        public ContentResult AskForNoteText(MessageContext ctx)
         {
-            var id = Guid.Parse(ctx.Message.Text);
-            var tag = _tagService.Get(id);
-            int counter = 0;
-            StringBuilder b = new(Environment.NewLine);
-            foreach (var item in tag.Notes)
+            Guid id;
+            if(!Guid.TryParse(ctx.Message.Text,out id))
             {
-                b.AppendLine(++counter + " " + item.Text);
+                ctx.MoveNext = false;
+                ctx.PipelineStageSucceeded = false;
+                return Text("Pick the set you want to modify,do not enter custom text.");
             }
-
-            return Text( $"{tag.Name}: "+ b.ToString());
+            cache.SetValueForChat("AddSetItemSetId", id, ctx.Recipient);
+            return Text("Note text:");
+        }
+        private ContentResult SaveNote(MessageContext ctx)
+        {
+            var tagId = cache.GetValueForChat<Guid>("AddSetItemSetId", ctx.Recipient);
+            _tagService.CreateNoteUnderTag(tagId, ctx.Message.Text, GetCurrentUser().Id);
+            return Text("✅ Note saved");
         }
     }
 }

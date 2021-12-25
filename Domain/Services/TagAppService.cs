@@ -36,7 +36,8 @@ namespace Application.Services
             var note = _noteRepository.Add(new()
             {
                 Text = text,
-                Tags = new() { tag }
+                Tags = new() { tag },
+                UserId = userId
             });
             return note;
         }
