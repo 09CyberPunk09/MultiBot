@@ -5,6 +5,7 @@ using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Telegram.Bot.Types.ReplyMarkups;
 using SystemUser = Persistence.Sql.Entites.User;
 
 namespace Infrastructure.UI.Core.MessagePipelines
@@ -84,7 +85,23 @@ namespace Infrastructure.UI.Core.MessagePipelines
             return new() { Text = text };
         }
 
-		protected SystemUser GetCurrentUser()
+		protected BotMessage YesNo(string question)
+        {
+            var markups = new List<InlineKeyboardButton>
+            {
+                InlineKeyboardButton.WithCallbackData("Yes", true.ToString()),
+                InlineKeyboardButton.WithCallbackData("No", false.ToString())
+            };
+
+            return new BotMessage()
+			{
+				Text = question,
+				Buttons = new InlineKeyboardMarkup(markups.ToArray())
+			};
+		}
+
+
+	protected SystemUser GetCurrentUser()
         {
             //todo: implement getting from cache
             //todo: add caching library

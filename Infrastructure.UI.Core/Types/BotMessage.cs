@@ -1,7 +1,7 @@
 ﻿using Infrastructure.UI.Core.Interfaces;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.TelegramBot.ResponseTypes
+namespace Infrastructure.UI.Core.Types
 {
     public class BotMessage : ContentResult
 	{
