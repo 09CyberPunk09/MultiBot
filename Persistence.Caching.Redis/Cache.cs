@@ -34,7 +34,6 @@ namespace Persistence.Caching.Redis
         [Serializable]
         class CachePayload
         {
-            public string TypeName { get; set; }
             public long ChatId { get; set; }
             public string Key { get; set; }
         }
@@ -44,8 +43,7 @@ namespace Persistence.Caching.Redis
             CachePayload get = new()
             {
                 ChatId = chatId,
-                Key = key,
-                TypeName = GetType().FullName
+                Key = key
             };
             return Get<T>(JsonConvert.SerializeObject(get));
         }
@@ -54,9 +52,8 @@ namespace Persistence.Caching.Redis
         {
             CachePayload cacheKey = new()
             {
-                ChatId = Convert.ToInt64(chatId),
-                Key = key,
-                TypeName = GetType().FullName
+                ChatId = chatId,
+                Key = key
             };
             Set(JsonConvert.SerializeObject(cacheKey), value);
         }
