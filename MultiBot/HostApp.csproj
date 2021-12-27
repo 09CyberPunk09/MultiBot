@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.UI.Core.csproj" />
+    <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.UI.TelegramBot.csproj" />
   </ItemGroup>
 

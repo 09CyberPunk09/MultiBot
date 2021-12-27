@@ -1,4 +1,5 @@
-﻿using Infrastructure.UI.Core.Attributes;
+﻿using Autofac;
+using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
@@ -10,12 +11,17 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 	[Description("This is an endpoint for developers, we use it for confirming that everythinf is ok")]
 	public class HelloMessagePipeline : MessagePipelineBase
 	{
+        public HelloMessagePipeline(ILifetimeScope scope) : base(scope)
+        {
+
+        }
 		public override void RegisterPipelineStages()
 		{
-			Stages.Add(SayHello);
-			Stages.Add(SayWhatsUp);
-			Stages.Add(SayGoodbye);
-		}
+            RegisterStage(SayHello);
+			RegisterStage(SayWhatsUp);
+            RegisterStage(SayGoodbye);
+            var t = new Stage(SayHello);
+        }
 
         private ContentResult SayHello(MessageContext ctx)
         {

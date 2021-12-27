@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace Persistence.Caching.Redis
 {
@@ -8,15 +11,25 @@ namespace Persistence.Caching.Redis
     {
         private readonly ConnectionMultiplexer redis;
         private readonly IDatabase db;
+        private readonly DatabaseType _dbType;
+        //todo: move to config.json
+        private readonly string _serverAddress = "localhost:6379";
+        private readonly ConfigurationOptions options = new()
+        {
+            EndPoints = { { "localhost", 6379 } },
+            AllowAdmin = true
+        };
 
         //add an enuum with values System,PipelineMetadata, Pipeline where the value will be the database ids 
         //todo: Add expiration
-        public Cache()
+        public Cache(DatabaseType dbType = DatabaseType.System)
         {
             //todo: move to config.json
-            redis = ConnectionMultiplexer.Connect("localhost");
-            db = redis.GetDatabase();
+            _dbType = dbType;
+            redis = ConnectionMultiplexer.Connect(options);
+            db = redis.GetDatabase((int)dbType);
         }
+
         public TResult Get<TResult>(string key)
         {
             var data = db.StringGet(new RedisKey(key));
@@ -26,36 +39,22 @@ namespace Persistence.Caching.Redis
         public void Set(string key, object value)
         {
             string valueToSet = JsonConvert.SerializeObject(value);
-            db.StringSet(new RedisKey(key), new RedisValue(valueToSet));
+            db.StringSet(new RedisKey(key), new RedisValue(valueToSet),TimeSpan.FromDays(90));
         }
 
-
-
-        [Serializable]
-        class CachePayload
+        public void PurgeDatabase()
         {
-            public long ChatId { get; set; }
-            public string Key { get; set; }
+            redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType,CommandFlags.HighPriority);
         }
 
-        public T GetValueForChat<T>(string key,long chatId)
+        protected IEnumerable<RedisKey> GetALLKeys()
         {
-            CachePayload get = new()
-            {
-                ChatId = chatId,
-                Key = key
-            };
-            return Get<T>(JsonConvert.SerializeObject(get));
+            return redis.GetServer(options.EndPoints.First()).Keys((int)_dbType);
         }
 
-        public void SetValueForChat(string key, object value,long chatId)
+        protected void Remove(RedisKey key)
         {
-            CachePayload cacheKey = new()
-            {
-                ChatId = chatId,
-                Key = key
-            };
-            Set(JsonConvert.SerializeObject(cacheKey), value);
+            db.KeyDelete(key);
         }
 
     }

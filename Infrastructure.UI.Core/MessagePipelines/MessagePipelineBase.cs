@@ -1,54 +1,42 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Autofac;
+using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.Types;
-using Persistence.Caching.Redis;
 using Persistence.Sql;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using Telegram.Bot.Types.ReplyMarkups;
+using StageDelegate = System.Func<Infrastructure.UI.Core.Types.MessageContext, Infrastructure.UI.Core.Interfaces.ContentResult>;
 using SystemUser = Persistence.Sql.Entites.User;
 
 namespace Infrastructure.UI.Core.MessagePipelines
 {
-    public class MessagePipelineBase : IMessagePipeline
+    public class MessagePipelineBase : Pipeline,IMessagePipeline
 	{
-		protected Cache cache = new();
-
-		private MessageContext _context;
-		public Func<MessageContext, ContentResult> Current { get; set; }
-		public List<Func<MessageContext, ContentResult>> Stages { get; set; }
-		public bool IsLooped { get; set; }
-		public Action<ContentResult, MessageContext> StagePostAction { get; set; }
-		public int CurrentActionIndex { get; set; }
-		public bool IsDone { get; set; }
-
-		public MessagePipelineBase(int currentActionIndex = 0)
-		{
-			InitBaseComponents();
-			RegisterPipelineStages();
-			Current = Stages.First();
-			CurrentActionIndex = currentActionIndex;
-		}
-		public virtual void RegisterPipelineStages()
-		{
-
+        public MessagePipelineBase(ILifetimeScope scope) : base(scope)
+        {
+			_scope = scope;
 		}
 
-		protected void InitBaseComponents()
-		{
-			Stages = new();
-			ConfigureBasicPostAction();
-		}
-
-		private ContentResult Execute(MessageContext ctx,int index = -1)
+		public ContentResult Execute(MessageContext ctx,string stageName = null)
 		{
 			//try
 			//{
-			_context = ctx;
-			CurrentActionIndex = index != -1 ? index : 0;
-			var result = index == -1 ? Current(ctx) : Stages[index](ctx);
-			StagePostAction?.Invoke(result, ctx);
-			_context = null;
+			MessageContext = ctx;
+			Stage stage;
+			if(stageName != null)
+            {
+				stage = Stages.Stages.FirstOrDefault(x => x.MethodName == stageName);
+			}
+            else
+            {
+				stage = Stages.Stages.FirstOrDefault();
+            }
+
+			ctx.CurrentStage = stage;
+
+			var result = stage.Invoke(ctx);
+			StagePostAction?.Invoke(stage, ctx);
+			MessageContext = null;
 			return result;
 			//}
 			//catch (Exception ex)
@@ -58,57 +46,77 @@ namespace Infrastructure.UI.Core.MessagePipelines
 			//}
 		}
 
-		public ContentResult ExecuteByIndex(MessageContext ctx, int index) 
-			=> Execute(ctx, index);
 
-		public ContentResult ExecuteCurrent(MessageContext ctx)
-			=> Execute(ctx);
-
-		public void ConfigureBasicPostAction()
+		protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
 		{
-			StagePostAction = (ContentResult r, MessageContext ctx) =>
+			var chunk = _scope.Resolve<TChunk>(new NamedParameter("ctx",MessageContext));
+			chunk.Stages.Stages.ForEach(stage => RegisterStage(stage));
+		}
+
+		protected SystemUser GetCurrentUser()
+		{
+			//todo: implement getting from cache
+			//todo: add caching library
+			using (var ctx = new SqlServerDbContext())
 			{
-				IsDone = false;
-				if(!(CurrentActionIndex + 1 < Stages.Count))
-                {
-					ctx.MoveNext = false;
-					IsDone = true;
-					ctx.PipelineEnded = true;
-				}
-			};
+				return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == MessageContext.Recipient);
+			}
 		}
 
 
-        protected static ContentResult Text(string text)
+		#region ResponseTemplates
+		protected ContentResult Text(string text) => ResponseTemplates.Text(text);
+        #endregion
+    }
+
+
+    public class StageMap 
+	{
+		public List<Stage> Stages { get; set; } = new();
+        public Stage Root { get; set; }
+        public Stage Current
         {
-			//todo: implement delayd messages and fire-and-forget messages
-            return new() { Text = text };
+			//todo: remake for search in stacktrace unitill the algo finds the stage which calls the method
+			get => Stages.FirstOrDefault(x => (new StackTrace()).GetFrame(1).GetMethod().Name == x.MethodName);
+		}
+
+		public Stage this [int index]
+        {
+			get => Stages[index];
+			set => Stages[index] = value;
         }
-
-		protected BotMessage YesNo(string question)
+			
+		public void Add(Stage stage)
         {
-            var markups = new List<InlineKeyboardButton>
+			if (Root == null)
             {
-                InlineKeyboardButton.WithCallbackData("Yes", true.ToString()),
-                InlineKeyboardButton.WithCallbackData("No", false.ToString())
-            };
-
-            return new BotMessage()
-			{
-				Text = question,
-				Buttons = new InlineKeyboardMarkup(markups.ToArray())
-			};
-		}
-
-
-	protected SystemUser GetCurrentUser()
-        {
-            //todo: implement getting from cache
-            //todo: add caching library
-            using (var ctx = new SqlServerDbContext())
-            {
-				return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == _context.Recipient);
+				Root = stage;
+				Stages.Add(stage);
+				return;
             }
+
+			var last = Stages.LastOrDefault();
+			last.NextStage = stage;
+			Stages.Add(stage);
         }
+    }
+
+
+
+	public class Stage
+    {
+		private readonly string _name;
+        public Stage(StageDelegate f)
+        {
+			Method = f;
+			_name = f.Method.Name;
+		}
+		public StageDelegate Method { get; }
+        public Stage NextStage { get; set; }
+        public string MethodName { get => _name; }
+
+		public ContentResult Invoke(MessageContext ctx)
+			=> Method.Invoke(ctx);
+
     }
 }

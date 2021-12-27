@@ -8,7 +8,8 @@ namespace Infrastructure.UI.TelegramBot
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			_ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MessagePipelineBase))).ToArray());
+			_ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MessagePipelineBase))).ToArray()).InstancePerLifetimeScope();
+			_ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(PipelineChunk))).ToArray()).InstancePerDependency();
 			base.Load(builder);
 		}
 	}

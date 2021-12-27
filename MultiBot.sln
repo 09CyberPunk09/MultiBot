@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostApp", "MultiBot\HostApp.csproj", "{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Sql", "Infrastr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UI.TelegramBot", "Infrastructure.UI.Telegram\Infrastructure.UI.TelegramBot.csproj", "{AC731A4E-EEF8-4BF1-8319-D7B9A437381D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UI.Core", "Infrastructure.UI.Core\Infrastructure.UI.Core.csproj", "{FEA9B573-FE4B-432B-99AC-FC1AA2E24FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.TextUI.Core", "Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj", "{FEA9B573-FE4B-432B-99AC-FC1AA2E24FEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Infrastructure.Kernel\Kernel.csproj", "{61C35052-3E7C-4F08-8673-5CC0249BF898}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Caching.Redis", "Persistence.Caching.Redis\Persistence.Caching.Redis.csproj", "{EF069282-47EA-4529-8C2F-EB0235D508D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Caching.Redis.TelegramCaching", "Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj", "{0BD43284-5538-48F2-B7BC-99CC4FE5214E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF069282-47EA-4529-8C2F-EB0235D508D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{08958154-A89B-4AEE-9E54-F028076E530A} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{61C35052-3E7C-4F08-8673-5CC0249BF898} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{EF069282-47EA-4529-8C2F-EB0235D508D1} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
+		{0BD43284-5538-48F2-B7BC-99CC4FE5214E} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}

@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.Kernel\Kernel.csproj" />
     <ProjectReference Include="..\Infrastructure.Sql\Persistence.Sql.csproj" />
+    <ProjectReference Include="..\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
 

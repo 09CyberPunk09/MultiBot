@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Infrastructure.UI.Core.MessagePipelines;
+using System;
 
 namespace Infrastructure.UI.Core.Types
 {
@@ -10,5 +11,6 @@ namespace Infrastructure.UI.Core.Types
 		public bool MoveNext { get; set; }
         public bool PipelineEnded { get; set; } = false;
         public long Recipient { get; set; }
+        public Stage CurrentStage { get; set; }
     }
 }

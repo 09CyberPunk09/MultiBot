@@ -6,6 +6,7 @@ using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.MessagePipelines;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
 using Persistence.Caching.Redis;
+using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
     public class MessageConsumer
     {
 		#region Cache Keys
-		private const string CURRENT_MESSAGEPIPELINE_METHOD_INDEX = "CurrentMessagePipelineIndex";
+		private const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
 		private const string CURRENT_MESSAGEPIPELINE_COMMAND = "CurrentMessagePipelineCommand";
         #endregion
 
@@ -24,7 +25,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
         private readonly ITelegramBotClient _uiClient;
 		private readonly IResultSender _sender;
 		private readonly ILifetimeScope _lifetimeScope;
-		private readonly Cache _cache;
+		private readonly TelegramCache _cache;
 		#endregion
 
 		private static readonly Dictionary<string, Type> pipleineCommands;
@@ -73,20 +74,14 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 		{
 			if (pipeline != null)
 			{
-				int? current = _cache.GetValueForChat<int?>(CURRENT_MESSAGEPIPELINE_METHOD_INDEX, ctx.Recipient);
+				string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
 
-				var result = current == null ? pipeline.ExecuteCurrent(ctx) : pipeline.ExecuteByIndex(ctx,current.Value);
+				var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx,current);
 
                 if (ctx.PipelineStageSucceeded)
                 {
-					int setIdx = current != null ? current.Value + 1 : 1;
-
-					if(pipeline.IsLooped && ctx.PipelineEnded)
-                    {
-						setIdx = 0;
-					}
-
-					_cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_METHOD_INDEX, setIdx, ctx.Recipient);
+					var nextName = ctx.CurrentStage.NextStage?.MethodName;
+					_cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
 				}
 
 				string commandToSet = null;
@@ -97,7 +92,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
 
                 if (pipeline.IsDone)
                 {
-					_cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_METHOD_INDEX, 0, ctx.Recipient);
+					_cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, ctx.Recipient);
 					_cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, ctx.Recipient);
 				}
                 else

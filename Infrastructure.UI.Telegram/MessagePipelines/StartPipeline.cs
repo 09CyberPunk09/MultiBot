@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Autofac;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -12,14 +13,14 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
     public class StartPipeline : MessagePipelineBase
     {
         private readonly UserAppService _userService;
-        public StartPipeline(UserAppService userService)
+        public StartPipeline(UserAppService userService, ILifetimeScope scope) : base(scope)
         {
             _userService = userService;
         }
 
         public override void RegisterPipelineStages()
         {
-            Stages.Add(Start);
+            RegisterStage(Start);
             IsLooped = true;
         }
 

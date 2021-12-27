@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Autofac;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -14,14 +15,14 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
     public class GetAllTagsPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
-        public GetAllTagsPipeline(TagAppService tagService)
+        public GetAllTagsPipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;
         }
 
         public override void RegisterPipelineStages()
         {
-            Stages.Add(AskForSetName);
+            RegisterStage(AskForSetName);
         }
 
         public ContentResult AskForSetName(MessageContext ctx)

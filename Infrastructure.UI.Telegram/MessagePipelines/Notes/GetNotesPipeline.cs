@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Autofac;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -16,14 +17,14 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 	public class GetNotesPipeline : MessagePipelineBase
 	{
 		private readonly NoteAppService _noteService;
-        public GetNotesPipeline(NoteAppService noteService)
-        {
+        public GetNotesPipeline(NoteAppService noteService, ILifetimeScope scope) : base(scope)
+		{
 			_noteService = noteService;
 		}
 
         public override void RegisterPipelineStages()
 		{
-			Stages.Add(GetNotes);
+			RegisterStage(GetNotes);
 			IsLooped = true;
 		}
 
