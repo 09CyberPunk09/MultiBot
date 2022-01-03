@@ -33,7 +33,7 @@ namespace Persistence.Caching.Redis.TelegramCaching
         {
             GetALLKeys().ToList().ForEach(key =>
             {
-                if(key.ToString().Contains(key.ToString()))
+                if (key.ToString().Contains(key.ToString()))
                 {
                     Remove(key);
                 }

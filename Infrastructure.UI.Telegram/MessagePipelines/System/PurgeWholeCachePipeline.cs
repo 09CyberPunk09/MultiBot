@@ -23,7 +23,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.System
             RegisterStage(Confirm);
             RegisterStage(Purge);
         }
-            
+
         public ContentResult Confirm(MessageContext ctx) => ResponseTemplates.YesNo("Are you shure you want to purge this chat data?");
 
         public ContentResult Purge(MessageContext ctx)

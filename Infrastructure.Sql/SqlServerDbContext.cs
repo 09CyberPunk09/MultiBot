@@ -4,29 +4,29 @@ using Persistence.Sql.Entites;
 namespace Persistence.Sql
 {
     public class SqlServerDbContext : DbContext
-	{
-		//todo: put into config.json
-		private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-Db;";
+    {
+        //todo: put into config.json
+        private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-Db;";
 
-		public DbSet<Note> Notes { get; set; }
-		public DbSet<Tag> Tags { get; set; }
-		public DbSet<User> Users { get; set; }
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<User> Users { get; set; }
 
-		public SqlServerDbContext() : base()
-		{
-		}
+        public SqlServerDbContext() : base()
+        {
+        }
 
-		public DbContextOptions<SqlServerDbContext> _options;
+        public DbContextOptions<SqlServerDbContext> _options;
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			optionsBuilder.UseSqlServer(connectionstring);
-		}
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(connectionstring);
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-			base.OnModelCreating(modelBuilder);
-		}
-	}
+            base.OnModelCreating(modelBuilder);
+        }
+    }
 }

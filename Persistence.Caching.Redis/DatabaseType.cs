@@ -2,8 +2,8 @@
 {
     public enum DatabaseType
     {
-       System = 1,
-       Telegram,
-       DbCache
+        System = 1,
+        Telegram,
+        DbCache
     }
 }

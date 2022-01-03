@@ -3,7 +3,7 @@
 namespace Infrastructure.UI.TelegramBot.ResponseTypes
 {
     public class TextResult : ContentResult
-	{
+    {
         public TextResult()
         {
 
@@ -12,5 +12,5 @@ namespace Infrastructure.UI.TelegramBot.ResponseTypes
         {
             Text = message;
         }
-	}
+    }
 }

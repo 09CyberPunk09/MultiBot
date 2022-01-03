@@ -2,7 +2,6 @@
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Persistence.Caching.Redis
@@ -39,12 +38,12 @@ namespace Persistence.Caching.Redis
         public void Set(string key, object value)
         {
             string valueToSet = JsonConvert.SerializeObject(value);
-            db.StringSet(new RedisKey(key), new RedisValue(valueToSet),TimeSpan.FromDays(90));
+            db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
 
         public void PurgeDatabase()
         {
-            redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType,CommandFlags.HighPriority);
+            redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType, CommandFlags.HighPriority);
         }
 
         protected IEnumerable<RedisKey> GetALLKeys()

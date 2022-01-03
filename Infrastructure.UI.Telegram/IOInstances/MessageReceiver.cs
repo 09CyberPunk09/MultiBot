@@ -6,41 +6,41 @@ using Telegram.Bot;
 namespace Infrastructure.UI.TelegramBot
 {
     public class MessageReceiver : IMessageReceiver
-	{
-		#region Injected members
-		private readonly ITelegramBotClient _uiClient;
-		private readonly MessageConsumer _consumer;
-		#endregion
+    {
+        #region Injected members
+        private readonly ITelegramBotClient _uiClient;
+        private readonly MessageConsumer _consumer;
+        #endregion
 
 
-		static MessageReceiver()
-		{
+        static MessageReceiver()
+        {
 
-		}
+        }
 
-		public MessageReceiver(MessageConsumer consumer, ITelegramBotClient uiClient)
-		{
+        public MessageReceiver(MessageConsumer consumer, ITelegramBotClient uiClient)
+        {
 
-			(_consumer,_uiClient) = (consumer,uiClient);
+            (_consumer, _uiClient) = (consumer, uiClient);
 
-		}
-		public void ConsumeMessage(Message message)
-		{
-			_consumer.ConsumeMessage(message);
-		}
+        }
+        public void ConsumeMessage(Message message)
+        {
+            _consumer.ConsumeMessage(message);
+        }
 
 
 
-		public void Start()
-		{
-			//MatchPipeline();
-			_uiClient.StartReceiving<MessageUpdateHandler>();
-		}
+        public void Start()
+        {
+            //MatchPipeline();
+            _uiClient.StartReceiving<MessageUpdateHandler>();
+        }
 
-		public void Stop()
-		{
-		}
+        public void Stop()
+        {
+        }
 
-	}
+    }
 
 }

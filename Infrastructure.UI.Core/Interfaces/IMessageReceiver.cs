@@ -4,7 +4,7 @@ using Infrastructure.UI.Core.Types;
 namespace Infrastructure.UI.Core.Interfaces
 {
     public interface IMessageReceiver : IStartStop
-	{
-		void ConsumeMessage(Message message);
+    {
+        void ConsumeMessage(Message message);
     }
 }

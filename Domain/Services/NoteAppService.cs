@@ -14,7 +14,7 @@ namespace Application.Services
             _noteRepository = noteRepository;
         }
 
-        public Note Create(string text,Guid userId)
+        public Note Create(string text, Guid userId)
         {
             return _noteRepository.Add(new()
             {

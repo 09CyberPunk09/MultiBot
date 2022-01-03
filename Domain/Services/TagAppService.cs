@@ -10,7 +10,7 @@ namespace Application.Services
     {
         private Repository<Tag> _tagRepository;
         private Repository<Note> _noteRepository;
-        public TagAppService(Repository<Tag> tagRepo,Repository<Note> noteRepository)
+        public TagAppService(Repository<Tag> tagRepo, Repository<Note> noteRepository)
         {
             _tagRepository = tagRepo;
             _noteRepository = noteRepository;
@@ -28,9 +28,9 @@ namespace Application.Services
         public Tag Get(Guid id) => _tagRepository.Get(id);
 
         public IEnumerable<Tag> GetAll(Guid userId)
-            =>_tagRepository.GetQuery().Where(x => x.UserId == userId);
+            => _tagRepository.GetQuery().Where(x => x.UserId == userId);
 
-        public Note CreateNoteUnderTag(Guid tagId,string text,Guid userId)
+        public Note CreateNoteUnderTag(Guid tagId, string text, Guid userId)
         {
             var tag = _tagRepository.Get(tagId);
             var note = _noteRepository.Add(new()

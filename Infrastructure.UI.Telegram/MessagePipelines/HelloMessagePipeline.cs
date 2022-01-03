@@ -8,17 +8,17 @@ using System.ComponentModel;
 namespace Infrastructure.UI.TelegramBot.MessagePipelines
 {
     [Route("/hello")]
-	[Description("This is an endpoint for developers, we use it for confirming that everythinf is ok")]
-	public class HelloMessagePipeline : MessagePipelineBase
-	{
+    [Description("This is an endpoint for developers, we use it for confirming that everythinf is ok")]
+    public class HelloMessagePipeline : MessagePipelineBase
+    {
         public HelloMessagePipeline(ILifetimeScope scope) : base(scope)
         {
 
         }
-		public override void RegisterPipelineStages()
-		{
+        public override void RegisterPipelineStages()
+        {
             RegisterStage(SayHello);
-			RegisterStage(SayWhatsUp);
+            RegisterStage(SayWhatsUp);
             RegisterStage(SayGoodbye);
             var t = new Stage(SayHello);
         }

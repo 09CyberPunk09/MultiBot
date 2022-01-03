@@ -5,9 +5,7 @@ using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
 {
@@ -16,7 +14,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
     public class AddNoteUnderTagPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
-        public AddNoteUnderTagPipeline(TagAppService tagService,ILifetimeScope scope) : base(scope)
+        public AddNoteUnderTagPipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;
         }
@@ -31,7 +29,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
         public ContentResult AskForNoteText(MessageContext ctx)
         {
             Guid id;
-            if(!Guid.TryParse(ctx.Message.Text,out id))
+            if (!Guid.TryParse(ctx.Message.Text, out id))
             {
                 ctx.MoveNext = false;
                 ctx.PipelineStageSucceeded = false;

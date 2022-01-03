@@ -8,19 +8,19 @@ namespace Infrastructure.UI.Core.MessagePipelines
 {
     public class PipelineChunk : Pipeline
     {
-        public PipelineChunk(ILifetimeScope scope) :base(scope)
+        public PipelineChunk(ILifetimeScope scope) : base(scope)
         {
         }
 
-		protected SystemUser GetCurrentUser(MessageContext ctx)
-		{
-			//todo: implement getting from cache
-			//todo: add caching library
-			using (var _dbContext = new SqlServerDbContext())
-			{
-				return _dbContext.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == ctx.Recipient);
-			}
-		}
+        protected SystemUser GetCurrentUser(MessageContext ctx)
+        {
+            //todo: implement getting from cache
+            //todo: add caching library
+            using (var _dbContext = new SqlServerDbContext())
+            {
+                return _dbContext.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == ctx.Recipient);
+            }
+        }
 
-	}
+    }
 }

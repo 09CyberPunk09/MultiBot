@@ -4,7 +4,7 @@ using Infrastructure.UI.Core.Types;
 namespace Infrastructure.UI.Core.Interfaces
 {
     public interface IQueryReceiver : IStartStop
-	{
-		void ConsumeQuery(Message query);
-	}
+    {
+        void ConsumeQuery(Message query);
+    }
 }

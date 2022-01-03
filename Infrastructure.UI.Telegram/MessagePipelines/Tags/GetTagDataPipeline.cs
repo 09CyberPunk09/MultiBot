@@ -4,7 +4,6 @@ using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.ResponseTypes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,7 +31,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
         public ContentResult AskForSetName(MessageContext ctx)
         {
             var tags = _tagService.GetAll(GetCurrentUser().Id);
-            
+
             var markups = new List<InlineKeyboardButton>();
             foreach (var item in tags)
             {
@@ -57,7 +56,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
                 b.AppendLine(++counter + " " + item.Text);
             }
 
-            return Text( $"{tag.Name}: "+ b.ToString());
+            return Text($"{tag.Name}: " + b.ToString());
         }
     }
 }

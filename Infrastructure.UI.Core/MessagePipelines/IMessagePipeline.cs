@@ -9,17 +9,17 @@ namespace Infrastructure.UI.Core.MessagePipelines
     /// </summary>
 	//todo: add missing methods to this interface
     public interface IMessagePipeline
-	{
-		Action<Stage, MessageContext> StagePostAction { get; set; }
+    {
+        Action<Stage, MessageContext> StagePostAction { get; set; }
 
-		ContentResult Execute(MessageContext ctx,string stageName);
-		void RegisterPipelineStages();
+        ContentResult Execute(MessageContext ctx, string stageName);
+        void RegisterPipelineStages();
 
-		public int CurrentActionIndex { get; set; }
-		public bool IsDone { get; set; }
+        public int CurrentActionIndex { get; set; }
+        public bool IsDone { get; set; }
 
-		bool IsLooped { get; set; }
+        bool IsLooped { get; set; }
 
-		void ConfigureBasicPostAction();
-	}
+        void ConfigureBasicPostAction();
+    }
 }

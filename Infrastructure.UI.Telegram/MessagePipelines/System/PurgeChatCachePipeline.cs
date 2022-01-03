@@ -4,12 +4,7 @@ using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines.System
 {
@@ -50,7 +45,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.System
             {
                 return Text("Operation is canceled.");
             }
-            
+
         }
     }
 }
