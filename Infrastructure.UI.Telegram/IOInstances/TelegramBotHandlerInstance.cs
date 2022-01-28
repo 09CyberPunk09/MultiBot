@@ -64,7 +64,7 @@ namespace Infrastructure.UI.TelegramBot
 
         private TelegramBotClient ConfigureApiClient()
         {
-            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4") { Timeout = TimeSpan.FromSeconds(10) };
+            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4") { Timeout = TimeSpan.FromMinutes(10) };
 
             client.GetUpdatesAsync();
             return client;

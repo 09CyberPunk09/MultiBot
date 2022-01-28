@@ -75,34 +75,40 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                 string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
 
                 var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
-
-                if (ctx.PipelineStageSucceeded)
+                if(result != null)
                 {
-                    var nextName = ctx.CurrentStage.NextStage?.MethodName;
-                    _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
-                }
+                    if (ctx.PipelineStageSucceeded)
+                    {
+                        var nextName = ctx.CurrentStage.NextStage?.MethodName;
+                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
+                    }
 
-                string commandToSet = null;
-                if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
-                {
-                    commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route;
-                }
+                    string commandToSet = null;
+                    if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
+                    {
+                        commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route;
+                    }
 
-                if (pipeline.IsDone)
-                {
-                    _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, ctx.Recipient);
-                    _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, ctx.Recipient);
+                    if (pipeline.IsDone)
+                    {
+                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, ctx.Recipient);
+                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, ctx.Recipient);
+                    }
+                    else
+                    {
+                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
+                    }
+
+                    _sender.SendMessage(result, ctx);
                 }
                 else
                 {
-                    _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
+                    _sender.SendMessage(new TextResult("Error! no message pipeline found"), ctx);
                 }
-
-                _sender.SendMessage(result, ctx);
             }
             else
             {
-                _sender.SendMessage(new TextResult("Error! no message pipeline found"), ctx);
+                _sender.SendMessage(new TextResult("An error occured while handling your message"), ctx);
             }
         }
 

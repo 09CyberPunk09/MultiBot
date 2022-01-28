@@ -19,8 +19,6 @@ namespace Infrastructure.UI.Core.MessagePipelines
 
         public ContentResult Execute(MessageContext ctx, string stageName = null)
         {
-            //try
-            //{
             MessageContext = ctx;
             Stage stage;
             if (stageName != null)
@@ -38,14 +36,15 @@ namespace Infrastructure.UI.Core.MessagePipelines
             StagePostAction?.Invoke(stage, ctx);
             MessageContext = null;
             return result;
-            //}
-            //catch (Exception ex)
-            //{
-            //	// todo: here wil be some logics for logging
-            //	throw;
-            //}
         }
 
+        public void ForbidMovingNext()
+        {
+            MessageContext.MoveNext = false;
+            MessageContext.PipelineStageSucceeded = false;
+            MessageContext.PipelineEnded = false;
+            IsDone = false;
+        }
 
         protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
         {

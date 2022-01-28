@@ -1,7 +1,10 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Infrastructure.TextUI.Core.Types;
+using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.Types;
 using Infrastructure.UI.TelegramBot.ResponseTypes;
+using Persistence.Caching.Redis.TelegramCaching;
 using System;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -11,35 +14,52 @@ namespace Infrastructure.UI.TelegramBot
     public class MessageSender : IResultSender
     {
         ITelegramBotClient _uiClient;
+        private readonly TelegramCache cache = new();
 
         public MessageSender(ITelegramBotClient uiClient)
         {
             _uiClient = uiClient;
         }
-        public void SendMessage(ContentResult message, MessageContext ctx)
+        public async Task SendMessage(ContentResult message, MessageContext ctx)
         {
-            void SendTextMessage(string text = "", IReplyMarkup markup = null)
+            var chatId = new ChatId(ctx.Message.ChatId);
+            string lastMessageCacheey = "LastPipelineMessageId";
+            async Task<Telegram.Bot.Types.Message> SendTextMessageAsync(string text = "", IReplyMarkup markup = null)
             {
-                _uiClient.SendTextMessageAsync(
-                chatId: new ChatId(ctx.Message.ChatId),
+                var message = await _uiClient.SendTextMessageAsync(
+                chatId: chatId,
                 text: text,
                 replyMarkup: markup);
+
+                cache.SetValueForChat(lastMessageCacheey, message.MessageId, ctx.Recipient);
+                return message;
             }
+
+            async Task EditMessageAsync(EditLastMessage message)
+            {
+                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, ctx.Recipient);
+                await _uiClient.EditMessageTextAsync(chatId, lastMessageId, message.NewMessage.Text);
+                await _uiClient.EditMessageReplyMarkupAsync(chatId, lastMessageId, message.NewMessage.Buttons);
+            }
+
 
             //TODO: Rewrite to more extensible way
             switch (message)
             {
+                case EditLastMessage editedMessage:
+                    await EditMessageAsync(editedMessage);
+                    break;
                 case TextResult textResult:
-                    SendTextMessage(textResult.Text);
+                    await SendTextMessageAsync(textResult.Text);
                     break;
                 case MultiMessageResult multi:
-                    multi.Messages.ForEach(x => SendTextMessage(x.Text));
+                    multi.Messages.ForEach(async x => await SendTextMessageAsync(x.Text));
                     break;
                 case BotMessage botMessage:
-                    SendTextMessage(botMessage.Text, botMessage.Buttons);
+                    await SendTextMessageAsync(botMessage.Text, botMessage.Buttons);
                     break;
                 case ContentResult textResult:
-                    SendTextMessage(textResult.Text);
+                    await SendTextMessageAsync(textResult.Text);
                     break;
                 default:
                     throw new NotImplementedException("The method to concrete response type is not implemented!");

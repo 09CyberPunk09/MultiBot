@@ -46,7 +46,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
             StagePostAction = (Stage stage, MessageContext ctx) =>
             {
                 IsDone = false;
-                if (stage.NextStage == null)
+                if (stage.NextStage == null && ctx.PipelineStageSucceeded)
                 {
                     ctx.MoveNext = false;
                     IsDone = true;
