@@ -3,6 +3,7 @@ using Infrastructure.UI.Core.Types;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using StageDelegate = System.Func<Infrastructure.UI.Core.Types.MessageContext, Infrastructure.UI.Core.Interfaces.ContentResult>;
+using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
 
 namespace Infrastructure.UI.Core.MessagePipelines
@@ -54,6 +55,9 @@ namespace Infrastructure.UI.Core.MessagePipelines
                 }
             };
         }
+
+        protected CallbackButtonButton Button(string text,string callbackData)
+            => CallbackButtonButton.WithCallbackData(text, callbackData);
 
         protected void RegisterStage(StageDelegate stage)
         {

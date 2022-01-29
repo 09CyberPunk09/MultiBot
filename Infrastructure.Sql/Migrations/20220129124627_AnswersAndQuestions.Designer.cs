@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Sql;
 
 namespace Persistence.Sql.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    partial class SqlServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220129124627_AnswersAndQuestions")]
+    partial class AnswersAndQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,28 +34,6 @@ namespace Persistence.Sql.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("NoteTag");
-                });
-
-            modelBuilder.Entity("Persistence.Sql.Entites.Answer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("Persistence.Sql.Entites.Note", b =>
@@ -184,15 +164,6 @@ namespace Persistence.Sql.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Persistence.Sql.Entites.Answer", b =>
-                {
-                    b.HasOne("Persistence.Sql.Entites.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("Persistence.Sql.Entites.Note", b =>
                 {
                     b.HasOne("Persistence.Sql.Entites.User", "User")
@@ -207,7 +178,7 @@ namespace Persistence.Sql.Migrations
             modelBuilder.Entity("Persistence.Sql.Entites.PredefinedAnswer", b =>
                 {
                     b.HasOne("Persistence.Sql.Entites.Question", "Question")
-                        .WithMany("PredefinedAnswers")
+                        .WithMany("PredefinedAnswer")
                         .HasForeignKey("QuestionId");
 
                     b.Navigation("Question");
@@ -215,9 +186,7 @@ namespace Persistence.Sql.Migrations
 
             modelBuilder.Entity("Persistence.Sql.Entites.Question", b =>
                 {
-                    b.Navigation("Answers");
-
-                    b.Navigation("PredefinedAnswers");
+                    b.Navigation("PredefinedAnswer");
                 });
 #pragma warning restore 612, 618
         }

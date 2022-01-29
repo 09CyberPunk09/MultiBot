@@ -1,4 +1,5 @@
-﻿using Persistence.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using Persistence.Core;
 using Persistence.Core.BaseTypes;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Persistence.Sql.BaseTypes
         {
             return _context;
         }
+
+
 
         public virtual TEntity Add(TEntity entity)
         {
@@ -57,6 +60,10 @@ namespace Persistence.Sql.BaseTypes
         public virtual IQueryable<TEntity> GetQuery()
         {
             return _context.Set<TEntity>().AsQueryable();
+        }
+        public virtual DbSet<TEntity> GetTable()
+        {
+            return _context.Set<TEntity>();
         }
 
         static void SetCreationAuditionFields(AuditableEntity entity)

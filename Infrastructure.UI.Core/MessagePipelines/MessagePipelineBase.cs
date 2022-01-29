@@ -75,7 +75,6 @@ namespace Infrastructure.UI.Core.MessagePipelines
         public Stage Root { get; set; }
         public Stage Current
         {
-            //todo: remake for search in stacktrace unitill the algo finds the stage which calls the method
             get => Stages.FirstOrDefault(x => (new StackTrace()).GetFrame(1).GetMethod().Name == x.MethodName);
         }
 

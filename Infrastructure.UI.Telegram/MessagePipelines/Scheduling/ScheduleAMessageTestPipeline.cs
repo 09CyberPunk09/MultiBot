@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
-using Button = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
+using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
 
 namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling
@@ -148,8 +148,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling
                      .ToList())
              .ToList();
 
-            buttons.Add(new List<Button>() { Button.WithCallbackData("Confirm", (MenuActiotype.Confirm).ToString()) });
-            buttons.Add(new List<Button>() { Button.WithCallbackData("Undo", (MenuActiotype.Undo).ToString()) });
+            buttons.Add(new List<CallbackButton>() { Button("Confirm", (MenuActiotype.Confirm).ToString()) });
+            buttons.Add(new List<CallbackButton>() { Button("Undo", (MenuActiotype.Undo).ToString()) });
 
             return new BotMessage()
             {
@@ -209,10 +209,10 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling
         }
 
 
-        private static Button Clickable(string text, string callbackData)
-            => Button.WithCallbackData(text, callbackData);
+        private CallbackButton Clickable(string text, string callbackData)
+            => Button(text, callbackData);
 
-        private static List<List<Button>> BuildDaysMenu(IEnumerable<DayPayload> days)
+        private List<List<CallbackButton>> BuildDaysMenu(IEnumerable<DayPayload> days)
         {
             var chunked = days
             .Select((x, i) => new { Index = i, Value = x })
@@ -221,7 +221,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling
             .ToList();
 
             return chunked.Select(
-                x => x.Select(y => Clickable(y.Text, y.Text))
+                x => x.Select(y => Button(y.Text, y.Text))
                         .ToList())
                 .ToList();
         }
