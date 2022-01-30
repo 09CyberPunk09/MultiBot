@@ -38,13 +38,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
             return result;
         }
 
-        public void ForbidMovingNext()
-        {
-            MessageContext.MoveNext = false;
-            MessageContext.PipelineStageSucceeded = false;
-            MessageContext.PipelineEnded = false;
-            IsDone = false;
-        }
+      
 
         protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
         {
@@ -61,11 +55,6 @@ namespace Infrastructure.UI.Core.MessagePipelines
                 return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == MessageContext.Recipient);
             }
         }
-
-
-        #region ResponseTemplates
-        protected ContentResult Text(string text) => ResponseTemplates.Text(text);
-        #endregion
     }
 
 

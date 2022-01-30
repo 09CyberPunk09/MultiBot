@@ -37,6 +37,14 @@ namespace Application.Services
             return answers.Select(a => _predefinedAnswerRepo.Add(a)).ToList();
         }
 
+        public void AddSchedule(Guid questionId,string cron)
+        {
+            var q = _questionRepo.Get(questionId);
+            q.CronExpression = cron;
+            _questionRepo.GetTable().Update(q);
+            _questionRepo.GetContext().SaveChanges();
+        }
+
         public Answer SaveAnswer(Answer answer)
         {
             return _answerRepo.Add(answer);

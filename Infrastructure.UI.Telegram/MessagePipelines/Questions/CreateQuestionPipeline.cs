@@ -4,6 +4,7 @@ using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
 using Infrastructure.UI.Core.Types;
+using Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Kernel;
 using Persistence.Sql.Entites;
 using System;
@@ -27,7 +28,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             CancelLast,
         }
         const string answersKey = "SelectedAnswers";
-        const string questionKey = "QuestionText";
+        const string questionTextKey = "QuestionText";
+        const string questionIdKey = "QuestionId";
         const string hasPredefinedAnswersKey = "HasPredefinedAnswers";
 
         private readonly QuestionAppService _questionAppService;
@@ -41,6 +43,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             RegisterStage(AskForQuestionText);
             RegisterStage(AcceptQuestionTextAndConfirmAnswers);
             RegisterStage(TryAcceptAnswers);
+            IntegrateChunkPipeline<CreateScheduleChunk>();
+            RegisterStage(SaveSchedule);
         }
 
         public ContentResult AskForQuestionText(MessageContext ctx)
@@ -51,7 +55,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
         public ContentResult AcceptQuestionTextAndConfirmAnswers(MessageContext ctx)
         {
             string questionText = ctx.Message.Text;
-            cache.SetValueForChat(questionKey, questionText, ctx.Recipient);
+            cache.SetValueForChat(questionTextKey, questionText, ctx.Recipient);
 
             List<CallbackButton> buttons = new()
             {
@@ -134,9 +138,12 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             var predefinedAnswers = (cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new List<string>());
             var question = _questionAppService.Create(new Question()
             {
-                Text = cache.GetValueForChat<string>(questionKey, ctx.Recipient),
+                Text = cache.GetValueForChat<string>(questionTextKey, ctx.Recipient),
                 HasPredefinedAnswers = predefinedAnswers.Count > 0,
             },GetCurrentUser().Id);
+
+            SetCachedValue(questionIdKey, question.Id, ctx.Recipient);
+
             List<PredefinedAnswer> answers = predefinedAnswers
                                     .Select(t => new PredefinedAnswer()
                                     {
@@ -147,9 +154,19 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             _questionAppService.InsertAnswers(answers);
 
             cache.SetValueForChat(answersKey, null, ctx.Recipient);
-            cache.SetValueForChat(questionKey, null, ctx.Recipient);
-            return Text("Done");
+            return Text("Now,select the schedule for the message");
         }
+
+        public ContentResult SaveSchedule(MessageContext ctx)
+        {
+            var cronExpr = cache.GetValueForChat<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY, ctx.Recipient);
+            var questionId = GetCachedValue<Guid>(questionIdKey, ctx.Recipient);
+            _questionAppService.AddSchedule(questionId, cronExpr);
+            return Text("✅Done. Question saved!");
+        }
+
+
+
         public ContentResult CancelLast(MessageContext ctx)
         {
             ForbidMovingNext();

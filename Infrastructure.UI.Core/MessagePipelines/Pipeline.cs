@@ -4,7 +4,7 @@ using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using StageDelegate = System.Func<Infrastructure.UI.Core.Types.MessageContext, Infrastructure.UI.Core.Interfaces.ContentResult>;
 using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
-
+using Infrastructure.UI.Core.Interfaces;
 
 namespace Infrastructure.UI.Core.MessagePipelines
 {
@@ -42,7 +42,22 @@ namespace Infrastructure.UI.Core.MessagePipelines
             ConfigureBasicPostAction();
         }
 
-        public void ConfigureBasicPostAction()
+        public void ForbidMovingNext()
+        {
+            MessageContext.MoveNext = false;
+            MessageContext.PipelineStageSucceeded = false;
+            MessageContext.PipelineEnded = false;
+            IsDone = false;
+        }  
+        public void ForbidMovingNext(MessageContext ctx)
+        {
+            ctx.MoveNext = false;
+            ctx.PipelineStageSucceeded = false;
+            ctx.PipelineEnded = false;
+            IsDone = false;
+        }
+
+        public virtual void ConfigureBasicPostAction()
         {
             StagePostAction = (Stage stage, MessageContext ctx) =>
             {
@@ -67,5 +82,15 @@ namespace Infrastructure.UI.Core.MessagePipelines
         {
             Stages.Add(stage);
         }
+
+        #region ResponseTemplates
+        protected ContentResult Text(string text) => ResponseTemplates.Text(text);
+        #endregion
+
+        protected T GetCachedValue<T>(string key, long chatId)
+            => cache.GetValueForChat<T>(key, chatId);
+        protected void SetCachedValue(string key,object value, long chatId)
+            => cache.SetValueForChat(key, value, chatId);
+
     }
 }
