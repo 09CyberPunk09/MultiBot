@@ -84,7 +84,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
         }
 
         #region ResponseTemplates
-        protected ContentResult Text(string text) => ResponseTemplates.Text(text);
+        protected ContentResult Text(string text,bool invokeNextImmediately = false) => ResponseTemplates.Text(text,invokeNextImmediately);
         #endregion
 
         protected T GetCachedValue<T>(string key, long chatId)

@@ -203,7 +203,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks
             cache.SetValueForChat(CRONEXPR_CACHEKEY, cronExpression, ctx.Recipient);
 
 
-            return Text($"You scheduled the message on every {string.Join(", ", stringDays)} at {hours}:{mins}. Cron expression: { cronExpression }");
+            return Text($"You scheduled the message on every {string.Join(", ", stringDays)} at {hours}:{mins}. Cron expression: { cronExpression }",true);
         }
 
         private List<List<CallbackButton>> BuildDaysMenu(IEnumerable<DayPayload> days)

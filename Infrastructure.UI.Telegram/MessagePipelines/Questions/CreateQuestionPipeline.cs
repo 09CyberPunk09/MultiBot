@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
+using Infrastructure.TextUI.Core.Types;
 using Infrastructure.UI.Core.Attributes;
 using Infrastructure.UI.Core.Interfaces;
 using Infrastructure.UI.Core.MessagePipelines;
@@ -154,7 +155,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             _questionAppService.InsertAnswers(answers);
 
             cache.SetValueForChat(answersKey, null, ctx.Recipient);
-            return Text("Now,select the schedule for the message");
+            return new EmptyResult();
         }
 
         public ContentResult SaveSchedule(MessageContext ctx)

@@ -20,12 +20,11 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
             RegisterStage(SayHello);
             RegisterStage(SayWhatsUp);
             RegisterStage(SayGoodbye);
-            var t = new Stage(SayHello);
         }
 
         private ContentResult SayHello(MessageContext ctx)
         {
-            return Text("1.Hello");
+            return Text("1.Hello",true);
         }
 
         private ContentResult SayGoodbye(MessageContext ctx)

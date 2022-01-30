@@ -6,10 +6,14 @@ namespace Infrastructure.UI.Core.Types
 {
     public static class ResponseTemplates
     {
-        public static ContentResult Text(string text)
+        public static ContentResult Text(string text,bool invokeNextImmediately = false)
         {
             //todo: implement delayd messages and fire-and-forget messages
-            return new() { Text = text };
+            return new() 
+            { 
+                Text = text,
+                InvokeNextImmediately = invokeNextImmediately
+            };
         }
 
         public static BotMessage YesNo(string question)

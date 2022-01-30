@@ -73,13 +73,16 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
             if (pipeline != null)
             {
                 string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
+                bool executeNextImmediately = false;
 
                 var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
                 if(result != null)
                 {
                     if (ctx.PipelineStageSucceeded)
                     {
-                        var nextName = ctx.CurrentStage.NextStage?.MethodName;
+                        executeNextImmediately = result.InvokeNextImmediately;
+
+                        string nextName = ctx.CurrentStage.NextStage?.MethodName;
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
                     }
 
@@ -89,17 +92,23 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                         commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route;
                     }
 
-                    if (pipeline.IsDone)
+                    if (pipeline.IsDone)//if it is true - we make null values in cache
                     {
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, ctx.Recipient);
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, ctx.Recipient);
                     }
-                    else
+                    else//else - we leave the command name as it is
                     {
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
                     }
 
                     _sender.SendMessage(result, ctx);
+
+                    //if a pipeline signed that a next method should be executed immediately,we invoke again this method
+                    if (executeNextImmediately)
+                    {
+                        ExecutePieplineStage(pipeline, ctx);
+                    }
                 }
                 else
                 {
