@@ -6,6 +6,6 @@ namespace Infrastructure.UI.Core.Interfaces
 {
     public interface IResultSender : IStartStop
     {
-        Task SendMessage(ContentResult message, MessageContext ctx);
+        Task SendMessage(ContentResult message, long recipient);
     }
 }

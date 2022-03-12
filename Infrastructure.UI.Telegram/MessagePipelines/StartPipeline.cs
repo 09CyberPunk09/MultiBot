@@ -30,7 +30,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
             if (user == null)
             {
                 //add pipeline for gettin name 
-                var newUuser = _userService.CreateFromTelegram("", ctx.Recipient);
+                //TODO: Retrieve recipientUserId
+                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientUserId,ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
             }

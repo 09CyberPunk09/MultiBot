@@ -12,12 +12,13 @@ namespace Application.Services
             _userRepository = userRepository;
         }
 
-        public User CreateFromTelegram(string username, long? tgUserId)
+        public User CreateFromTelegram(string username, long? tgUserId,long tgChatId)
         {
             return _userRepository.Add(new()
             {
                 Name = username,
-                TelegramUserId = tgUserId
+                TelegramUserId = tgUserId,
+                TelegramChatId = tgChatId
             });
         }
 

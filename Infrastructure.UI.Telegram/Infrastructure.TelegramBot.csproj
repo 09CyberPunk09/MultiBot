@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.2.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extras.Quartz" Version="7.0.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Fody" Version="6.5.2">
       <PrivateAssets>all</PrivateAssets>
@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>

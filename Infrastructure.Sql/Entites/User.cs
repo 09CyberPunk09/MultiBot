@@ -6,6 +6,7 @@ namespace Persistence.Sql.Entites
     public class User : AuditableEntity
     {
         public long? TelegramUserId { get; set; }
+        public long? TelegramChatId { get; set; }
         public bool TelegramLoggedIn { get; set; }
         public string Name { get; set; }
     }

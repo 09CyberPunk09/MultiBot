@@ -102,7 +102,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
                     }
 
-                    _sender.SendMessage(result, ctx);
+                    _sender.SendMessage(result, ctx.Recipient);
 
                     //if a pipeline signed that a next method should be executed immediately,we invoke again this method
                     if (executeNextImmediately)
@@ -112,12 +112,12 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                 }
                 else
                 {
-                    _sender.SendMessage(new TextResult("Error! no message pipeline found"), ctx);
+                    _sender.SendMessage(new TextResult("Error! no message pipeline found"), ctx.Recipient);
                 }
             }
             else
             {
-                _sender.SendMessage(new TextResult("An error occured while handling your message"), ctx);
+                _sender.SendMessage(new TextResult("An error occured while handling your message"), ctx.Recipient);
             }
         }
 

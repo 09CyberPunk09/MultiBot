@@ -7,11 +7,20 @@ namespace MultiBot
     {
         static void Main(string[] args)
         {
-            var telegramBot = new TelegramBotHandlerInstance();
-            telegramBot.Start();
-            //todo:change all models to table per type
-            Console.WriteLine("The bot started succesfully");
-            LoopConsoleClosing();
+            try
+            {
+                var telegramBot = new TelegramBotHandlerInstance();
+                telegramBot.Start();
+                //todo:change all models to table per type
+                Console.WriteLine("The bot started succesfully");
+                LoopConsoleClosing();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+          
         }
         static void LoopConsoleClosing()
         {

@@ -20,9 +20,9 @@ namespace Infrastructure.UI.TelegramBot
         {
             _uiClient = uiClient;
         }
-        public async Task SendMessage(ContentResult message, MessageContext ctx)
+        public async Task SendMessage(ContentResult message, long recipient)
         {
-            var chatId = new ChatId(ctx.Message.ChatId);
+            var chatId = new ChatId(recipient);
             string lastMessageCacheey = "LastPipelineMessageId";
             async Task<Telegram.Bot.Types.Message> SendTextMessageAsync(string text = "", IReplyMarkup markup = null)
             {
@@ -31,13 +31,13 @@ namespace Infrastructure.UI.TelegramBot
                 text: text,
                 replyMarkup: markup);
 
-                cache.SetValueForChat(lastMessageCacheey, message.MessageId, ctx.Recipient);
+                cache.SetValueForChat(lastMessageCacheey, message.MessageId, recipient);
                 return message;
             }
 
             async Task EditMessageAsync(EditLastMessage message)
             {
-                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, ctx.Recipient);
+                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, recipient);
                 await _uiClient.EditMessageTextAsync(chatId, lastMessageId, message.NewMessage.Text);
                 await _uiClient.EditMessageReplyMarkupAsync(chatId, lastMessageId, message.NewMessage.Buttons);
             }

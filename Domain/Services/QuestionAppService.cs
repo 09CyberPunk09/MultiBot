@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.Jobs.Executor;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Sql.BaseTypes;
 using Persistence.Sql.Entites;
 using System;
@@ -9,17 +10,20 @@ namespace Application.Services
 {
     public class QuestionAppService : AppService
     {
-        private Repository<Question> _questionRepo;
-        private Repository<PredefinedAnswer> _predefinedAnswerRepo;
-        private Repository<Answer> _answerRepo;
+        private readonly Repository<Question> _questionRepo;
+        private readonly Repository<PredefinedAnswer> _predefinedAnswerRepo;
+        private readonly Repository<Answer> _answerRepo;
+        private readonly JobExecutor _jobExecutor;
         public QuestionAppService(
             Repository<Question> questionRepo,
             Repository<PredefinedAnswer> predanswerRepo,
-            Repository<Answer> answerRepo)
+            Repository<Answer> answerRepo,
+            JobExecutor jobExecutor)
         {
             _questionRepo = questionRepo;
             _predefinedAnswerRepo = predanswerRepo;
             _answerRepo = answerRepo;
+            _jobExecutor = jobExecutor;
         }
 
         public Question Create(Question q, Guid userId)
@@ -58,6 +62,14 @@ namespace Application.Services
                                     .Include(q => q.PredefinedAnswers)
                                     .Where(q => q.UserId == userId);
             return questions.ToList();   
+        }
+
+        public List<Question> GetScheduledQuestions()
+        {
+            return _questionRepo
+                       .GetAll()
+                       .Where(q => q.CronExpression != null)
+                       .ToList();
         }
     }
 }

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Domain\Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Sql", "Infrastructure.Sql\Persistence.Sql.csproj", "{E336F49E-5E34-420C-B528-FCA69D4D0ABD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.UI.TelegramBot", "Infrastructure.UI.Telegram\Infrastructure.UI.TelegramBot.csproj", "{AC731A4E-EEF8-4BF1-8319-D7B9A437381D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.TelegramBot", "Infrastructure.UI.Telegram\Infrastructure.TelegramBot.csproj", "{AC731A4E-EEF8-4BF1-8319-D7B9A437381D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.TextUI.Core", "Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj", "{FEA9B573-FE4B-432B-99AC-FC1AA2E24FEB}"
 EndProject
@@ -23,7 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Infrastructure.Ke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Caching.Redis", "Persistence.Caching.Redis\Persistence.Caching.Redis.csproj", "{EF069282-47EA-4529-8C2F-EB0235D508D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Caching.Redis.TelegramCaching", "Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj", "{0BD43284-5538-48F2-B7BC-99CC4FE5214E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Caching.Redis.TelegramCaching", "Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj", "{0BD43284-5538-48F2-B7BC-99CC4FE5214E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{C085BB19-87F0-4C4B-B3B2-B06F50A42FAB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Jobs.Executor", "Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj", "{80686B34-FC64-4F65-9518-3F171C604A77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Jobs.Core", "Infrastructure.Jobs.Core\Infrastructure.Jobs.Core.csproj", "{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +69,14 @@ Global
 		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BD43284-5538-48F2-B7BC-99CC4FE5214E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80686B34-FC64-4F65-9518-3F171C604A77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80686B34-FC64-4F65-9518-3F171C604A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80686B34-FC64-4F65-9518-3F171C604A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80686B34-FC64-4F65-9518-3F171C604A77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +90,9 @@ Global
 		{61C35052-3E7C-4F08-8673-5CC0249BF898} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{EF069282-47EA-4529-8C2F-EB0235D508D1} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
 		{0BD43284-5538-48F2-B7BC-99CC4FE5214E} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
+		{C085BB19-87F0-4C4B-B3B2-B06F50A42FAB} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
+		{80686B34-FC64-4F65-9518-3F171C604A77} = {C085BB19-87F0-4C4B-B3B2-B06F50A42FAB}
+		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5} = {C085BB19-87F0-4C4B-B3B2-B06F50A42FAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}
