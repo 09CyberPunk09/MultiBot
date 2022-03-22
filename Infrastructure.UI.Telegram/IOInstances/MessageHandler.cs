@@ -1,19 +1,18 @@
 ﻿using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.MessagePipelines;
-using Infrastructure.UI.TelegramBot.ResponseTypes;
+using Infrastructure.TelegramBot.MessagePipelines;
+using Infrastructure.TelegramBot.ResponseTypes;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot;
 
-namespace Infrastructure.UI.TelegramBot.IOInstances
+namespace Infrastructure.TelegramBot.IOInstances
 {
-    public class MessageConsumer
+    public class MessageHandler
     {
         #region Cache Keys
         private const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
@@ -21,33 +20,37 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
         #endregion
 
         #region Injected members
-        private readonly ITelegramBotClient _uiClient;
-        private readonly IResultSender _sender;
+        private readonly MessageResponsePublisher _sender;
         private readonly ILifetimeScope _lifetimeScope;
         private readonly TelegramCache _cache;
+        private MessageReceiver _receiver; 
         #endregion
 
         private static readonly Dictionary<string, Type> pipleineCommands;
         public IMessagePipeline DefaultPipeline { get; set; }
 
-        public MessageConsumer(IResultSender sender,
-                               ILifetimeScope lifetimeScope,
-                               ITelegramBotClient uiClient)
+        public MessageHandler(ILifetimeScope lifetimeScope)
         {
-            _sender = sender;
             _lifetimeScope = lifetimeScope;
-            _uiClient = uiClient;
-
+            _sender = new();
             _cache = new();
+
+            StartReceiving();
         }
 
-        static MessageConsumer()
+        private void StartReceiving()
+        {
+            _receiver = new(this);
+            _receiver.StartReceiving();
+        }
+
+        static MessageHandler()
         {
             //TODO:  make attribute multiparametrized,duplicate in list every entry which has more than one command
-            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route);
+            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route);
         }
 
-        public void ConsumeMessage(Core.Types.Message message)
+        public void ConsumeMessage(Message message)
         {
             MessageContext ctx = new()
             {
@@ -56,19 +59,12 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                 Recipient = message.ChatId,
                 TimeStamp = DateTime.Now
             };
-            //try
-            //{
+
             MessagePipelineBase pipeline = MatchPipeline(message.Text, ctx);
             ExecutePieplineStage(pipeline, ctx);
-            //}
-            //catch (Exception ex)
-            //{
-            //	throw;
-            //}
-
         }
 
-        public void ExecutePieplineStage(MessagePipelineBase pipeline, MessageContext ctx)
+        private void ExecutePieplineStage(MessagePipelineBase pipeline, MessageContext ctx)
         {
             if (pipeline != null)
             {
@@ -76,7 +72,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                 bool executeNextImmediately = false;
 
                 var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
-                if(result != null)
+                if (result != null)
                 {
                     if (ctx.PipelineStageSucceeded)
                     {
@@ -89,7 +85,7 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                     string commandToSet = null;
                     if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
                     {
-                        commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => (attr as RouteAttribute) != null) as RouteAttribute).Route;
+                        commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route;
                     }
 
                     if (pipeline.IsDone)//if it is true - we make null values in cache
@@ -102,7 +98,8 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                         _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
                     }
 
-                    _sender.SendMessage(result, ctx.Recipient);
+                    result.RecipientChatId = ctx.Recipient;
+                    _sender.SendMessage(result);
 
                     //if a pipeline signed that a next method should be executed immediately,we invoke again this method
                     if (executeNextImmediately)
@@ -112,12 +109,12 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
                 }
                 else
                 {
-                    _sender.SendMessage(new TextResult("Error! no message pipeline found"), ctx.Recipient);
+                    _sender.SendMessage(new TextResult("Error! no message pipeline found", ctx.Recipient));
                 }
             }
             else
             {
-                _sender.SendMessage(new TextResult("An error occured while handling your message"), ctx.Recipient);
+                _sender.SendMessage(new TextResult("An error occured while handling your message", ctx.Recipient));
             }
         }
 
@@ -139,6 +136,5 @@ namespace Infrastructure.UI.TelegramBot.IOInstances
             var basePipelineType = typeof(MessagePipelineBase);
             return typeof(StartPipeline).Assembly.GetTypes().Where(t => t.IsSubclassOf(basePipelineType)).ToList();
         }
-
     }
 }

@@ -1,12 +1,8 @@
 ﻿using Application.Services;
 using Autofac;
-using Autofac.Core;
 using Domain;
 using Infrastructure.Jobs.Executor;
 using Infrastructure.TelegramBot.Jobs;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.TelegramBot.IOInstances;
-using Microsoft.Extensions.Configuration;
 using Persistence.Caching.Redis;
 using Persistence.Sql;
 using Persistence.Sql.BaseTypes;
@@ -15,54 +11,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Telegram.Bot;
 
-namespace Infrastructure.UI.TelegramBot
+namespace Infrastructure.TelegramBot.IOInstances
 {
-    public class TelegramBotHandlerInstance : IHandlerInstance
+    public class TelegramBotHandlerInstance
     {
-        public IResultSender Sender { get; set; }
+        private IContainer _container;
 
-        public IMessageReceiver Receiver { get; }
-
-        //todo: remove 
-        private ContainerBuilder _containerBuider;
-
+        private MessageHandler _messageConsumer;
 
         private void ConfigureApplication()
         {
-            _containerBuider = new ContainerBuilder();
-            _containerBuider.RegisterModule(new JobExecutorModule(GetType().Assembly));
+            var containerBuilder = new ContainerBuilder();
 
-            //Telegram bot direct deps
-            _ = _containerBuider.RegisterInstance<TelegramBotClient>(ConfigureApiClient()).As<ITelegramBotClient>().SingleInstance();
+            ConfigureHandlersAccess(containerBuilder);
 
-            ConfigureIOInfrastructure();
+            ConfigurePersistence(containerBuilder);
 
-            ConfigurePersistence();
+            ConfigureDomain(containerBuilder);
 
-            ConfigureDomain();
-        }
-
-        private void ConfigureConfigurationAccess()
-        {
-            var configurationBuilder = new ConfigurationBuilder()
-                .AddJsonFile("config.json");
-
-            _ = _containerBuider.RegisterInstance(configurationBuilder.Build()).SingleInstance();
-
+            ResolveRequiredServices(containerBuilder);
         }
 
         public void Start()
         {
             ConfigureApplication();
-            var container = _containerBuider.Build();
-
-            StartJobs(container);
-            MessageUpdateHandler.SetAccessObjects(container.BeginLifetimeScope());
-
-            container.Resolve<IMessageReceiver>().Start();
-            //container.Resolve<IResultSender>().Start();
         }
 
         public void Stop()
@@ -70,31 +43,32 @@ namespace Infrastructure.UI.TelegramBot
             throw new NotImplementedException();
         }
 
-        private void ConfigureIOInfrastructure()
+        private void ResolveRequiredServices(ContainerBuilder containerBuilder)
         {
-            _ = _containerBuider.RegisterType<MessageReceiver>().As<IMessageReceiver>().SingleInstance();
-            _ = _containerBuider.RegisterType<MessageSender>().As<IResultSender>().SingleInstance();
-            _ = _containerBuider.RegisterType<QueryReceiver>().As<IQueryReceiver>().SingleInstance();
-            //todo: ad as<>() section
-            _ = _containerBuider.RegisterType<MessageConsumer>().SingleInstance();
+            _container = containerBuilder.Build();
 
+            _messageConsumer = _container.Resolve<MessageHandler>();
         }
 
-        private void ConfigurePersistence()
+        private void ConfigureHandlersAccess(ContainerBuilder containerBuilder)
         {
-            _ = _containerBuider.RegisterModule<PersistenceModule>();
-            _ = _containerBuider.RegisterModule<CachingModule>();
-
+            _ = containerBuilder.RegisterType<MessageHandler>().SingleInstance();
         }
 
-        private void ConfigureDomain()
+        private void ConfigurePersistence(ContainerBuilder builder)
         {
-            _ = _containerBuider.RegisterModule<PipelinesModule>();
-            _ = _containerBuider.RegisterModule<DomainModule>();
+            _ = builder.RegisterModule<PersistenceModule>();
+            _ = builder.RegisterModule<CachingModule>();
+        }
+
+        private void ConfigureDomain(ContainerBuilder builder)
+        {
+            _ = builder.RegisterModule<PipelinesModule>();
+            _ = builder.RegisterModule<DomainModule>();
         }
 
         private async Task StartJobs(IContainer container)
-        {       
+        {
             var executor = container.Resolve<JobExecutor>();
             var userRepo = container.Resolve<Repository<User>>();
             var questionsToLoad = container.Resolve<QuestionAppService>()
@@ -119,14 +93,6 @@ namespace Infrastructure.UI.TelegramBot
             });
 
             await executor.StartExecuting();
-        }
-
-        private TelegramBotClient ConfigureApiClient()
-        {
-            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4") { Timeout = TimeSpan.FromMinutes(10) };
-
-            client.GetUpdatesAsync();
-            return client;
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using Infrastructure.TextUI.Core.Types;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.ResponseTypes;
+﻿using Infrastructure.TelegramBot.ResponseTypes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.Types;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Threading.Tasks;
@@ -9,20 +8,22 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.TelegramBot
+namespace TelegramBot.IOHandler
 {
-    public class MessageSender : IResultSender
+    internal class MessageSender : IResultSender
     {
         ITelegramBotClient _uiClient;
+        //TODO: Move caching to handlers
         private readonly TelegramCache cache = new();
+
 
         public MessageSender(ITelegramBotClient uiClient)
         {
             _uiClient = uiClient;
         }
-        public async Task SendMessage(ContentResult message, long recipient)
+        public async Task SendMessage(ContentResult contentResult)
         {
-            var chatId = new ChatId(recipient);
+            var chatId = new ChatId(contentResult.RecipientChatId);
             string lastMessageCacheey = "LastPipelineMessageId";
             async Task<Telegram.Bot.Types.Message> SendTextMessageAsync(string text = "", IReplyMarkup markup = null)
             {
@@ -31,20 +32,20 @@ namespace Infrastructure.UI.TelegramBot
                 text: text,
                 replyMarkup: markup);
 
-                cache.SetValueForChat(lastMessageCacheey, message.MessageId, recipient);
+                cache.SetValueForChat(lastMessageCacheey, message.MessageId, contentResult.RecipientChatId);
                 return message;
             }
 
             async Task EditMessageAsync(EditLastMessage message)
             {
-                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, recipient);
+                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, message.RecipientChatId);
                 await _uiClient.EditMessageTextAsync(chatId, lastMessageId, message.NewMessage.Text);
                 await _uiClient.EditMessageReplyMarkupAsync(chatId, lastMessageId, message.NewMessage.Buttons);
             }
 
 
             //TODO: Rewrite to more extensible way
-            switch (message)
+            switch (contentResult)
             {
                 case EditLastMessage editedMessage:
                     await EditMessageAsync(editedMessage);

@@ -1,46 +1,34 @@
-﻿using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.IOInstances;
-using Telegram.Bot;
+﻿using Application.Services;
+using Infrastructure.Queuing;
+using Infrastructure.TextUI.Core.Types;
 
-namespace Infrastructure.UI.TelegramBot
+namespace Infrastructure.TelegramBot.IOInstances
 {
-    public class MessageReceiver : IMessageReceiver
+    internal class MessageReceiver
     {
-        #region Injected members
-        private readonly ITelegramBotClient _uiClient;
-        private readonly MessageConsumer _consumer;
-        #endregion
-
-
-        static MessageReceiver()
+        private QueueListener<Message> _listener;
+        private readonly MessageHandler _messageHandler;
+        public MessageReceiver(MessageHandler handler)
         {
+            _messageHandler = handler;
 
+            var service = new ConfigurationAppService();
+            var hostName = service.Get("telegramQueueHost");
+            var queueName = service.Get("telegramHandleMessageQueue");
+            var username = service.Get("username");
+            var password = service.Get("password");
+
+            _listener = new(hostName, queueName, username, password);
+          
         }
 
-        public MessageReceiver(MessageConsumer consumer, ITelegramBotClient uiClient)
+        public void StartReceiving()
         {
-
-            (_consumer, _uiClient) = (consumer, uiClient);
-
+            _listener.AddMessageHandler(message =>
+            {
+                _messageHandler.ConsumeMessage(message);
+            });
+            _listener.StartConsuming();
         }
-        public void ConsumeMessage(Message message)
-        {
-            _consumer.ConsumeMessage(message);
-        }
-
-
-
-        public void Start()
-        {
-            //MatchPipeline();
-            _uiClient.StartReceiving<MessageUpdateHandler>();
-        }
-
-        public void Stop()
-        {
-        }
-
     }
-
 }

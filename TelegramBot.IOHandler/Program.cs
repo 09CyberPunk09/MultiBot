@@ -1,18 +1,17 @@
-﻿using Infrastructure.TelegramBot.IOInstances;
-using System;
+﻿using System;
 
-namespace MultiBot
+namespace TelegramBot.IOHandler
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            var telegramBot = new TelegramBotHandlerInstance();
-            telegramBot.Start();
-            Console.WriteLine("The bot started succesfully");
-            
+            IOHandler handler = new();
+            handler.Start();
+            Console.WriteLine("Handler started successfully");
             LoopConsoleClosing();
         }
+
         static void LoopConsoleClosing()
         {
             while (Console.ReadKey().Key != ConsoleKey.Escape)

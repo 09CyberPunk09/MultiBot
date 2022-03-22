@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HostApp", "MultiBot\HostApp.csproj", "{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot.Handlers", "MultiBot\TelegramBot.Handlers.csproj", "{1D5AB572-99A0-4DA8-AC4B-94E9D0D62C50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Domain\Application.csproj", "{BC1651EA-3E72-49FF-B3A7-A65E3BAA4C56}"
 EndProject
@@ -30,6 +30,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Jobs.Executor", "Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj", "{80686B34-FC64-4F65-9518-3F171C604A77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Jobs.Core", "Infrastructure.Jobs.Core\Infrastructure.Jobs.Core.csproj", "{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot.IOHandler", "TelegramBot.IOHandler\TelegramBot.IOHandler.csproj", "{0D5D614C-4066-4C9C-8D95-EAADBC9B5525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Queuing", "Infrastructure.Queuing\Infrastructure.Queuing.csproj", "{D742469B-8AF4-478F-8589-A1108D02F8C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +81,14 @@ Global
 		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5D614C-4066-4C9C-8D95-EAADBC9B5525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5D614C-4066-4C9C-8D95-EAADBC9B5525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5D614C-4066-4C9C-8D95-EAADBC9B5525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5D614C-4066-4C9C-8D95-EAADBC9B5525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D742469B-8AF4-478F-8589-A1108D02F8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D742469B-8AF4-478F-8589-A1108D02F8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D742469B-8AF4-478F-8589-A1108D02F8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D742469B-8AF4-478F-8589-A1108D02F8C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +105,7 @@ Global
 		{C085BB19-87F0-4C4B-B3B2-B06F50A42FAB} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 		{80686B34-FC64-4F65-9518-3F171C604A77} = {C085BB19-87F0-4C4B-B3B2-B06F50A42FAB}
 		{2A2AF08F-F153-4262-9EF5-E4580DFA50B5} = {C085BB19-87F0-4C4B-B3B2-B06F50A42FAB}
+		{D742469B-8AF4-478F-8589-A1108D02F8C0} = {0C2DEB9B-B6D3-4619-881E-1913BD24D1F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}
