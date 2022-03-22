@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
+﻿namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
     internal class TagANotePipeline
     {

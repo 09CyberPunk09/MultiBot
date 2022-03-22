@@ -1,11 +1,10 @@
 ﻿using Application.Services;
 using Autofac;
+using Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
 using Infrastructure.TextUI.Core.Types;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Kernel;
 using Persistence.Sql.Entites;
 using System;
@@ -16,7 +15,7 @@ using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
 using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
+namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 {
     [Route("/new-q")]
     [Description("Use this command for creating questions")]
@@ -34,7 +33,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
         const string hasPredefinedAnswersKey = "HasPredefinedAnswers";
 
         private readonly QuestionAppService _questionAppService;
-        public CreateQuestionPipeline(QuestionAppService qs,ILifetimeScope scope) : base(scope)
+        public CreateQuestionPipeline(QuestionAppService qs, ILifetimeScope scope) : base(scope)
         {
             _questionAppService = qs;
         }
@@ -98,7 +97,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
         public ContentResult AddAnswer(MessageContext ctx)
         {
             string input = ctx.Message.Text;
-            if(Enum.TryParse(typeof(AnswerSelectionOptions), input, out object choice))
+            if (Enum.TryParse(typeof(AnswerSelectionOptions), input, out object choice))
             {
                 switch ((AnswerSelectionOptions)choice)
                 {
@@ -116,7 +115,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
                 ForbidMovingNext();
                 var savedAnswers = cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new();
                 savedAnswers.Add(input);
-                cache.SetValueForChat(answersKey, savedAnswers,ctx.Recipient);
+                cache.SetValueForChat(answersKey, savedAnswers, ctx.Recipient);
 
                 StringBuilder output = savedAnswers.ToListString("Your answers:");
 
@@ -136,12 +135,12 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
 
         public ContentResult ConfirmResults(MessageContext ctx)
         {
-            var predefinedAnswers = (cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new List<string>());
+            var predefinedAnswers = cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new List<string>();
             var question = _questionAppService.Create(new Question()
             {
                 Text = cache.GetValueForChat<string>(questionTextKey, ctx.Recipient),
                 HasPredefinedAnswers = predefinedAnswers.Count > 0,
-            },GetCurrentUser().Id);
+            }, GetCurrentUser().Id);
 
             SetCachedValue(questionIdKey, question.Id, ctx.Recipient);
 

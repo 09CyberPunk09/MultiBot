@@ -1,18 +1,16 @@
 ﻿using Autofac;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
 using Infrastructure.TextUI.Core.Types;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
 using Kernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
-using static System.Net.Mime.MediaTypeNames;
 using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks
+namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
 {
     public class CreateScheduleChunk : PipelineChunk
     {
@@ -136,8 +134,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks
                      .ToList())
              .ToList();
 
-            buttons.Add(new List<CallbackButton>() { Button("Confirm", (MenuActiotype.Confirm).ToString()) });
-            buttons.Add(new List<CallbackButton>() { Button("Undo", (MenuActiotype.Undo).ToString()) });
+            buttons.Add(new List<CallbackButton>() { Button("Confirm", MenuActiotype.Confirm.ToString()) });
+            buttons.Add(new List<CallbackButton>() { Button("Undo", MenuActiotype.Undo.ToString()) });
 
             return new EditLastMessage()
             {
@@ -193,7 +191,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks
 
             var days = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.Recipient);
 
-            var stringDays = days.Select(x => Enum.GetName<DayOfWeek>(x.DayOfWeek.Value)).ToList();
+            var stringDays = days.Select(x => Enum.GetName(x.DayOfWeek.Value)).ToList();
 
             var daysShortNames = stringDays.Select(d => d.ToUpper().Substring(0, 3));
             //Seconds 	Minutes 	Hours 	Day Of Month 	Month 	Day Of Week 	Year
@@ -203,7 +201,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Scheduling.Chunks
             cache.SetValueForChat(CRONEXPR_CACHEKEY, cronExpression, ctx.Recipient);
 
 
-            return Text($"You scheduled the message on every {string.Join(", ", stringDays)} at {hours}:{mins}. Cron expression: { cronExpression }",true);
+            return Text($"You scheduled the message on every {string.Join(", ", stringDays)} at {hours}:{mins}. Cron expression: { cronExpression }", true);
         }
 
         private List<List<CallbackButton>> BuildDaysMenu(IEnumerable<DayPayload> days)

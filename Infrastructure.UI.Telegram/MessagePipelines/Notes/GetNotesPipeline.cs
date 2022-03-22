@@ -1,16 +1,16 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
-using Infrastructure.UI.TelegramBot.ResponseTypes;
+using Infrastructure.TelegramBot.ResponseTypes;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines
+namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 {
     [Route("/get-notes")]
     [Description("Get's all your notes")]

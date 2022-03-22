@@ -1,16 +1,16 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot.Types.ReplyMarkups;
 using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
+namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 {
     [Route("/force-answer")]
     public class SelectAndAnswerQuestionPipeline : MessagePipelineBase
@@ -57,8 +57,8 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
 
             cache.SetValueForChat(selectedQustionCacheKey, question.Id, ctx.Recipient);
 
-            return new BotMessage() 
-            { 
+            return new BotMessage()
+            {
                 Text = question.Text,
                 Buttons = new InlineKeyboardMarkup(buttons)
             };
@@ -70,12 +70,12 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines.Questions
             var answer = ctx.Message.Text;
             if (question.HasPredefinedAnswers)
             {
-                if(question.PredefinedAnswers.Any(x => x.Content == answer))
+                if (question.PredefinedAnswers.Any(x => x.Content == answer))
                 {
-                    _questionAppService.SaveAnswer(new() 
+                    _questionAppService.SaveAnswer(new()
                     {
-                         Content = answer,
-                         Question = question,
+                        Content = answer,
+                        Question = question,
                     });
                 }
                 else

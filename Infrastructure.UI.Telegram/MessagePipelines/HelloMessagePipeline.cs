@@ -1,11 +1,11 @@
 ﻿using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System.ComponentModel;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines
+namespace Infrastructure.TelegramBot.MessagePipelines
 {
     [Route("/hello")]
     [Description("This is an endpoint for developers, we use it for confirming that everythinf is ok")]
@@ -24,7 +24,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
 
         private ContentResult SayHello(MessageContext ctx)
         {
-            return Text("1.Hello",true);
+            return Text("1.Hello");
         }
 
         private ContentResult SayGoodbye(MessageContext ctx)

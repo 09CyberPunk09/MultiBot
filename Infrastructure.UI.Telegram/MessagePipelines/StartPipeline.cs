@@ -1,12 +1,12 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System.ComponentModel;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines
+namespace Infrastructure.TelegramBot.MessagePipelines
 {
     [Route("/start")]
     [Description("Use this command for start the app or sign in")]
@@ -31,7 +31,7 @@ namespace Infrastructure.UI.TelegramBot.MessagePipelines
             {
                 //add pipeline for gettin name 
                 //TODO: Retrieve recipientUserId
-                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientUserId,ctx.Recipient);
+                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientUserId, ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
             }

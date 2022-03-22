@@ -1,12 +1,12 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines
+namespace Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks
 {
     public class GetTagIdChunk : PipelineChunk
     {

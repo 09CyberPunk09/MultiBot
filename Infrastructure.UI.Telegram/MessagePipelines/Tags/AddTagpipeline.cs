@@ -1,12 +1,12 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System.ComponentModel;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
+namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
     [Route("/new-tag")]
     [Description("Use this command for creating notes")]

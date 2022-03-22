@@ -1,16 +1,16 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.UI.Core.Attributes;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.MessagePipelines;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Attributes;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.TelegramBot.MessagePipelines.Tags
+namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
     [Route("/get-tag-data")]
     [Description("Use this command for getting tag data")]
