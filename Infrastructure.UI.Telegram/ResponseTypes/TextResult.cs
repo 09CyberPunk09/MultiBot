@@ -1,6 +1,6 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Infrastructure.TextUI.Core.Interfaces;
 
-namespace Infrastructure.UI.TelegramBot.ResponseTypes
+namespace Infrastructure.TelegramBot.ResponseTypes
 {
     public class TextResult : ContentResult
     {
@@ -8,9 +8,10 @@ namespace Infrastructure.UI.TelegramBot.ResponseTypes
         {
 
         }
-        public TextResult(string message)
+        public TextResult(string message, long reciipientChatId = 0)
         {
             Text = message;
+            RecipientChatId = reciipientChatId;
         }
     }
 }

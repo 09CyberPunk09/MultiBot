@@ -1,16 +1,18 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.Types;
 using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.UI.Core.Types
+namespace Infrastructure.TextUI.Core
 {
+    //todo: remove cope from core
     public static class ResponseTemplates
     {
-        public static ContentResult Text(string text,bool invokeNextImmediately = false)
+        public static ContentResult Text(string text, bool invokeNextImmediately = false)
         {
             //todo: implement delayd messages and fire-and-forget messages
-            return new() 
-            { 
+            return new()
+            {
                 Text = text,
                 InvokeNextImmediately = invokeNextImmediately
             };

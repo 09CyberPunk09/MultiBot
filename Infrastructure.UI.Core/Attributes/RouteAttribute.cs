@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Infrastructure.UI.Core.Attributes
+namespace Infrastructure.TextUI.Core.Attributes
 {
-    [System.AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
     public sealed class RouteAttribute : Attribute
     {
         readonly string _coommand;

@@ -1,6 +1,6 @@
 ﻿using Infrastructure.Jobs.Core;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TelegramBot.IOInstances;
+using Infrastructure.TextUI.Core.Types;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -39,10 +39,10 @@ namespace Infrastructure.TelegramBot.Jobs
         public const string QuestionId = "questionId";
         public const string UserId = "userId";
         public const string ChatId = "chatId";
-        private readonly IResultSender _sender;
-        public SendQustionJob(IResultSender sender)
+        private readonly MessageResponsePublisher _sender;
+        public SendQustionJob()
         {
-            _sender = sender;
+            _sender = new();
         }
 
         public virtual Task Execute(IJobExecutionContext context)
@@ -55,9 +55,10 @@ namespace Infrastructure.TelegramBot.Jobs
             _sender.SendMessage(
                 new BotMessage()
                 {
-                    Text = context.JobDetail.JobDataMap[QuestionId] as string
+                    Text = context .JobDetail.JobDataMap[QuestionId] as string,
+                    RecipientChatId = Convert.ToInt64(context.JobDetail.JobDataMap[ChatId])
                 }
-                , Convert.ToInt64(context.JobDetail.JobDataMap[ChatId]));
+                );
             return Task.CompletedTask;
         }
     }

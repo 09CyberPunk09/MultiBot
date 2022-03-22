@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.UI.Core.Types
+﻿namespace Infrastructure.TextUI.Core.Types
 {
     public class Message
     {

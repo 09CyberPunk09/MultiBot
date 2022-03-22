@@ -1,4 +1,4 @@
-﻿using Infrastructure.UI.Core.Interfaces;
+﻿using Infrastructure.TextUI.Core.Interfaces;
 
 namespace Infrastructure.TextUI.Core.Types
 {

@@ -1,14 +1,13 @@
 ﻿using Autofac;
-using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.Types;
 using Persistence.Sql;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using StageDelegate = System.Func<Infrastructure.UI.Core.Types.MessageContext, Infrastructure.UI.Core.Interfaces.ContentResult>;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.Types.MessageContext, Infrastructure.TextUI.Core.Interfaces.ContentResult>;
 using SystemUser = Persistence.Sql.Entites.User;
 
-namespace Infrastructure.UI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.MessagePipelines
 {
     public class MessagePipelineBase : Pipeline, IMessagePipeline
     {
@@ -38,7 +37,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
             return result;
         }
 
-      
+
 
         protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
         {
@@ -62,10 +61,6 @@ namespace Infrastructure.UI.Core.MessagePipelines
     {
         public List<Stage> Stages { get; set; } = new();
         public Stage Root { get; set; }
-        public Stage Current
-        {
-            get => Stages.FirstOrDefault(x => (new StackTrace()).GetFrame(1).GetMethod().Name == x.MethodName);
-        }
 
         public Stage this[int index]
         {

@@ -1,12 +1,12 @@
 ﻿using Autofac;
-using Infrastructure.UI.Core.Types;
+using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.Types;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
-using StageDelegate = System.Func<Infrastructure.UI.Core.Types.MessageContext, Infrastructure.UI.Core.Interfaces.ContentResult>;
 using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
-using Infrastructure.UI.Core.Interfaces;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.Types.MessageContext, Infrastructure.TextUI.Core.Interfaces.ContentResult>;
 
-namespace Infrastructure.UI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.MessagePipelines
 {
     public class Pipeline
     {
@@ -48,7 +48,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
             MessageContext.PipelineStageSucceeded = false;
             MessageContext.PipelineEnded = false;
             IsDone = false;
-        }  
+        }
         public void ForbidMovingNext(MessageContext ctx)
         {
             ctx.MoveNext = false;
@@ -59,7 +59,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
 
         public virtual void ConfigureBasicPostAction()
         {
-            StagePostAction = (Stage stage, MessageContext ctx) =>
+            StagePostAction = (stage, ctx) =>
             {
                 IsDone = false;
                 if (stage.NextStage == null && ctx.PipelineStageSucceeded)
@@ -71,7 +71,7 @@ namespace Infrastructure.UI.Core.MessagePipelines
             };
         }
 
-        protected CallbackButtonButton Button(string text,string callbackData)
+        protected CallbackButtonButton Button(string text, string callbackData)
             => CallbackButtonButton.WithCallbackData(text, callbackData);
 
         protected void RegisterStage(StageDelegate stage)
@@ -84,12 +84,12 @@ namespace Infrastructure.UI.Core.MessagePipelines
         }
 
         #region ResponseTemplates
-        protected ContentResult Text(string text,bool invokeNextImmediately = false) => ResponseTemplates.Text(text,invokeNextImmediately);
+        protected ContentResult Text(string text, bool invokeNextImmediately = false) => ResponseTemplates.Text(text, invokeNextImmediately);
         #endregion
 
         protected T GetCachedValue<T>(string key, long chatId)
             => cache.GetValueForChat<T>(key, chatId);
-        protected void SetCachedValue(string key,object value, long chatId)
+        protected void SetCachedValue(string key, object value, long chatId)
             => cache.SetValueForChat(key, value, chatId);
 
     }

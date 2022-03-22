@@ -1,8 +1,8 @@
-﻿using Infrastructure.UI.Core.Interfaces;
-using Infrastructure.UI.Core.Types;
+﻿using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.Types;
 using System.Collections.Generic;
 
-namespace Infrastructure.UI.TelegramBot.ResponseTypes
+namespace Infrastructure.TelegramBot.ResponseTypes
 {
     public class MultiMessageResult : ContentResult
     {

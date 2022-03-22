@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Infrastructure.UI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.MessagePipelines;
 using System.Linq;
 
-namespace Infrastructure.UI.TelegramBot
+namespace Infrastructure.TelegramBot
 {
-    public class PipelinesModule : Autofac.Module
+    public class PipelinesModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

@@ -25,11 +25,29 @@
     </PackageReference>
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.TelegramBot.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="appSettings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>appSettings.json</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appSettings.json">
+      <LastGenOutput>appSettings.Designer.cs</LastGenOutput>
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

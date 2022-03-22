@@ -1,7 +1,7 @@
-﻿using Infrastructure.UI.Core.MessagePipelines;
+﻿using Infrastructure.TextUI.Core.MessagePipelines;
 using System;
 
-namespace Infrastructure.UI.Core.Types
+namespace Infrastructure.TextUI.Core.Types
 {
     public class MessageContext
     {
@@ -12,6 +12,6 @@ namespace Infrastructure.UI.Core.Types
         public bool PipelineEnded { get; set; } = false;
         public long Recipient { get; set; }
         public long RecipientUserId { get; set; }
-        public Stage CurrentStage { get; set; }  
+        public Stage CurrentStage { get; set; }
     }
 }

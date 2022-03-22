@@ -30,12 +30,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Telegram.Bot" Version="17.0.0-alpha.3" />
+    <PackageReference Include="Telegram.Bot" Version="17.0.0" />
+    <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj" />
+    <ProjectReference Include="..\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
