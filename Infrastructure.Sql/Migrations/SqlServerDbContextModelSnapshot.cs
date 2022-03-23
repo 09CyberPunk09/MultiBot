@@ -8,7 +8,7 @@ using Persistence.Sql;
 
 namespace Persistence.Sql.Migrations
 {
-    [DbContext(typeof(SqlServerDbContext))]
+    [DbContext(typeof(LifeTrackerDbContext))]
     partial class SqlServerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -1,12 +1,12 @@
 ﻿using Application.Services;
 using Autofac;
+using Common.Entites;
 using Domain;
 using Infrastructure.Jobs.Executor;
 using Infrastructure.TelegramBot.Jobs;
 using Persistence.Caching.Redis;
 using Persistence.Sql;
-using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

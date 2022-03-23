@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Persistence.Core.BaseTypes
+namespace Common.BaseTypes
 {
     public class AuditableEntity
     {

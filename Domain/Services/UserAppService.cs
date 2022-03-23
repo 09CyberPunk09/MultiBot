@@ -1,5 +1,5 @@
-﻿using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+﻿using Common.Entites;
+using Persistence.Sql;
 using System.Linq;
 
 namespace Application.Services

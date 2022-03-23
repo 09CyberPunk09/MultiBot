@@ -1,11 +1,11 @@
-﻿using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+﻿using Common.Entites;
+
 
 namespace Persistence.Sql.Repositories
 {
     public class PredefinedAnswerRepository : Repository<PredefinedAnswer>
     {
-        public PredefinedAnswerRepository(SqlServerDbContext context) : base(context)
+        public PredefinedAnswerRepository(LifeTrackerDbContext context) : base(context)
         { }
     }
 }

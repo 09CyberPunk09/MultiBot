@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+﻿using Common.Entites;
+using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Persistence.Sql.Repositories
 {
     public class QuestionRepository : Repository<Question>
     {
-        public QuestionRepository(SqlServerDbContext context) : base(context)
+        public QuestionRepository(LifeTrackerDbContext context) : base(context)
         { }
 
         public override Question Get(Guid id)

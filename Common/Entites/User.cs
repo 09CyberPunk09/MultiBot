@@ -1,6 +1,6 @@
-﻿using Persistence.Core.BaseTypes;
+﻿using Common.BaseTypes;
 
-namespace Persistence.Sql.Entites
+namespace Common.Entites
 {
     //todo: divide the entity on two separate: base data and app-specific settings
     public class User : AuditableEntity
@@ -9,5 +9,6 @@ namespace Persistence.Sql.Entites
         public long? TelegramChatId { get; set; }
         public bool TelegramLoggedIn { get; set; }
         public string Name { get; set; }
+        public bool IsSpecial { get; set; }
     }
 }

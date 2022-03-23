@@ -1,10 +1,11 @@
 ﻿using Infrastructure.Jobs.Executor;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Persistence.Sql;
+using Common.Entites;
 
 namespace Application.Services
 {

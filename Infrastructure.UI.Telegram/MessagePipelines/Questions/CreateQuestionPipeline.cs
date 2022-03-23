@@ -1,12 +1,13 @@
 ﻿using Application.Services;
 using Autofac;
+using Common.Entites;
 using Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Infrastructure.TextUI.Core.Attributes;
 using Infrastructure.TextUI.Core.Interfaces;
 using Infrastructure.TextUI.Core.MessagePipelines;
 using Infrastructure.TextUI.Core.Types;
 using Kernel;
-using Persistence.Sql.Entites;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

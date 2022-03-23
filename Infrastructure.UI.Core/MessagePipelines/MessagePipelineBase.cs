@@ -5,7 +5,7 @@ using Persistence.Sql;
 using System.Collections.Generic;
 using System.Linq;
 using StageDelegate = System.Func<Infrastructure.TextUI.Core.Types.MessageContext, Infrastructure.TextUI.Core.Interfaces.ContentResult>;
-using SystemUser = Persistence.Sql.Entites.User;
+using SystemUser = Common.Entites.User;
 
 namespace Infrastructure.TextUI.Core.MessagePipelines
 {
@@ -49,7 +49,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
         {
             //todo: implement getting from cache
             //todo: add caching library
-            using (var ctx = new SqlServerDbContext())
+            using (var ctx = new LifeTrackerDbContext())
             {
                 return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == MessageContext.Recipient);
             }

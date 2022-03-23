@@ -1,8 +1,8 @@
-﻿using Persistence.Core.BaseTypes;
+﻿using Common.BaseTypes;
 using System;
 using System.Collections.Generic;
 
-namespace Persistence.Sql.Entites
+namespace Common.Entites
 {
     public class Tag : AuditableEntity
     {

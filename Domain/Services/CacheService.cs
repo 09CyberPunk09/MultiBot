@@ -1,8 +1,9 @@
 ﻿using Persistence.Caching.Redis.TelegramCaching;
-using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+
 using System;
 using System.Linq;
+using Persistence.Sql;
+using Common.Entites;
 
 namespace Application.Services
 {

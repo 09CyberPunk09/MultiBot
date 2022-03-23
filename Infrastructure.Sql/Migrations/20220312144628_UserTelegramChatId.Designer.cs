@@ -9,7 +9,7 @@ using Persistence.Sql;
 
 namespace Persistence.Sql.Migrations
 {
-    [DbContext(typeof(SqlServerDbContext))]
+    [DbContext(typeof(LifeTrackerDbContext))]
     [Migration("20220312144628_UserTelegramChatId")]
     partial class UserTelegramChatId
     {

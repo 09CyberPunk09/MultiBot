@@ -1,6 +1,6 @@
-﻿using Persistence.Core.BaseTypes;
+﻿using Common.BaseTypes;
 
-namespace Persistence.Sql.Entites
+namespace Common.Entites
 {
     public class PredefinedAnswer : AuditableEntity
     {
