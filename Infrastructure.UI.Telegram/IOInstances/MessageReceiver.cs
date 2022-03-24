@@ -8,6 +8,7 @@ namespace Infrastructure.TelegramBot.IOInstances
     {
         private QueueListener<Message> _listener;
         private readonly MessageHandler _messageHandler;
+
         public MessageReceiver(MessageHandler handler)
         {
             _messageHandler = handler;
@@ -19,7 +20,6 @@ namespace Infrastructure.TelegramBot.IOInstances
             var password = service.Get("password");
 
             _listener = new(hostName, queueName, username, password);
-          
         }
 
         public void StartReceiving()

@@ -13,6 +13,7 @@ namespace Persistence.Sql.Repositories
 
         private IQueryable<Tag> TagQuery => _context.Tags
                                                     .Include(x => x.Notes);
+
         public override Tag Get(Guid id)
         {
             return TagQuery.FirstOrDefault(x => x.Id == id);

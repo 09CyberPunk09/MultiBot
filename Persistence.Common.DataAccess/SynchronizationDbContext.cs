@@ -18,6 +18,5 @@ namespace Persistence.Common.DataAccess
         {
             optionsBuilder.UseSqlServer(connectionstring);
         }
-
     }
 }

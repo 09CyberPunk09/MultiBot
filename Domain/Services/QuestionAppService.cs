@@ -12,6 +12,7 @@ namespace Application.Services
         private readonly Repository<Question> _questionRepo;
         private readonly Repository<PredefinedAnswer> _predefinedAnswerRepo;
         private readonly Repository<Answer> _answerRepo;
+
         public QuestionAppService(
             Repository<Question> questionRepo,
             Repository<PredefinedAnswer> predanswerRepo,
@@ -32,12 +33,13 @@ namespace Application.Services
         {
             return _questionRepo.Get(id);
         }
+
         public List<PredefinedAnswer> InsertAnswers(List<PredefinedAnswer> answers)
         {
             return answers.Select(a => _predefinedAnswerRepo.Add(a)).ToList();
         }
 
-        public void AddSchedule(Guid questionId,string cron)
+        public void AddSchedule(Guid questionId, string cron)
         {
             var q = _questionRepo.Get(questionId);
             q.CronExpression = cron;
@@ -50,14 +52,13 @@ namespace Application.Services
             return _answerRepo.Add(answer);
         }
 
-
         public List<Question> GetQuestions(Guid userId)
         {
             var questions = _questionRepo
                                     .GetTable()
                                     .Include(q => q.PredefinedAnswers)
                                     .Where(q => q.UserId == userId);
-            return questions.ToList();   
+            return questions.ToList();
         }
 
         public List<Question> GetScheduledQuestions()

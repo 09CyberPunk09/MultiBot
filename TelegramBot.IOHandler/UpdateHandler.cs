@@ -11,6 +11,7 @@ namespace TelegramBot.IOHandler
     internal class MessageUpdateHandler : IUpdateHandler
     {
         private MessageConsumer _messageConsumer = new();
+
         public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             //TODO: Add logging
@@ -24,6 +25,7 @@ namespace TelegramBot.IOHandler
             {
                 case UpdateType.Unknown:
                     break;
+
                 case UpdateType.Message:
                     {
                         message = new()
@@ -33,6 +35,7 @@ namespace TelegramBot.IOHandler
                         };
                     }
                     break;
+
                 case UpdateType.InlineQuery:
                     {
                         message = new()
@@ -44,6 +47,7 @@ namespace TelegramBot.IOHandler
                     }
                 case UpdateType.ChosenInlineResult:
                     break;
+
                 case UpdateType.CallbackQuery:
                     {
                         message = new()
@@ -53,6 +57,7 @@ namespace TelegramBot.IOHandler
                         };
                     }
                     break;
+
                 default:
                     break;
             }

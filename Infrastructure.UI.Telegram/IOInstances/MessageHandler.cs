@@ -8,23 +8,26 @@ using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Telegram.Bot;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {
     public class MessageHandler
     {
         #region Cache Keys
+
         private const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
         private const string CURRENT_MESSAGEPIPELINE_COMMAND = "CurrentMessagePipelineCommand";
-        #endregion
+
+        #endregion Cache Keys
 
         #region Injected members
+
         private readonly MessageResponsePublisher _sender;
         private readonly ILifetimeScope _lifetimeScope;
         private readonly TelegramCache _cache;
-        private MessageReceiver _receiver; 
-        #endregion
+        private MessageReceiver _receiver;
+
+        #endregion Injected members
 
         private static readonly Dictionary<string, Type> pipleineCommands;
         public IMessagePipeline DefaultPipeline { get; set; }

@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Jobs.Executor
 {
-    class Program
+    internal class Program
     {
         private static ContainerBuilder _containerBuilder;
         private static List<Type> _configurationTypes = new();
-        static async Task Main(string[] args)
+
+        private static async Task Main(string[] args)
         {
             _containerBuilder = new();
             _containerBuilder.RegisterModule<JobExecutorModule>();
@@ -43,10 +44,9 @@ namespace Infrastructure.Jobs.Executor
             _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
             _containerBuilder.RegisterType<TType>();
             _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
-
         }
 
-        static void LoopConsoleClosing()
+        private static void LoopConsoleClosing()
         {
             while (Console.ReadKey().Key != ConsoleKey.Escape)
             { }

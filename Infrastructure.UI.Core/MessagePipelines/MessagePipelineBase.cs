@@ -37,8 +37,6 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             return result;
         }
 
-
-
         protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
         {
             var chunk = _scope.Resolve<TChunk>(new NamedParameter("ctx", MessageContext));
@@ -55,7 +53,6 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             }
         }
     }
-
 
     public class StageMap
     {
@@ -83,22 +80,21 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
         }
     }
 
-
-
     public class Stage
     {
         private readonly string _name;
+
         public Stage(StageDelegate f)
         {
             Method = f;
             _name = f.Method.Name;
         }
+
         public StageDelegate Method { get; }
         public Stage NextStage { get; set; }
         public string MethodName { get => _name; }
 
         public ContentResult Invoke(MessageContext ctx)
             => Method.Invoke(ctx);
-
     }
 }

@@ -15,6 +15,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
     public class AddNoteUnderTagPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
+
         public AddNoteUnderTagPipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;
@@ -39,6 +40,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
             cache.SetValueForChat("AddSetItemSetId", id, ctx.Recipient);
             return Text("Note text:");
         }
+
         private ContentResult SaveNote(MessageContext ctx)
         {
             var tagId = cache.GetValueForChat<Guid>("AddSetItemSetId", ctx.Recipient);

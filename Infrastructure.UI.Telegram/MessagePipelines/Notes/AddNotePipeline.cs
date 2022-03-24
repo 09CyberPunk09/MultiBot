@@ -10,10 +10,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 {
     [Route("/new-note")]
     [Description("Use this command for creating notes")]
-    //TODO: REQWRITE TO: FIRST WE TELL THE USER TO ADD A MESSAGE AND THEN WE SAVE IT
     public class AddNotePipeline : MessagePipelineBase
     {
         private readonly NoteAppService _noteService;
+
         public AddNotePipeline(NoteAppService noteService, ILifetimeScope scope) : base(scope)
         {
             _noteService = noteService;

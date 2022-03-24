@@ -11,6 +11,7 @@ namespace Persistence.Sql
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : AuditableEntity
     {
         protected readonly RelationalSchemaContext _context;
+
         public Repository(RelationalSchemaContext ctx)
         {
             _context = ctx;
@@ -20,8 +21,6 @@ namespace Persistence.Sql
         {
             return _context;
         }
-
-
 
         public virtual TEntity Add(TEntity entity)
         {
@@ -62,12 +61,13 @@ namespace Persistence.Sql
         {
             return _context.Set<TEntity>().AsQueryable();
         }
+
         public virtual DbSet<TEntity> GetTable()
         {
             return _context.Set<TEntity>();
         }
 
-        static void SetCreationAuditionFields(AuditableEntity entity)
+        private static void SetCreationAuditionFields(AuditableEntity entity)
         {
             entity.CreationDate = DateTime.Now;
             entity.Id = Guid.NewGuid();

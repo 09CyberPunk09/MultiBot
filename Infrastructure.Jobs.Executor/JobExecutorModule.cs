@@ -25,7 +25,7 @@ namespace Infrastructure.Jobs.Executor
                 ConfigurationProvider = c => schedulerConfig
             });
 
-         //   builder.RegisterModule(new QuartzAutofacJobsModule(_assemblyWithJobs));
+            //   builder.RegisterModule(new QuartzAutofacJobsModule(_assemblyWithJobs));
 
             builder.RegisterType<JobExecutor>().As<IJobExecutor>().SingleInstance();
         }

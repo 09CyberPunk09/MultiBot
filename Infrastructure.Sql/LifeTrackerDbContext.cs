@@ -48,6 +48,7 @@ namespace Persistence.Sql
         {
             optionsBuilder.UseSqlServer(connectionstring);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

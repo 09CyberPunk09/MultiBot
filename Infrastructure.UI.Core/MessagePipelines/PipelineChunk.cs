@@ -21,6 +21,5 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
                 return _dbContext.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == ctx.Recipient);
             }
         }
-
     }
 }

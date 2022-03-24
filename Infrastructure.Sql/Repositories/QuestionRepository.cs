@@ -15,6 +15,5 @@ namespace Persistence.Sql.Repositories
         {
             return GetTable().Include(q => q.PredefinedAnswers).FirstOrDefault(q => q.Id == id);
         }
-
     }
 }

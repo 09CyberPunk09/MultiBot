@@ -7,6 +7,7 @@ namespace Infrastructure.TelegramBot.IOInstances
     public class MessageResponsePublisher
     {
         private static QueuePublisher _publisher;
+
         static MessageResponsePublisher()
         {
             var service = new ConfigurationAppService();

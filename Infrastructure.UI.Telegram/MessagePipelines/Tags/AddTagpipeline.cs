@@ -13,6 +13,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
     public class AddTagpipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
+
         public AddTagpipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;
@@ -29,6 +30,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
         {
             return Text("Enter Tag name:");
         }
+
         public ContentResult SaveTag(MessageContext ctx)
         {
             _tagService.Create(ctx.Message.Text, GetCurrentUser().Id);

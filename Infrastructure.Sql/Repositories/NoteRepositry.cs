@@ -6,6 +6,5 @@ namespace Persistence.Sql.Repositories
     {
         public NoteRepositry(LifeTrackerDbContext context) : base(context)
         { }
-
     }
 }

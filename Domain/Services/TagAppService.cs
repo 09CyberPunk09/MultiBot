@@ -10,6 +10,7 @@ namespace Application.Services
     {
         private Repository<Tag> _tagRepository;
         private Repository<Note> _noteRepository;
+
         public TagAppService(Repository<Tag> tagRepo, Repository<Note> noteRepository)
         {
             _tagRepository = tagRepo;

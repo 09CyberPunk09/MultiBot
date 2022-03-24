@@ -13,6 +13,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
     public class StartPipeline : MessagePipelineBase
     {
         private readonly UserAppService _userService;
+
         public StartPipeline(UserAppService userService, ILifetimeScope scope) : base(scope)
         {
             _userService = userService;
@@ -29,7 +30,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
             var user = _userService.GetByTgId(ctx.Recipient);
             if (user == null)
             {
-                //add pipeline for gettin name 
+                //add pipeline for gettin name
                 //TODO: Retrieve recipientUserId
                 var newUuser = _userService.CreateFromTelegram("", ctx.RecipientUserId, ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
@@ -42,6 +43,5 @@ namespace Infrastructure.TelegramBot.MessagePipelines
             }
             return Text("Telegram User successfully logged in. Welcome!");
         }
-
     }
 }

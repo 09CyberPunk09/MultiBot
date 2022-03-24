@@ -1,9 +1,8 @@
-﻿using Persistence.Caching.Redis.TelegramCaching;
-
+﻿using Common.Entites;
+using Persistence.Caching.Redis.TelegramCaching;
+using Persistence.Sql;
 using System;
 using System.Linq;
-using Persistence.Sql;
-using Common.Entites;
 
 namespace Application.Services
 {
@@ -11,10 +10,12 @@ namespace Application.Services
     {
         private readonly TelegramCache _cache = new();
         private readonly Repository<User> _userRepository;
+
         public CacheService(Repository<User> userRepo)
         {
             _userRepository = userRepo;
         }
+
         public void Purge(Guid? userId = null)
         {
             if (userId != null)

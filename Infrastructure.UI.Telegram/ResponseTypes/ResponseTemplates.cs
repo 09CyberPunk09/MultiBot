@@ -27,7 +27,5 @@ namespace Infrastructure.TelegramBot.ResponseTypes
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())
             };
         }
-
-
     }
 }

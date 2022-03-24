@@ -7,7 +7,7 @@ using Telegram.Bot;
 
 namespace TelegramBot.IOHandler
 {
-    public class IOHandler 
+    public class IOHandler
     {
         private IContainer _container;
         private QueueListener<ContentResult> _queueListenner;
@@ -25,13 +25,13 @@ namespace TelegramBot.IOHandler
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
         {
-            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4") 
-            { 
-                Timeout = TimeSpan.FromMinutes(10) 
+            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4")
+            {
+                Timeout = TimeSpan.FromMinutes(10)
             };
             client.StartReceiving<MessageUpdateHandler>();
             client.GetUpdatesAsync();
-            
+
             _ = containerBuilder.RegisterInstance(client).As<ITelegramBotClient>().SingleInstance();
             _ = containerBuilder.RegisterType<MessageSender>().SingleInstance();
         }
@@ -48,7 +48,9 @@ namespace TelegramBot.IOHandler
             _queueListenner = new(hostName, queueName, username, password);
             _queueListenner.AddMessageHandler(response =>
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
                 _sender.SendMessage(response);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             });
             _queueListenner.StartConsuming();
         }

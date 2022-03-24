@@ -7,6 +7,7 @@ namespace Persistence.Sql.Repositories
     {
         public UserRepositry(LifeTrackerDbContext context) : base(context)
         { }
+
         public override IEnumerable<User> GetAll()
         {
             return base.GetAll();

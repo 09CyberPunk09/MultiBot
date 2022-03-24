@@ -11,23 +11,23 @@ namespace Infrastructure.TelegramBot.Jobs
     public class QuestionJobConfiguration : IConfiguredJob
     {
         public IJob Job { get; set; }
-        public Dictionary<string,string> AdditionalData { get; set; }
+        public Dictionary<string, string> AdditionalData { get; set; }
 
         public IJobDetail BuildJob()
         {
             var builder = JobBuilder.Create<SendQustionJob>()
-                                     .WithIdentity("questionSender" + AdditionalData[SendQustionJob.QuestionId], "telegram-questions" );
+                                     .WithIdentity("questionSender" + AdditionalData[SendQustionJob.QuestionId], "telegram-questions");
             foreach (var item in AdditionalData)
             {
                 builder.UsingJobData(item.Key, item.Value);
-            }           
+            }
             return builder.Build();
         }
 
         public ITrigger GetTrigger()
         {
             return TriggerBuilder.Create()
-            .WithIdentity("question-trigger" + AdditionalData[SendQustionJob.QuestionId], "telegram-questions" )
+            .WithIdentity("question-trigger" + AdditionalData[SendQustionJob.QuestionId], "telegram-questions")
             .StartNow()
             //.WithCronSchedule(AdditionalData[JobsConsts.CRON])
             .WithSchedule(SimpleScheduleBuilder.RepeatSecondlyForever(2)).Build();
@@ -40,6 +40,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public const string UserId = "userId";
         public const string ChatId = "chatId";
         private readonly MessageResponsePublisher _sender;
+
         public SendQustionJob()
         {
             _sender = new();
@@ -55,12 +56,11 @@ namespace Infrastructure.TelegramBot.Jobs
             _sender.SendMessage(
                 new BotMessage()
                 {
-                    Text = context .JobDetail.JobDataMap[QuestionId] as string,
+                    Text = context.JobDetail.JobDataMap[QuestionId] as string,
                     RecipientChatId = Convert.ToInt64(context.JobDetail.JobDataMap[ChatId])
                 }
                 );
             return Task.CompletedTask;
         }
     }
-
 }

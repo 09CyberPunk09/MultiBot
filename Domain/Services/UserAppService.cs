@@ -7,12 +7,13 @@ namespace Application.Services
     public class UserAppService : AppService
     {
         private readonly Repository<User> _userRepository;
+
         public UserAppService(Repository<User> userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public User CreateFromTelegram(string username, long? tgUserId,long tgChatId)
+        public User CreateFromTelegram(string username, long? tgUserId, long tgChatId)
         {
             return _userRepository.Add(new()
             {

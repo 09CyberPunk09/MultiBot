@@ -32,7 +32,5 @@ namespace Infrastructure.TextUI.Core
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())
             };
         }
-
-
     }
 }

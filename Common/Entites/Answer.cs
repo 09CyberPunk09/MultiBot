@@ -6,6 +6,5 @@ namespace Common.Entites
     {
         public Question Question { get; set; }
         public string Content { get; set; }
-
     }
 }

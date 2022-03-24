@@ -6,6 +6,5 @@ namespace Common.BaseTypes
     {
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
-
     }
 }

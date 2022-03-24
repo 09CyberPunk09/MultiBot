@@ -8,6 +8,5 @@ namespace Infrastructure.Kernel
         public DateTime DateCreated { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? LastModified { get; set; }
-
     }
 }

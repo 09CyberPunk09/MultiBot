@@ -15,8 +15,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
     [Route("/force-answer")]
     public class SelectAndAnswerQuestionPipeline : MessagePipelineBase
     {
-        const string selectedQustionCacheKey = "SelectedQuestion";
+        private const string selectedQustionCacheKey = "SelectedQuestion";
         private readonly QuestionAppService _questionAppService;
+
         public SelectAndAnswerQuestionPipeline(QuestionAppService qs, ILifetimeScope scope) : base(scope)
         {
             _questionAppService = qs;
@@ -91,10 +92,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                     Content = answer,
                     Question = question,
                 });
-
             }
             return Text("Got it!");
         }
-
     }
 }

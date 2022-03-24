@@ -5,6 +5,7 @@ namespace Application.Services
     public class ConfigurationAppService : AppService
     {
         private IConfigurationRoot _configuration;
+
         public ConfigurationAppService()
         {
             var configurationBuilder = new ConfigurationBuilder()

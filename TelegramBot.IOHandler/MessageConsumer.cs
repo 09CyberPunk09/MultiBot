@@ -7,6 +7,7 @@ namespace TelegramBot.IOHandler
     internal class MessageConsumer
     {
         private static QueuePublisher _publisher;
+
         public MessageConsumer()
         {
             var service = new ConfigurationAppService();
@@ -17,6 +18,7 @@ namespace TelegramBot.IOHandler
 
             _publisher = new QueuePublisher(hostName, queueName, username, password);
         }
+
         public void ConsumeMessage(Message msg)
         {
             _publisher.Publish(msg);

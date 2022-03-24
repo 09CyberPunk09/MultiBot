@@ -7,8 +7,8 @@ namespace Persistence.Caching.Redis.TelegramCaching
     {
         public TelegramCache() : base(DatabaseType.Telegram)
         {
-
         }
+
         public T GetValueForChat<T>(string key, long chatId)
         {
             CachePayload get = new()
@@ -39,6 +39,5 @@ namespace Persistence.Caching.Redis.TelegramCaching
                 }
             });
         }
-
     }
 }

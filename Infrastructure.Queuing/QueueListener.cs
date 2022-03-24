@@ -12,7 +12,9 @@ namespace Infrastructure.Queuing
         private readonly string _queueName;
         private readonly string _username;
         private readonly string _password;
+
         public delegate void QueueMessageHandlerDelegate(TQueryMessageType response);
+
         private event EventHandler<BasicDeliverEventArgs> Recieved;
 
         private readonly IConnection _connection;
@@ -53,11 +55,11 @@ namespace Infrastructure.Queuing
 
         public void StartConsuming()
         {
-                var consumer = new EventingBasicConsumer(_channel);
-                consumer.Received += Recieved;
-                _channel.BasicConsume(queue: _queueName,
-                                     autoAck: true,
-                                     consumer: consumer);
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += Recieved;
+            _channel.BasicConsume(queue: _queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
         }
     }
 }

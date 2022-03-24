@@ -22,18 +22,20 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
     [Description("Use this command for creating questions")]
     public class CreateQuestionPipeline : MessagePipelineBase
     {
-        enum AnswerSelectionOptions
+        private enum AnswerSelectionOptions
         {
             YesNo = -45634986,
             Confirm,
             CancelLast,
         }
-        const string answersKey = "SelectedAnswers";
-        const string questionTextKey = "QuestionText";
-        const string questionIdKey = "QuestionId";
-        const string hasPredefinedAnswersKey = "HasPredefinedAnswers";
+
+        private const string answersKey = "SelectedAnswers";
+        private const string questionTextKey = "QuestionText";
+        private const string questionIdKey = "QuestionId";
+        private const string hasPredefinedAnswersKey = "HasPredefinedAnswers";
 
         private readonly QuestionAppService _questionAppService;
+
         public CreateQuestionPipeline(QuestionAppService qs, ILifetimeScope scope) : base(scope)
         {
             _questionAppService = qs;
@@ -82,8 +84,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 
                         cache.SetValueForChat(answersKey, new List<string>() { "Yes", "No" }, ctx.Recipient);
                         return ConfirmResults(ctx);
+
                     case AnswerSelectionOptions.Confirm:
                         return ConfirmResults(ctx);
+
                     default:
                         return Text("Unkonown result");
                 }
@@ -104,8 +108,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 {
                     case AnswerSelectionOptions.Confirm:
                         return ConfirmResults(ctx);
+
                     case AnswerSelectionOptions.CancelLast:
                         return CancelLast(ctx);
+
                     default:
                         ForbidMovingNext();
                         return Text("Unkown result");
@@ -166,8 +172,6 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             return Text("✅Done. Question saved!");
         }
 
-
-
         public ContentResult CancelLast(MessageContext ctx)
         {
             ForbidMovingNext();
@@ -189,6 +193,5 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 Buttons = new InlineKeyboardMarkup(butotns)
             };
         }
-
     }
 }

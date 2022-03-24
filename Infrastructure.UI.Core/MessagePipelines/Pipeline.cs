@@ -29,11 +29,10 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             _scope = scope;
             InitBaseComponents();
             RegisterPipelineStages();
-
         }
+
         public virtual void RegisterPipelineStages()
         {
-
         }
 
         protected void InitBaseComponents()
@@ -49,6 +48,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             MessageContext.PipelineEnded = false;
             IsDone = false;
         }
+
         public void ForbidMovingNext(MessageContext ctx)
         {
             ctx.MoveNext = false;
@@ -78,19 +78,22 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
         {
             Stages.Add(new Stage(stage));
         }
+
         protected void RegisterStage(Stage stage)
         {
             Stages.Add(stage);
         }
 
         #region ResponseTemplates
+
         protected ContentResult Text(string text, bool invokeNextImmediately = false) => ResponseTemplates.Text(text, invokeNextImmediately);
-        #endregion
+
+        #endregion ResponseTemplates
 
         protected T GetCachedValue<T>(string key, long chatId)
             => cache.GetValueForChat<T>(key, chatId);
+
         protected void SetCachedValue(string key, object value, long chatId)
             => cache.SetValueForChat(key, value, chatId);
-
     }
 }

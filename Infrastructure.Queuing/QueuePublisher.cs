@@ -10,18 +10,19 @@ namespace Infrastructure.Queuing
         private readonly string _queueName;
         private readonly string _username;
         private readonly string _password;
-        public QueuePublisher(string hostName,string queueName,string username,string password)
+
+        public QueuePublisher(string hostName, string queueName, string username, string password)
         {
             _hostName = hostName;
             _queueName = queueName;
             _username = username;
             _password = password;
         }
+
         public void Publish(object objectToSend)
         {
-
-            var factory = new ConnectionFactory() 
-            { 
+            var factory = new ConnectionFactory()
+            {
                 HostName = _hostName,
                 UserName = _username,
                 Password = _password

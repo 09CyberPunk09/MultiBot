@@ -13,8 +13,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines
     {
         public HelloMessagePipeline(ILifetimeScope scope) : base(scope)
         {
-
         }
+
         public override void RegisterPipelineStages()
         {
             RegisterStage(SayHello);

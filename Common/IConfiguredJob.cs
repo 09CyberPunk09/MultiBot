@@ -7,7 +7,9 @@ namespace Common
     {
         Dictionary<string, string> AdditionalData { get; set; }
         IJob Job { get; set; }
+
         ITrigger GetTrigger();
+
         IJobDetail BuildJob();
     }
 }

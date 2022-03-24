@@ -31,12 +31,10 @@ namespace Persistence.Common.DataAccess.Jobs
         }
     }
 
-
     public class SynchronizationJob : IJob
     {
         public SynchronizationJob()
         {
-
         }
 
         public virtual Task Execute(IJobExecutionContext context)

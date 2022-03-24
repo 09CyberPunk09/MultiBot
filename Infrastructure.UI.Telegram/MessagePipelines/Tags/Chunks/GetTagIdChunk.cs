@@ -11,14 +11,17 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks
     public class GetTagIdChunk : PipelineChunk
     {
         private readonly TagAppService _tagService;
+
         public GetTagIdChunk(TagAppService tagAppService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagAppService;
         }
+
         public override void RegisterPipelineStages()
         {
             RegisterStage(AskForSetName);
         }
+
         public ContentResult AskForSetName(MessageContext ctx)
         {
             var tags = _tagService.GetAll(GetCurrentUser(ctx).Id);

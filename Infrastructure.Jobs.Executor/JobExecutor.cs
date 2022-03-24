@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Common;
 using Quartz;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,16 +9,18 @@ namespace Infrastructure.Jobs.Executor
     public class JobExecutor : IJobExecutor
     {
         private readonly ILifetimeScope _scope;
+
         public JobExecutor(ILifetimeScope scope)
         {
             _scope = scope;
         }
+
         public async Task ScheduleJob(IConfiguredJob configuredJob)
         {
             var cts = new CancellationTokenSource();
             var job = configuredJob.BuildJob();
 
-            var trigger = configuredJob.GetTrigger();       
+            var trigger = configuredJob.GetTrigger();
 
             var scheduler = _scope.Resolve<IScheduler>();
             await scheduler.ScheduleJob(job, trigger, cts.Token).ConfigureAwait(true);
@@ -29,7 +30,6 @@ namespace Infrastructure.Jobs.Executor
         {
             var scheduler = _scope.Resolve<IScheduler>();
             await scheduler.Start().ConfigureAwait(true);
-
         }
     }
 }

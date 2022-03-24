@@ -17,6 +17,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
     public class GetNotesPipeline : MessagePipelineBase
     {
         private readonly NoteAppService _noteService;
+
         public GetNotesPipeline(NoteAppService noteService, ILifetimeScope scope) : base(scope)
         {
             _noteService = noteService;

@@ -14,6 +14,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
     internal class PurgeWholeCachePipeline : MessagePipelineBase
     {
         private readonly CacheService _cacheService;
+
         public PurgeWholeCachePipeline(CacheService cacheService, ILifetimeScope scope) : base(scope)
         {
             _cacheService = cacheService;
@@ -46,8 +47,6 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
             {
                 return Text("Operation is canceled.");
             }
-
         }
-
     }
 }

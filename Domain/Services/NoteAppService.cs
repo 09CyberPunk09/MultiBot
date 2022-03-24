@@ -1,15 +1,15 @@
-﻿
+﻿using Common.Entites;
+using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Persistence.Sql;
-using Common.Entites;
 
 namespace Application.Services
 {
     public class NoteAppService : AppService
     {
         private readonly Repository<Note> _noteRepository;
+
         public NoteAppService(Repository<Note> noteRepository)
         {
             _noteRepository = noteRepository;

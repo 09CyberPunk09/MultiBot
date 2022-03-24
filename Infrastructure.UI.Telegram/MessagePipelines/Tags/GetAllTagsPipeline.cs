@@ -15,6 +15,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
     public class GetAllTagsPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
+
         public GetAllTagsPipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;

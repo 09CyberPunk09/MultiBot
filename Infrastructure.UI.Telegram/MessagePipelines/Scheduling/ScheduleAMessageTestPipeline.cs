@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling
 {
-    enum MenuActiotype
+    internal enum MenuActiotype
     {
         Selection = 700,
         Undo,
@@ -15,6 +15,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling
         Next,
         Previous
     }
+
     record DayPayload(string Text, DayOfWeek? DayOfWeek, bool ContinueChoosing = true, MenuActiotype ActionType = MenuActiotype.Selection);
 
     [Route("/schedule-message-test")]
@@ -29,7 +30,5 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling
         {
             IntegrateChunkPipeline<CreateScheduleChunk>();
         }
-
-
     }
 }

@@ -4,7 +4,7 @@ namespace TelegramBot.IOHandler
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             IOHandler handler = new();
             handler.Start();
@@ -12,7 +12,7 @@ namespace TelegramBot.IOHandler
             LoopConsoleClosing();
         }
 
-        static void LoopConsoleClosing()
+        private static void LoopConsoleClosing()
         {
             while (Console.ReadKey().Key != ConsoleKey.Escape)
             { }

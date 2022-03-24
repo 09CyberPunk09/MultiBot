@@ -34,15 +34,21 @@ namespace Infrastructure.TelegramBot.Jobs
             .WithSchedule(SimpleScheduleBuilder.RepeatSecondlyForTotalCount(1)).Build();
         }
     }
+
     public class QustionSchedulingJob : IJob
     {
         private readonly ILifetimeScope _scope;
+
         public QustionSchedulingJob(ILifetimeScope scope)
         {
             _scope = scope;
         }
+
+#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         public async Task Execute(IJobExecutionContext context)
+#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             try
             {
                 System.Console.WriteLine("Scheduling questions...");
@@ -72,10 +78,9 @@ namespace Infrastructure.TelegramBot.Jobs
             }
             catch (System.Exception ex)
             {
-
                 throw;
             }
-          
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
         }
     }
 }
