@@ -40,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj" />
     <ProjectReference Include="..\Infrastructure.Kernel\Kernel.csproj" />
     <ProjectReference Include="..\Infrastructure.Sql\Persistence.Sql.csproj" />
     <ProjectReference Include="..\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />

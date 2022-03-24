@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using Persistence.Sql.BaseTypes;
-using Persistence.Sql.Entites;
+using Common.Entites;
+using Persistence.Common.DataAccess;
 using Persistence.Sql.Repositories;
 
 namespace Persistence.Sql
@@ -9,7 +9,8 @@ namespace Persistence.Sql
     {
         protected override void Load(ContainerBuilder builder)
         {
-            _ = builder.RegisterType<SqlServerDbContext>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<LifeTrackerDbContext>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<SynchronizationDbContext>().InstancePerLifetimeScope();
 
             _ = builder.RegisterType<NoteRepositry>().As<Repository<Note>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<UserRepositry>().As<Repository<User>>().InstancePerLifetimeScope();

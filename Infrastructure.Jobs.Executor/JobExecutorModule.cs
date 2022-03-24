@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.Quartz;
+using Common;
 using System.Collections.Specialized;
 
 namespace Infrastructure.Jobs.Executor
@@ -7,11 +8,11 @@ namespace Infrastructure.Jobs.Executor
     //todo: refactor for not to be dependent from one assembly or create a separate project woth jobs
     public class JobExecutorModule : Module
     {
-        private readonly System.Reflection.Assembly _assemblyWithJobs;
-        public JobExecutorModule(System.Reflection.Assembly assemblyWithJobs)
-        {
-            _assemblyWithJobs = assemblyWithJobs;
-        }
+        //private readonly System.Reflection.Assembly _assemblyWithJobs;
+        //public JobExecutorModule(System.Reflection.Assembly assemblyWithJobs)
+        //{
+        //    _assemblyWithJobs = assemblyWithJobs;
+        //}
         protected override void Load(ContainerBuilder builder)
         {
             var schedulerConfig = new NameValueCollection {
@@ -24,9 +25,9 @@ namespace Infrastructure.Jobs.Executor
                 ConfigurationProvider = c => schedulerConfig
             });
 
-            builder.RegisterModule(new QuartzAutofacJobsModule(_assemblyWithJobs));
+         //   builder.RegisterModule(new QuartzAutofacJobsModule(_assemblyWithJobs));
 
-            builder.RegisterType<JobExecutor>().SingleInstance();
+            builder.RegisterType<JobExecutor>().As<IJobExecutor>().SingleInstance();
         }
     }
 }

@@ -33,21 +33,7 @@
     <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.TelegramBot.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="appSettings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>appSettings.json</DependentUpon>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appSettings.json">
-      <LastGenOutput>appSettings.Designer.cs</LastGenOutput>
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+	<ItemGroup>
+		<Content Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
+	</ItemGroup>
 </Project>

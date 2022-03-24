@@ -36,7 +36,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Application.csproj" />
-    <ProjectReference Include="..\Infrastructure.Jobs.Executor\Infrastructure.Jobs.Executor.csproj" />
     <ProjectReference Include="..\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
     <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />

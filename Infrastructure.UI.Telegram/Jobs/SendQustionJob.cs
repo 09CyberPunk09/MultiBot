@@ -1,4 +1,4 @@
-﻿using Infrastructure.Jobs.Core;
+﻿using Common;
 using Infrastructure.TelegramBot.IOInstances;
 using Infrastructure.TextUI.Core.Types;
 using Quartz;

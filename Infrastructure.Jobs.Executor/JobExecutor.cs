@@ -1,6 +1,5 @@
 ﻿using Autofac;
-using Autofac.Extras.Quartz;
-using Infrastructure.Jobs.Core;
+using Common;
 using Quartz;
 using System;
 using System.Threading;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Jobs.Executor
 {
-    public class JobExecutor
+    public class JobExecutor : IJobExecutor
     {
         private readonly ILifetimeScope _scope;
         public JobExecutor(ILifetimeScope scope)
@@ -17,22 +16,13 @@ namespace Infrastructure.Jobs.Executor
         }
         public async Task ScheduleJob(IConfiguredJob configuredJob)
         {
-           // QuartzAutofacFactoryModule
-            Console.WriteLine("This sample demonstrates how to integrate Quartz and Autofac.");
-            try
-            {
-                var cts = new CancellationTokenSource();
-                var job = configuredJob.BuildJob();
+            var cts = new CancellationTokenSource();
+            var job = configuredJob.BuildJob();
 
-                var trigger = configuredJob.GetTrigger();       
+            var trigger = configuredJob.GetTrigger();       
 
-                var scheduler = _scope.Resolve<IScheduler>();
-                await scheduler.ScheduleJob(job, trigger, cts.Token).ConfigureAwait(true);
-
-            }
-            catch (Exception ex)
-            {
-            }
+            var scheduler = _scope.Resolve<IScheduler>();
+            await scheduler.ScheduleJob(job, trigger, cts.Token).ConfigureAwait(true);
         }
 
         public async Task StartExecuting()

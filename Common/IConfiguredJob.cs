@@ -1,7 +1,7 @@
 ﻿using Quartz;
 using System.Collections.Generic;
 
-namespace Infrastructure.Jobs.Core
+namespace Common
 {
     public interface IConfiguredJob
     {

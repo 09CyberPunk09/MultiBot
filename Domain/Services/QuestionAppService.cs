@@ -1,11 +1,9 @@
-﻿using Infrastructure.Jobs.Executor;
+﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
-
+using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Persistence.Sql;
-using Common.Entites;
 
 namespace Application.Services
 {
@@ -14,17 +12,14 @@ namespace Application.Services
         private readonly Repository<Question> _questionRepo;
         private readonly Repository<PredefinedAnswer> _predefinedAnswerRepo;
         private readonly Repository<Answer> _answerRepo;
-        private readonly JobExecutor _jobExecutor;
         public QuestionAppService(
             Repository<Question> questionRepo,
             Repository<PredefinedAnswer> predanswerRepo,
-            Repository<Answer> answerRepo,
-            JobExecutor jobExecutor)
+            Repository<Answer> answerRepo)
         {
             _questionRepo = questionRepo;
             _predefinedAnswerRepo = predanswerRepo;
             _answerRepo = answerRepo;
-            _jobExecutor = jobExecutor;
         }
 
         public Question Create(Question q, Guid userId)

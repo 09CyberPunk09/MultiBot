@@ -1,9 +1,9 @@
-﻿using Persistence.Core.BaseTypes;
+﻿using Common.BaseTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Persistence.Core
+namespace Persistence.Common.DataAccess.Interfaces
 {
     public interface IRepository<TEntity>
         where TEntity : AuditableEntity

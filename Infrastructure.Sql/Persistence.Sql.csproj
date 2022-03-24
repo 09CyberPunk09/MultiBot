@@ -31,4 +31,9 @@
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.0-alpha.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

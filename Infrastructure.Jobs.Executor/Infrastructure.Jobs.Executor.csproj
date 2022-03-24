@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Jobs.Core\Infrastructure.Jobs.Core.csproj" />
+    <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.TelegramBot.csproj" />
+    <ProjectReference Include="..\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	  <Content Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="PreserveNewest" LinkBase="\" /> 
   </ItemGroup>
 
 </Project>
