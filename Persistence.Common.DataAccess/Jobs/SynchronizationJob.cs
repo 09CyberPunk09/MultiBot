@@ -1,4 +1,5 @@
 ﻿using Common;
+using NLog;
 using Quartz;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace Persistence.Common.DataAccess.Jobs
 
     public class SynchronizationJob : IJob
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         public SynchronizationJob()
         {
         }
@@ -40,8 +43,8 @@ namespace Persistence.Common.DataAccess.Jobs
         public virtual Task Execute(IJobExecutionContext context)
         {
             using var syncDb = new SynchronizationDbContext();
-
             var changes = syncDb.EntityChanges.ToList();
+            logger.Trace($"SynchronizationJob: {changes.Count()} entity changed detected");
 
             return Task.CompletedTask;
         }

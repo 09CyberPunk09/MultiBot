@@ -1,6 +1,8 @@
 ﻿using Common;
 using Infrastructure.TelegramBot.IOInstances;
+using Infrastructure.TextUI.Core.Interfaces;
 using Infrastructure.TextUI.Core.Types;
+using NLog;
 using Quartz;
 using System;
 using System.Collections.Generic;
@@ -29,8 +31,9 @@ namespace Infrastructure.TelegramBot.Jobs
             return TriggerBuilder.Create()
             .WithIdentity("question-trigger" + AdditionalData[SendQustionJob.QuestionId], "telegram-questions")
             .StartNow()
-            //.WithCronSchedule(AdditionalData[JobsConsts.CRON])
-            .WithSchedule(SimpleScheduleBuilder.RepeatSecondlyForever(2)).Build();
+            .WithCronSchedule(AdditionalData[JobsConsts.cron])
+            //.WithSchedule(SimpleScheduleBuilder.RepeatSecondlyForever(2)).Build();
+            .Build();
         }
     }
 
@@ -40,6 +43,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public const string UserId = "userId";
         public const string ChatId = "chatId";
         private readonly MessageResponsePublisher _sender;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public SendQustionJob()
         {
@@ -50,16 +54,14 @@ namespace Infrastructure.TelegramBot.Jobs
         {
             //TODO: Add better formatting for questions
 
-            var timestamp = DateTime.Now;
-            Console.WriteLine($"{context.JobDetail.JobDataMap[QuestionId]} - {timestamp:yyyy-MM-dd HH:mm:ss.fff}");
-
             _sender.SendMessage(
-                new BotMessage()
+                new ContentResult()
                 {
                     Text = context.JobDetail.JobDataMap[QuestionId] as string,
                     RecipientChatId = Convert.ToInt64(context.JobDetail.JobDataMap[ChatId])
                 }
                 );
+            logger.Trace($"Question {context.JobDetail.JobDataMap[QuestionId]} sent");
             return Task.CompletedTask;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Infrastructure.TelegramBot.IOInstances;
+using NLog;
 using System;
 
 namespace MultiBot
@@ -7,9 +8,11 @@ namespace MultiBot
     {
         private static void Main(string[] args)
         {
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info("Starting...");
             var telegramBot = new TelegramBotHandlerInstance();
             telegramBot.Start();
-            Console.WriteLine("The bot started succesfully");
+            logger.Info("The message handler started succesfully");
 
             LoopConsoleClosing();
         }

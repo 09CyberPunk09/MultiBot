@@ -2,6 +2,7 @@
 using Autofac.Extras.Quartz;
 using Common;
 using Infrastructure.TelegramBot.Jobs;
+using NLog;
 using Persistence.Common.DataAccess.Jobs;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace Infrastructure.Jobs.Executor
     {
         private static ContainerBuilder _containerBuilder;
         private static List<Type> _configurationTypes = new();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static async Task Main(string[] args)
         {
             _containerBuilder = new();
             _containerBuilder.RegisterModule<JobExecutorModule>();
+            logger.Info("Configuration of job executor started");
 
             StartJobs();
 
@@ -27,6 +30,7 @@ namespace Infrastructure.Jobs.Executor
             {
                 var obj = (IConfiguredJob)container.Resolve(type);
                 executor.ScheduleJob(obj);
+
             });
             await executor.StartExecuting();
             LoopConsoleClosing();

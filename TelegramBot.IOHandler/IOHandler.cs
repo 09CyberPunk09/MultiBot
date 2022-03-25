@@ -2,6 +2,7 @@
 using Autofac;
 using Infrastructure.Queuing;
 using Infrastructure.TextUI.Core.Interfaces;
+using NLog;
 using System;
 using Telegram.Bot;
 
@@ -12,6 +13,11 @@ namespace TelegramBot.IOHandler
         private IContainer _container;
         private QueueListener<ContentResult> _queueListenner;
         private MessageSender _sender;
+        private readonly Logger logger;
+        public IOHandler()
+        {
+            logger = LogManager.GetCurrentClassLogger();
+        }
 
         public void Start()
         {
@@ -48,9 +54,8 @@ namespace TelegramBot.IOHandler
             _queueListenner = new(hostName, queueName, username, password);
             _queueListenner.AddMessageHandler(response =>
             {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
+                 logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");
                 _sender.SendMessage(response);
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call.
             });
             _queueListenner.StartConsuming();
         }

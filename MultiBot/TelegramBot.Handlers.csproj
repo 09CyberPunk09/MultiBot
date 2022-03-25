@@ -25,6 +25,9 @@
     </PackageReference>
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.14" />
+    <PackageReference Include="NLog.Config" Version="4.7.14" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
@@ -35,5 +38,6 @@
   </ItemGroup>
 	<ItemGroup>
 		<Content Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
+		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
 	</ItemGroup>
 </Project>

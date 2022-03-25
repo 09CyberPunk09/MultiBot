@@ -34,7 +34,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
         {
             var questions = _questionAppService.GetQuestions(GetCurrentUser().Id);
             var buttons = questions.Select(q => new CallbackButton[] { Button(q.Text, q.Id.ToString()) });
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = "Pick a question to answer:",
                 Buttons = new InlineKeyboardMarkup(buttons)
@@ -58,7 +58,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 
             cache.SetValueForChat(selectedQustionCacheKey, question.Id, ctx.Recipient);
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = question.Text,
                 Buttons = new InlineKeyboardMarkup(buttons)

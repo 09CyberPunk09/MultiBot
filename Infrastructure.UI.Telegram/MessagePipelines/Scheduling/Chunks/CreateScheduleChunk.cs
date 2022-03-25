@@ -33,13 +33,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
         {
             cache.SetValueForChat(DAYS_CACHEKEY, new List<DayOfWeek>(), ctx.Recipient);
 
-            return new EditLastMessage()
+            return new()
             {
-                NewMessage = new BotMessage()
-                {
-                    Text = "First, choose a day or days when the bot must send you message:",
-                    Buttons = new InlineKeyboardMarkup(BuildDaysMenu(daysMenu.ToList()))
-                }
+
+                Text = "First, choose a day or days when the bot must send you message:",
+                Buttons = new InlineKeyboardMarkup(BuildDaysMenu(daysMenu.ToList()))
             };
         }
 
@@ -77,13 +75,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
 
                         ForbidMovingNext(ctx);
 
-                        return new EditLastMessage()
+                        return new()
                         {
-                            NewMessage = new BotMessage()
-                            {
-                                Text = selectedDaysText.ToString(),
-                                Buttons = new InlineKeyboardMarkup(buttons)
-                            }
+                            Edited = true,
+                            Text = selectedDaysText.ToString(),
+                            Buttons = new InlineKeyboardMarkup(buttons)
                         };
                     }
                 case MenuActiotype.Undo:
@@ -108,13 +104,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
 
                         ForbidMovingNext(ctx);
 
-                        return new EditLastMessage()
+                        return new()
                         {
-                            NewMessage = new BotMessage()
-                            {
-                                Text = selectedDaysText.ToString(),
-                                Buttons = new InlineKeyboardMarkup(buttons)
-                            }
+                            Edited = true,
+                            Text = selectedDaysText.ToString(),
+                            Buttons = new InlineKeyboardMarkup(buttons)
                         };
                     }
                 case MenuActiotype.Confirm:
@@ -137,13 +131,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
             buttons.Add(new List<CallbackButton>() { Button("Confirm", MenuActiotype.Confirm.ToString()) });
             buttons.Add(new List<CallbackButton>() { Button("Undo", MenuActiotype.Undo.ToString()) });
 
-            return new EditLastMessage()
+            return new()
             {
-                NewMessage = new BotMessage()
-                {
-                    Text = "Select time of day when the bot should send you: ",
-                    Buttons = new InlineKeyboardMarkup(buttons)
-                }
+                Edited = true,
+                Text = "Select time of day when the bot should send you: ",
+                Buttons = new InlineKeyboardMarkup(buttons)
+
             };
         }
 
@@ -158,7 +151,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
             cache.SetValueForChat(HOUR_CACHEKEY, ctx.Message.Text, ctx.Recipient);
 
             List<int> mins = new();
-            for (int i = 0; i <= 60; i += 5)
+            for (int i = 0; i < 60; i += 5)
                 mins.Add(i);
 
             var chunked = mins.Chunk(4);
@@ -168,13 +161,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
                   .ToList())
             .ToList();
 
-            return new EditLastMessage()
+            return new()
             {
-                NewMessage = new BotMessage()
-                {
-                    Text = "Choose time in minutes or type custom:",
-                    Buttons = new InlineKeyboardMarkup(buttons)
-                }
+                Edited = true,
+                Text = "Choose time in minutes or type custom:",
+                Buttons = new InlineKeyboardMarkup(buttons)
             };
         }
 

@@ -66,7 +66,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 Button("Confirm", ((int)AnswerSelectionOptions.Confirm).ToString())
             };
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = "Now, let's define the answers for the question.You can choose the type from buttons,or type custom answers.",
                 Buttons = new InlineKeyboardMarkup(buttons)
@@ -132,7 +132,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                     Button("Remove last", ((int)AnswerSelectionOptions.CancelLast).ToString())
                 };
 
-                return new BotMessage()
+                return new ContentResult()
                 {
                     Text = output.ToString(),
                     Buttons = new InlineKeyboardMarkup(butotns)
@@ -187,7 +187,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 Button("Remove last", ((int)AnswerSelectionOptions.CancelLast).ToString())
             };
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = output.ToString(),
                 Buttons = new InlineKeyboardMarkup(butotns)

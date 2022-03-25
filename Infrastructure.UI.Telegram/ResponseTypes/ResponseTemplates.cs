@@ -13,7 +13,7 @@ namespace Infrastructure.TelegramBot.ResponseTypes
             return new() { Text = text };
         }
 
-        public static BotMessage YesNo(string question)
+        public static ContentResult YesNo(string question)
         {
             var markups = new List<InlineKeyboardButton>
             {
@@ -21,7 +21,7 @@ namespace Infrastructure.TelegramBot.ResponseTypes
                 InlineKeyboardButton.WithCallbackData("No", false.ToString())
             };
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = question,
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())

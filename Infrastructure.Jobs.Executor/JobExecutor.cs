@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Common;
+using NLog;
 using Quartz;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Infrastructure.Jobs.Executor
     public class JobExecutor : IJobExecutor
     {
         private readonly ILifetimeScope _scope;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public JobExecutor(ILifetimeScope scope)
         {
@@ -24,12 +26,14 @@ namespace Infrastructure.Jobs.Executor
 
             var scheduler = _scope.Resolve<IScheduler>();
             await scheduler.ScheduleJob(job, trigger, cts.Token).ConfigureAwait(true);
+            logger.Info($"{configuredJob.GetType().Name} added to scheduler");
         }
 
         public async Task StartExecuting()
         {
             var scheduler = _scope.Resolve<IScheduler>();
             await scheduler.Start().ConfigureAwait(true);
+            logger.Info($"Scheduler started");
         }
     }
 }

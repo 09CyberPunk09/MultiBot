@@ -4,10 +4,12 @@ using Infrastructure.TelegramBot.ResponseTypes;
 using Infrastructure.TextUI.Core.Attributes;
 using Infrastructure.TextUI.Core.MessagePipelines;
 using Infrastructure.TextUI.Core.Types;
+using NLog;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {
@@ -28,6 +30,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         private MessageReceiver _receiver;
 
         #endregion Injected members
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Dictionary<string, Type> pipleineCommands;
         public IMessagePipeline DefaultPipeline { get; set; }
@@ -74,7 +77,11 @@ namespace Infrastructure.TelegramBot.IOInstances
                 string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
                 bool executeNextImmediately = false;
 
+                var routeName = (pipeline.GetType().GetCustomAttribute<RouteAttribute>() as RouteAttribute).Route;
+                logger.Info($"{routeName}.{current}: Message {ctx.Message} started being processed");
                 var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
+                logger.Info($"{routeName}.{current}: Message {ctx.Message} finished being processed");
+               
                 if (result != null)
                 {
                     if (ctx.PipelineStageSucceeded)

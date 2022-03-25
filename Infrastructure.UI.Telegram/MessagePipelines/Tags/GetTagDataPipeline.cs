@@ -39,7 +39,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
                 markups.Add(InlineKeyboardButton.WithCallbackData(item.Name, item.Id.ToString()));
             }
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = "Choose the set you want to open:",
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())

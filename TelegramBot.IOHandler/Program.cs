@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 
 namespace TelegramBot.IOHandler
 {
@@ -6,9 +7,10 @@ namespace TelegramBot.IOHandler
     {
         private static void Main(string[] args)
         {
+            var logger = LogManager.GetCurrentClassLogger();
             IOHandler handler = new();
             handler.Start();
-            Console.WriteLine("Handler started successfully");
+            logger.Info("Logger started successfully");
             LoopConsoleClosing();
         }
 

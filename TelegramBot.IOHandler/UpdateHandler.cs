@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -11,7 +12,7 @@ namespace TelegramBot.IOHandler
     internal class MessageUpdateHandler : IUpdateHandler
     {
         private MessageConsumer _messageConsumer = new();
-
+        private Logger logger = LogManager.GetCurrentClassLogger();
         public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             //TODO: Add logging
@@ -61,7 +62,7 @@ namespace TelegramBot.IOHandler
                 default:
                     break;
             }
-
+            logger.Info($"Message '{message.Text}' recieved form {message.ChatId}");
             _messageConsumer.ConsumeMessage(message);
 
             return Task.CompletedTask;

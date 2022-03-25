@@ -18,7 +18,7 @@ namespace Infrastructure.TextUI.Core
             };
         }
 
-        public static BotMessage YesNo(string question)
+        public static ContentResult YesNo(string question)
         {
             var markups = new List<InlineKeyboardButton>
             {
@@ -26,7 +26,7 @@ namespace Infrastructure.TextUI.Core
                 InlineKeyboardButton.WithCallbackData("No", false.ToString())
             };
 
-            return new BotMessage()
+            return new ContentResult()
             {
                 Text = question,
                 Buttons = new InlineKeyboardMarkup(markups.ToArray())

@@ -33,12 +33,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
         {
             var result = _noteService.GetByUserId(GetCurrentUser().Id);
             //todo: add markup
-            var messagesToSend = new List<BotMessage>()
+            var messagesToSend = new List<ContentResult>()
             {
-                new BotMessage(){ Text = "Here are your notes:"}
+                new ContentResult(){ Text = "Here are your notes:"}
             };
 
-            messagesToSend.AddRange(result.Select(x => new BotMessage()
+            messagesToSend.AddRange(result.Select(x => new ContentResult()
             {
                 Text = x.Text,
                 Buttons = new InlineKeyboardMarkup(

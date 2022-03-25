@@ -2,6 +2,7 @@
 using Autofac;
 using Common;
 using Common.Entites;
+using NLog;
 using Persistence.Sql;
 using Quartz;
 using System.Collections.Generic;
@@ -38,20 +39,18 @@ namespace Infrastructure.TelegramBot.Jobs
     public class QustionSchedulingJob : IJob
     {
         private readonly ILifetimeScope _scope;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public QustionSchedulingJob(ILifetimeScope scope)
         {
             _scope = scope;
         }
 
-#pragma warning disable CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         public async Task Execute(IJobExecutionContext context)
-#pragma warning restore CS1998 // This async method lacks 'await' operators and will run synchronously. Consider using the 'await' operator to await non-blocking API calls, or 'await Task.Run(...)' to do CPU-bound work on a background thread.
         {
-#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             try
             {
-                System.Console.WriteLine("Scheduling questions...");
+                logger.Info("Scheduling questions...");
                 var executor = _scope.Resolve<IJobExecutor>();
                 var userRepo = _scope.Resolve<Repository<User>>();
                 var questionsToLoad = _scope.Resolve<QuestionAppService>()
@@ -59,28 +58,32 @@ namespace Infrastructure.TelegramBot.Jobs
 
                 var users = userRepo.GetAll().ToList();
 
+                int counter = 0;
                 questionsToLoad.ForEach(async q =>
                 {
+                    counter++;
+                    logger.Trace($"Question: {q.Id} loaded to scheduler");
                     var currentUser = users.FirstOrDefault(u => u.Id == q.UserId);
                     //TODO: навести порядок з юзер айді і чат айді
                     var dictionary = new Dictionary<string, string>
                 {
                     { SendQustionJob.QuestionId, q.Id.ToString() },
                     { SendQustionJob.UserId, q.UserId.ToString() },
-                    { SendQustionJob.ChatId, currentUser.TelegramUserId.ToString() }
+                    { SendQustionJob.ChatId, currentUser.TelegramUserId.ToString() },
+                    { JobsConsts.cron, q.CronExpression }
                 };
                     await executor.ScheduleJob(new QuestionJobConfiguration()
                     {
                         AdditionalData = dictionary
                     });
                 });
-                System.Console.WriteLine("Scheduling questions completed");
+                logger.Trace($"{counter} questions scheduled");
+                logger.Trace("Scheduling questions completed");
             }
             catch (System.Exception ex)
             {
-                throw;
+                logger.Error(ex);
             }
-#pragma warning restore CS0168 // The variable 'ex' is declared but never used
         }
     }
 }
