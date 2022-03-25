@@ -1,5 +1,5 @@
-﻿using Autofac;
-using Domain;
+﻿using Application;
+using Autofac;
 using Infrastructure.TextUI.Core.MessagePipelines;
 using Persistence.Sql;
 using System.Linq;

@@ -1,10 +1,9 @@
-﻿using Application;
-using Autofac;
+﻿using Autofac;
 using System.Linq;
 
-namespace Domain
+namespace Application
 {
-    public class DomainModule : Autofac.Module
+    public class DomainModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

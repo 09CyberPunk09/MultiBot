@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Kernel
+﻿namespace Kernel
 {
     public interface IStartStop
     {

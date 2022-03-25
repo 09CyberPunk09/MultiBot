@@ -2,7 +2,7 @@
 using NLog;
 using System;
 
-namespace MultiBot
+namespace TelegramBot.Handlers
 {
     internal class Program
     {

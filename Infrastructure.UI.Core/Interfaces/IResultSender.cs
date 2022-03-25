@@ -1,4 +1,4 @@
-﻿using Infrastructure.Kernel;
+﻿using Kernel;
 using System.Threading.Tasks;
 
 namespace Infrastructure.TextUI.Core.Interfaces

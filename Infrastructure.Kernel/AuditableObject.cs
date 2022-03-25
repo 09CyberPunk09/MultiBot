@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastructure.Kernel
+namespace Kernel
 {
     public class AuditableObject
     {

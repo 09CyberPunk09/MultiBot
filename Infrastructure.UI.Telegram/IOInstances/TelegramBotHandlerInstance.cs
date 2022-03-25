@@ -1,5 +1,5 @@
-﻿using Autofac;
-using Domain;
+﻿using Application;
+using Autofac;
 using NLog;
 using Persistence.Caching.Redis;
 using Persistence.Sql;
