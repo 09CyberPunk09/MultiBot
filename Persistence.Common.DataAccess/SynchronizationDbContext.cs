@@ -1,11 +1,11 @@
 ﻿using Common.SynchronizationEntities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Persistence.Common.DataAccess
 {
     public class SynchronizationDbContext : DbContext
     {
-        private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= SynchronizationDb;";
         public DbSet<EntityChange> EntityChanges { get; set; }
 
         public SynchronizationDbContext() : base()
@@ -16,7 +16,10 @@ namespace Persistence.Common.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionstring);
+            var configurationBuilder = new ConfigurationBuilder()
+                      .AddJsonFile("appSettings.json");
+            var config = configurationBuilder.Build();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("SynchronizationDb"));
         }
     }
 }

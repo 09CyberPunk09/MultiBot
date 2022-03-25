@@ -26,6 +26,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.0-alpha.1" />
@@ -35,5 +37,9 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
+		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
+	</ItemGroup>
 
 </Project>

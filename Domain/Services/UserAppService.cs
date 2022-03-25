@@ -13,12 +13,11 @@ namespace Application.Services
             _userRepository = userRepository;
         }
 
-        public User CreateFromTelegram(string username, long? tgUserId, long tgChatId)
+        public User CreateFromTelegram(string username, long tgChatId)
         {
             return _userRepository.Add(new()
             {
                 Name = username,
-                TelegramUserId = tgUserId,
                 TelegramChatId = tgChatId
             });
         }
@@ -30,7 +29,7 @@ namespace Application.Services
 
         public User GetByTgId(long tgUserId)
         {
-            return _userRepository.GetQuery().FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId.Value == tgUserId);
+            return _userRepository.GetQuery().FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId.Value == tgUserId);
         }
     }
 }

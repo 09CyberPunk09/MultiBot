@@ -20,7 +20,7 @@ namespace Application.Services
         {
             if (userId != null)
             {
-                var tgId = _userRepository.GetQuery().FirstOrDefault(x => x.Id == userId).TelegramUserId;
+                var tgId = _userRepository.GetQuery().FirstOrDefault(x => x.Id == userId).TelegramChatId;
                 _cache.PurgeChatData(tgId.Value);
             }
             else

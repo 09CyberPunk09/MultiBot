@@ -1,6 +1,8 @@
 ﻿using Common.BaseTypes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Persistence.Common.DataAccess;
 using System;
 using System.Linq;
@@ -9,8 +11,6 @@ namespace Persistence.Sql
 {
     public class LifeTrackerDbContext : RelationalSchemaContext
     {
-        //todo: put into config.json
-        private static readonly string connectionstring = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog= MultiBot-Db;";
 
         public LifeTrackerDbContext() : base()
         {
@@ -33,7 +33,10 @@ namespace Persistence.Sql
                 {
                     EntityId = entity.Id,
                     TimeStamp = DateTime.Now,
-                    ObjectContent = JsonConvert.SerializeObject(entity),
+                    ObjectContent = JsonConvert.SerializeObject(entity, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    }),
                     EntityState = x.State,
                     Id = Guid.NewGuid(),
                     TypeName = entity.GetType().FullName
@@ -45,8 +48,11 @@ namespace Persistence.Sql
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(connectionstring);
+{
+            var configurationBuilder = new ConfigurationBuilder()
+             .AddJsonFile("appSettings.json");
+            var config = configurationBuilder.Build();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("LifeTrackerDb"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

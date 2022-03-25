@@ -3,16 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Common.DataAccess;
-using Persistence.Sql;
 
-namespace Persistence.Sql.SynchronizationDbMigrations
+namespace Persistence.Common.DataAccess.Migrations
 {
     [DbContext(typeof(SynchronizationDbContext))]
-    partial class SynchronizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220325154700_Inital")]
+    partial class Inital
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -18,7 +18,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             //todo: add caching library
             using (var _dbContext = new LifeTrackerDbContext())
             {
-                return _dbContext.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == ctx.Recipient);
+                return _dbContext.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == ctx.Recipient);
             }
         }
     }

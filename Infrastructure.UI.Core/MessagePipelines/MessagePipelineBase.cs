@@ -49,7 +49,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
             //todo: add caching library
             using (var ctx = new LifeTrackerDbContext())
             {
-                return ctx.Users.FirstOrDefault(u => u.TelegramUserId.HasValue && u.TelegramUserId == MessageContext.Recipient);
+                return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.Recipient);
             }
         }
     }

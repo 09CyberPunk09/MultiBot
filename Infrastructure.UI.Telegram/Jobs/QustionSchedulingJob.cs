@@ -68,8 +68,7 @@ namespace Infrastructure.TelegramBot.Jobs
                     var dictionary = new Dictionary<string, string>
                 {
                     { SendQustionJob.QuestionId, q.Id.ToString() },
-                    { SendQustionJob.UserId, q.UserId.ToString() },
-                    { SendQustionJob.ChatId, currentUser.TelegramUserId.ToString() },
+                    { SendQustionJob.ChatId, currentUser.TelegramChatId.ToString() },
                     { JobsConsts.cron, q.CronExpression }
                 };
                     await executor.ScheduleJob(new QuestionJobConfiguration()

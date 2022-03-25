@@ -32,7 +32,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
             {
                 //add pipeline for gettin name
                 //TODO: Retrieve recipientUserId
-                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientUserId, ctx.Recipient);
+                var newUuser = _userService.CreateFromTelegram("", ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
             }
