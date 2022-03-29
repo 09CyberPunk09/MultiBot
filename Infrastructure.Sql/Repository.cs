@@ -35,6 +35,11 @@ namespace Persistence.Sql
             return _context.Find<TEntity>(id);
         }
 
+        public virtual void Remove(TEntity entity)
+        {
+            _context.Remove(entity);
+            _context.SaveChanges();
+        }
         public virtual IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();

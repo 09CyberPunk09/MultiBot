@@ -10,7 +10,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
 {
     public class Pipeline
     {
-        public StageMap Stages { get; set; }
+        public StageMap Stages { get; set; } = new();
 
         //todo: review which type of cache is inited in this project
 
@@ -37,7 +37,6 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
 
         protected void InitBaseComponents()
         {
-            Stages = new();
             ConfigureBasicPostAction();
         }
 

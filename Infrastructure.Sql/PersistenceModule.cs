@@ -13,6 +13,8 @@ namespace Persistence.Sql
             _ = builder.RegisterType<SynchronizationDbContext>().InstancePerLifetimeScope();
 
             _ = builder.RegisterType<NoteRepositry>().As<Repository<Note>>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<TimeTrackingActivityRepository>().As<Repository<TimeTrackingActivity>>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<TimeTrackingEntryRepository>().As<Repository<TimeTrackingEntry>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<UserRepositry>().As<Repository<User>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<TagRepository>().As<Repository<Tag>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<PredefinedAnswerRepository>().As<Repository<PredefinedAnswer>>().InstancePerLifetimeScope();

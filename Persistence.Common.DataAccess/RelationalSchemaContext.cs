@@ -11,5 +11,7 @@ namespace Persistence.Common.DataAccess
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<TimeTrackingActivity> TimeTrackingActivities { get; set; }
+        public virtual DbSet<TimeTrackingEntry> TimeTrackingEntries { get; set; }
     }
 }

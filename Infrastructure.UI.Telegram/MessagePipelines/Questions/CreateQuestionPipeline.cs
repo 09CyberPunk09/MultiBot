@@ -7,7 +7,6 @@ using Infrastructure.TextUI.Core.Interfaces;
 using Infrastructure.TextUI.Core.MessagePipelines;
 using Infrastructure.TextUI.Core.Types;
 using Kernel;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
