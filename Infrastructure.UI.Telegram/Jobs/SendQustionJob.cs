@@ -1,7 +1,5 @@
 ﻿using Common;
 using Infrastructure.TelegramBot.IOInstances;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.Types;
 using NLog;
 using Quartz;
 using System;

@@ -1,7 +1,6 @@
-﻿using Infrastructure.TextUI.Core.MessagePipelines;
-using System;
+﻿using System;
 
-namespace Infrastructure.TextUI.Core.Types
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class MessageContext
     {

@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.TextUI.Core.Types
+﻿namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class Message
     {

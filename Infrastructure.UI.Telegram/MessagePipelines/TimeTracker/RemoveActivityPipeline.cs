@@ -1,9 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.Linq;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -31,13 +28,13 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             return new()
             {
                 Text = "Select activityto remove:",
-                Buttons = new(activities.Select(x => InlineKeyboardButton.WithCallbackData(x.Name,x.Id.ToString()))),
+                Buttons = new(activities.Select(x => InlineKeyboardButton.WithCallbackData(x.Name, x.Id.ToString()))),
             };
         }
 
         public ContentResult Confirm(MessageContext ctx)
         {
-            if (Guid.TryParse(ctx.Message.Text,out var id))
+            if (Guid.TryParse(ctx.Message.Text, out var id))
             {
                 SetCachedValue(ID_CACHEKEY, id.ToString(), ctx.Recipient);
 
@@ -60,7 +57,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 
         public ContentResult Remove(MessageContext ctx)
         {
-            if(bool.TryParse(ctx.Message.Text,out var result))
+            if (bool.TryParse(ctx.Message.Text, out var result))
             {
                 if (result)
                 {

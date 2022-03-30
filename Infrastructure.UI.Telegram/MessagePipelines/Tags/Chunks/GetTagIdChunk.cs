@@ -1,8 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
 

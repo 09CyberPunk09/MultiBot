@@ -1,7 +1,7 @@
 ﻿using Application.Services;
 using Autofac;
 using Infrastructure.Queuing;
-using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using NLog;
 using System;
 using Telegram.Bot;

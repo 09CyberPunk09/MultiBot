@@ -1,4 +1,4 @@
-﻿using Infrastructure.TextUI.Core.Interfaces;
+﻿using Infrastructure.TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TelegramBot.ResponseTypes
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Infrastructure.TextUI.Core.Interfaces
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class ContentResult
     {

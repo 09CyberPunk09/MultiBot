@@ -1,9 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.System
@@ -12,10 +9,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
     public class MakeUserSpecialPipeline : MessagePipelineBase
     {
         private readonly UserAppService _service;
- 
+
         public MakeUserSpecialPipeline(ILifetimeScope scope) : base(scope)
         {
-          _service = _scope.Resolve<UserAppService>();
+            _service = _scope.Resolve<UserAppService>();
 
             RegisterStage(AskForSuperSercretCode);
             RegisterStage(AcceptSuperSercretCode);
@@ -28,7 +25,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
 
         public ContentResult AcceptSuperSercretCode(MessageContext ctx)
         {
-            if(Guid.TryParse(ctx.Message.Text,out var res))
+            if (Guid.TryParse(ctx.Message.Text, out var res))
             {
                 var supersercretCode = (new ConfigurationAppService()).Get("SpecialSercretKey");
                 if (supersercretCode.Equals(ctx.Message.Text, StringComparison.OrdinalIgnoreCase))

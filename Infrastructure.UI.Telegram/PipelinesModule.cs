@@ -1,6 +1,6 @@
 ﻿using Application;
 using Autofac;
-using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Persistence.Sql;
 using System.Linq;
 

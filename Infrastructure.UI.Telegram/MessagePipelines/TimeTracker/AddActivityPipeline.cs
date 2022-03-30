@@ -1,9 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 {
@@ -26,7 +23,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 
         public ContentResult Save(MessageContext ctx)
         {
-            _service.CreateTimeTrackingActivity(ctx.Message.Text,GetCurrentUser().Id);
+            _service.CreateTimeTrackingActivity(ctx.Message.Text, GetCurrentUser().Id);
             return Text("✅ Done");
         }
 

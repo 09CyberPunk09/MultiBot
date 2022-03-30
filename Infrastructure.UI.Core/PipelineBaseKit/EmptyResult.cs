@@ -1,6 +1,4 @@
-﻿using Infrastructure.TextUI.Core.Interfaces;
-
-namespace Infrastructure.TextUI.Core.Types
+﻿namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class EmptyResult : ContentResult
     {

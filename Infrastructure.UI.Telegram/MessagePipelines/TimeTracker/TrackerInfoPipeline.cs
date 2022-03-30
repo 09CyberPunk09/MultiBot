@@ -1,9 +1,5 @@
-﻿using Application.Services;
-using Autofac;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+﻿using Autofac;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System.ComponentModel;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker

@@ -1,10 +1,7 @@
 ﻿using Application.Services;
 using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.ComponentModel;
 

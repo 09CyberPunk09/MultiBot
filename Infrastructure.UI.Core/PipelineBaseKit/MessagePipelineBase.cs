@@ -1,16 +1,15 @@
 ﻿using Autofac;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.Types;
 using Persistence.Sql;
 using System.Collections.Generic;
 using System.Linq;
-using StageDelegate = System.Func<Infrastructure.TextUI.Core.Types.MessageContext, Infrastructure.TextUI.Core.Interfaces.ContentResult>;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
 using SystemUser = Common.Entites.User;
 
-namespace Infrastructure.TextUI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class MessagePipelineBase : Pipeline, IMessagePipeline
     {
+        //TODO: https://autofac.readthedocs.io/en/latest/register/prop-method-injection.html
         public MessagePipelineBase(ILifetimeScope scope) : base(scope)
         {
             _scope = scope;

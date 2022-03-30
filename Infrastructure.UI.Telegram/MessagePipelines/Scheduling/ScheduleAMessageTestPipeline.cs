@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.MessagePipelines;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.ComponentModel;
 

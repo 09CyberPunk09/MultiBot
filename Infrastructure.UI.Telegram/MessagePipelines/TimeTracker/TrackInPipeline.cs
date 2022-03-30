@@ -1,10 +1,7 @@
 ﻿using Application.Services;
 using Autofac;
 using Common.Enums;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.Linq;
 using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
@@ -29,7 +26,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
         public ContentResult AskForActivity(MessageContext ctx)
         {
             var data = _service.GetAllActivities(GetCurrentUser().Id);
-            if(data == null ||data.Count == 0)
+            if (data == null || data.Count == 0)
             {
                 var activity = _service.CreateTimeTrackingActivity("Default", GetCurrentUser().Id);
                 data = new() { activity };
@@ -44,10 +41,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 
         public ContentResult AcceptTrackIn(MessageContext ctx)
         {
-            if(Guid.TryParse(ctx.Message.Text,out var result))
+            if (Guid.TryParse(ctx.Message.Text, out var result))
             {
-                 _service.Track(result, EntryType.In, GetCurrentUser().Id);
-                 return Text($"✅Done. Started tracking at ⏱{DateTime.Now.ToString("HH:mm dd:MM:yyyy")}");
+                _service.Track(result, EntryType.In, GetCurrentUser().Id);
+                return Text($"✅Done. Started tracking at ⏱{DateTime.Now.ToString("HH:mm dd:MM:yyyy")}");
             }
             else
             {

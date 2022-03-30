@@ -21,7 +21,7 @@ namespace TelegramBot.IOHandler
 
         public Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Infrastructure.TextUI.Core.Types.Message message = null;
+            Infrastructure.TextUI.Core.PipelineBaseKit.Message message = null;
             switch (update.Type)
             {
                 case UpdateType.Unknown:

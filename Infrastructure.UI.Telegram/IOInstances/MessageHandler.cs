@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines;
 using Infrastructure.TelegramBot.ResponseTypes;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using NLog;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
@@ -81,7 +79,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                 logger.Info($"{routeName}.{current}: Message {ctx.Message} started being processed");
                 var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
                 logger.Info($"{routeName}.{current}: Message {ctx.Message} finished being processed");
-               
+
                 if (result != null)
                 {
                     if (ctx.PipelineStageSucceeded)

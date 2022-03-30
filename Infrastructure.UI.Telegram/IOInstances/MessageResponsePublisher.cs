@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using Infrastructure.Queuing;
-using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {

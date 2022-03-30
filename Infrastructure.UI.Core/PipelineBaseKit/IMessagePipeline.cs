@@ -1,8 +1,6 @@
-﻿using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.Types;
-using System;
+﻿using System;
 
-namespace Infrastructure.TextUI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     /// <summary>
     /// Message pipeline is a simple way to build complicated user-interaction scenarios for consuming messages step-by-step. The user communication is organized in a message-response way.

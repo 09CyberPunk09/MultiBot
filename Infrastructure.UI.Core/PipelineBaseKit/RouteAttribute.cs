@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastructure.TextUI.Core.Attributes
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
     public sealed class RouteAttribute : Attribute

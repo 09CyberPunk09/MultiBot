@@ -9,7 +9,7 @@ namespace Infrastructure.TelegramBot.IOInstances
 {
     public class TelegramBotHandlerInstance
     {
-         IContainer _container;
+        IContainer _container;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private MessageHandler _messageConsumer;

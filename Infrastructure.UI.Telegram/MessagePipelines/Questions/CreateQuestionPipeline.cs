@@ -2,10 +2,7 @@
 using Autofac;
 using Common.Entites;
 using Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks;
-using Infrastructure.TextUI.Core.Attributes;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.MessagePipelines;
-using Infrastructure.TextUI.Core.Types;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Kernel;
 using System;
 using System.Collections.Generic;

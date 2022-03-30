@@ -1,4 +1,5 @@
 ﻿using Infrastructure.TextUI.Core.Interfaces;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Threading.Tasks;

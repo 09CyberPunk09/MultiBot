@@ -1,10 +1,9 @@
 ﻿using Autofac;
-using Infrastructure.TextUI.Core.Types;
 using Persistence.Sql;
 using System.Linq;
 using SystemUser = Common.Entites.User;
 
-namespace Infrastructure.TextUI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class PipelineChunk : Pipeline
     {

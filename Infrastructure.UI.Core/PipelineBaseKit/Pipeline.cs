@@ -1,16 +1,15 @@
 ﻿using Autofac;
-using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.Types;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
+using System.Reflection;
 using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
-using StageDelegate = System.Func<Infrastructure.TextUI.Core.Types.MessageContext, Infrastructure.TextUI.Core.Interfaces.ContentResult>;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
 
-namespace Infrastructure.TextUI.Core.MessagePipelines
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class Pipeline
     {
-        public StageMap Stages { get; set; } = new();
+        private StageMap Stages = new();
 
         //todo: review which type of cache is inited in this project
 
@@ -22,7 +21,7 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
         public Action<Stage, MessageContext> StagePostAction { get; set; }
         public int CurrentActionIndex { get; set; }
         public bool IsDone { get; set; }
-        protected ILifetimeScope _scope;
+        protected ILifetimeScope _scope { get; set; }
 
         public Pipeline(ILifetimeScope scope)
         {
@@ -33,6 +32,12 @@ namespace Infrastructure.TextUI.Core.MessagePipelines
 
         public virtual void RegisterPipelineStages()
         {
+        }
+
+        private static string GetCommand<TPpileline>() where TPpileline : Pipeline
+        {
+            var attr = typeof(TPpileline).GetCustomAttribute(typeof(RouteAttribute)) as RouteAttribute;
+            return attr.Route;
         }
 
         protected void InitBaseComponents()
