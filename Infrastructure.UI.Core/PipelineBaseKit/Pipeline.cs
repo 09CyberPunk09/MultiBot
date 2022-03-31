@@ -9,7 +9,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class Pipeline
     {
-        private StageMap Stages = new();
+        public StageMap Stages { get; set; } = new();
 
         //todo: review which type of cache is inited in this project
 
@@ -21,7 +21,12 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         public Action<Stage, MessageContext> StagePostAction { get; set; }
         public int CurrentActionIndex { get; set; }
         public bool IsDone { get; set; }
-        protected ILifetimeScope _scope { get; set; }
+        public ILifetimeScope _scope { get; set; }
+
+        public void InitLifeTimeScope(ILifetimeScope scope)
+        {
+            _scope = scope;
+        }
 
         public Pipeline(ILifetimeScope scope)
         {
@@ -30,11 +35,16 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             RegisterPipelineStages();
         }
 
+        public Pipeline()
+        {
+
+        }
+
         public virtual void RegisterPipelineStages()
         {
         }
 
-        private static string GetCommand<TPpileline>() where TPpileline : Pipeline
+        protected static string GetCommand<TPpileline>() where TPpileline : Pipeline
         {
             var attr = typeof(TPpileline).GetCustomAttribute(typeof(RouteAttribute)) as RouteAttribute;
             return attr.Route;

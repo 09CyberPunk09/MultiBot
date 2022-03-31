@@ -1,6 +1,6 @@
 ﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
-
+using Persistence.Common.DataAccess;
 using System;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Persistence.Sql.Repositories
 {
     public class TagRepository : Repository<Tag>
     {
-        public TagRepository(LifeTrackerDbContext context) : base(context)
+        public TagRepository(RelationalSchemaContext context) : base(context)
         { }
 
         private IQueryable<Tag> TagQuery => _context.Tags

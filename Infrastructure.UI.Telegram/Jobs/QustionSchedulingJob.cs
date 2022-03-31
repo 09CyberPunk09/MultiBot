@@ -32,7 +32,7 @@ namespace Infrastructure.TelegramBot.Jobs
             return TriggerBuilder.Create()
             .WithIdentity("question-setup-trigger", "telegram-questions-setup")
             .StartNow()
-            .WithSchedule(SimpleScheduleBuilder.RepeatSecondlyForTotalCount(1)).Build();
+            .WithSchedule(SimpleScheduleBuilder.RepeatMinutelyForever(2)).Build();
         }
     }
 
@@ -49,12 +49,13 @@ namespace Infrastructure.TelegramBot.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             try
-            {
+            { 
                 logger.Info("Scheduling questions...");
                 var executor = _scope.Resolve<IJobExecutor>();
                 var userRepo = _scope.Resolve<Repository<User>>();
-                var questionsToLoad = _scope.Resolve<QuestionAppService>()
-                    .GetScheduledQuestions();
+                var questionService = _scope.Resolve<QuestionAppService>();
+                var questionsToLoad = questionService.GetScheduledQuestions()
+                    .Where(q => q.SchedulerInstanceId != executor.InstanceId).ToList();
 
                 var users = userRepo.GetAll().ToList();
 
@@ -62,19 +63,21 @@ namespace Infrastructure.TelegramBot.Jobs
                 questionsToLoad.ForEach(async q =>
                 {
                     counter++;
-                    logger.Trace($"Question: {q.Id} loaded to scheduler");
                     var currentUser = users.FirstOrDefault(u => u.Id == q.UserId);
-                    //TODO: навести порядок з юзер айді і чат айді
                     var dictionary = new Dictionary<string, string>
-                {
-                    { SendQustionJob.QuestionId, q.Id.ToString() },
-                    { SendQustionJob.ChatId, currentUser.TelegramChatId.ToString() },
-                    { JobsConsts.cron, q.CronExpression }
-                };
+                    {
+                        { SendQustionJob.QuestionId, q.Id.ToString() },
+                        { SendQustionJob.ChatId, currentUser.TelegramChatId.ToString() },
+                        { JobsConsts.cron, q.CronExpression }
+                    };
                     await executor.ScheduleJob(new QuestionJobConfiguration()
                     {
                         AdditionalData = dictionary
                     });
+
+                    q.SchedulerInstanceId = executor.InstanceId;
+                    questionService.Update(q);
+                    logger.Trace($"Question: {q.Id} loaded to scheduler");
                 });
                 logger.Trace($"{counter} questions scheduled");
                 logger.Trace("Scheduling questions completed");

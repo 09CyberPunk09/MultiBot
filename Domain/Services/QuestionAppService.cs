@@ -34,6 +34,11 @@ namespace Application.Services
             return _questionRepo.Get(id);
         }
 
+        public Question Update(Question q)
+        {
+            return _questionRepo.Update(q);
+        }
+
         public List<PredefinedAnswer> InsertAnswers(List<PredefinedAnswer> answers)
         {
             return answers.Select(a => _predefinedAnswerRepo.Add(a)).ToList();

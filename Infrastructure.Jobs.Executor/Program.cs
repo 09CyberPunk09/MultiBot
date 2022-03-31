@@ -40,6 +40,7 @@ namespace Infrastructure.Jobs.Executor
         {
             AddJob<SynchronizationJobConfiguration>();
             AddJob<QustionSchedulingJobConfiguration>();
+            AddJob<ReminderSchedulerJobConfiguration>();
         }
 
         private static void AddJob<TType>() where TType : IConfiguredJob

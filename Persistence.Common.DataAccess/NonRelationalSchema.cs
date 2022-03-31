@@ -6,6 +6,7 @@ namespace Persistence.Common.DataAccess
     public class NonRelationalSchema
     {
         public virtual List<Note> Notes { get; set; }
+        public virtual List<Reminder> Reminders { get; set; }
         public virtual List<PredefinedAnswer> PredefinedAnswers { get; set; }
         public virtual List<Answer> Answers { get; set; }
         public virtual List<Question> Questions { get; set; }

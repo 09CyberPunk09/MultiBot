@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Sql;
 
 namespace Persistence.Sql.Migrations
 {
     [DbContext(typeof(LifeTrackerDbContext))]
-    partial class SqlServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220331073046_RemindersAdded")]
+    partial class RemindersAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +105,6 @@ namespace Persistence.Sql.Migrations
                     b.Property<bool>("HasPredefinedAnswers")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("SchedulerInstanceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
@@ -137,9 +136,6 @@ namespace Persistence.Sql.Migrations
 
                     b.Property<DateTime?>("ReminderTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("SchedulerInstanceId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

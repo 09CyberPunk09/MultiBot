@@ -51,7 +51,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         static MessageHandler()
         {
             //TODO:  make attribute multiparametrized,duplicate in list every entry which has more than one command
-            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route);
+            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttribute<RouteAttribute>() as RouteAttribute).Route);
         }
 
         public void ConsumeMessage(Message message)

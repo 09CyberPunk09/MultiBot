@@ -1,13 +1,14 @@
 ﻿using Common.BaseTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common.Entites
 {
-    public class Reminder : AuditableEntity
+    public class Reminder : SchedulerInfoEntity
     {
+        public Guid UserId { get; set; }
+        public string Name { get; set; }
+        public bool Recuring { get; set; }
+        public DateTime? ReminderTime { get; set; }
+        public string RecuringCron { get; set; }
     }
 }

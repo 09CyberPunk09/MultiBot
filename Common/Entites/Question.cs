@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Common.Entites
 {
-    public class Question : AuditableEntity
+    public class Question : SchedulerInfoEntity
     {
         public Guid UserId { get; set; }
         public string Text { get; set; }

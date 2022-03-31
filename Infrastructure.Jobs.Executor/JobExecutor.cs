@@ -1,7 +1,9 @@
-﻿using Autofac;
+﻿using Application;
+using Autofac;
 using Common;
 using NLog;
 using Quartz;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace Infrastructure.Jobs.Executor
     {
         private readonly ILifetimeScope _scope;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
+        public Guid InstanceId { get => InstanceIdentifier.Identifier; }
         public JobExecutor(ILifetimeScope scope)
         {
             _scope = scope;

@@ -1,4 +1,5 @@
 ﻿using Common.Entites;
+using Persistence.Common.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Persistence.Sql.Repositories
 {
     public class TimeTrackingEntryRepository : Repository<TimeTrackingEntry>
     {
-        public TimeTrackingEntryRepository(LifeTrackerDbContext ctx) : base(ctx)
+        public TimeTrackingEntryRepository(RelationalSchemaContext ctx) : base(ctx)
         {
 
         }

@@ -9,10 +9,11 @@ namespace Persistence.Sql
     {
         protected override void Load(ContainerBuilder builder)
         {
-            _ = builder.RegisterType<LifeTrackerDbContext>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<LifeTrackerDbContext>().As<RelationalSchemaContext>().InstancePerLifetimeScope();
             _ = builder.RegisterType<SynchronizationDbContext>().InstancePerLifetimeScope();
 
             _ = builder.RegisterType<NoteRepositry>().As<Repository<Note>>().InstancePerLifetimeScope();
+            _ = builder.RegisterType<ReminderRepository>().As<Repository<Reminder>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<TimeTrackingActivityRepository>().As<Repository<TimeTrackingActivity>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<TimeTrackingEntryRepository>().As<Repository<TimeTrackingEntry>>().InstancePerLifetimeScope();
             _ = builder.RegisterType<UserRepositry>().As<Repository<User>>().InstancePerLifetimeScope();

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Infrastructure.TelegramBot.IOInstances;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
 using NLog;
 using Quartz;
 using System;

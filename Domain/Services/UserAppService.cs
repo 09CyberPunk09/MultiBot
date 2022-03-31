@@ -1,5 +1,6 @@
 ﻿using Common.Entites;
 using Persistence.Sql;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Application.Services
@@ -11,6 +12,11 @@ namespace Application.Services
         public UserAppService(Repository<User> userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public List<User> GetAll()
+        {
+            return _userRepository.GetAll().ToList();
         }
 
         public User CreateFromTelegram(string username, long tgChatId)

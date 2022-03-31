@@ -12,10 +12,7 @@ namespace Persistence.Caching.Redis
         private readonly IDatabase db;
         private readonly DatabaseType _dbType;
 
-        //todo: move to config.json
-#pragma warning disable CS0414 // The field 'Cache._serverAddress' is assigned but its value is never used
         private readonly string _serverAddress = "localhost:6379";
-#pragma warning restore CS0414 // The field 'Cache._serverAddress' is assigned but its value is never used
 
         private readonly ConfigurationOptions options = new()
         {
@@ -35,6 +32,7 @@ namespace Persistence.Caching.Redis
 
         public TResult Get<TResult>(string key)
         {
+            //TODO: Add key remove after getting
             var data = db.StringGet(new RedisKey(key));
             return data != default ? JsonConvert.DeserializeObject<TResult>(data.ToString()) : default;
         }
@@ -47,9 +45,7 @@ namespace Persistence.Caching.Redis
 
         public void PurgeDatabase()
         {
-#pragma warning disable CS0618 // 'CommandFlags.HighPriority' is obsolete: 'From 2.0, this flag is not used'
             redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType, CommandFlags.HighPriority);
-#pragma warning restore CS0618 // 'CommandFlags.HighPriority' is obsolete: 'From 2.0, this flag is not used'
         }
 
         protected IEnumerable<RedisKey> GetALLKeys()

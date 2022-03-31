@@ -40,8 +40,4 @@
     <ProjectReference Include="..\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MessagePipelines\" />
-  </ItemGroup>
-
 </Project>

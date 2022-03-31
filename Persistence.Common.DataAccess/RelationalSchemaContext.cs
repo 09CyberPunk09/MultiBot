@@ -6,6 +6,7 @@ namespace Persistence.Common.DataAccess
     public class RelationalSchemaContext : DbContext
     {
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<Reminder> Reminders { get; set; }
         public virtual DbSet<PredefinedAnswer> PredefinedAnswers { get; set; }
         public virtual DbSet<Answer> Answers { get; set; }
         public virtual DbSet<Question> Questions { get; set; }

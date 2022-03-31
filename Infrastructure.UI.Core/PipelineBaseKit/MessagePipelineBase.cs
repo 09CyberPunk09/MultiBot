@@ -2,6 +2,7 @@
 using Persistence.Sql;
 using System.Collections.Generic;
 using System.Linq;
+using Telegram.Bot.Types.ReplyMarkups;
 using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
 using SystemUser = Common.Entites.User;
 
@@ -14,6 +15,12 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         {
             _scope = scope;
         }
+
+        protected InlineKeyboardButton Button(string content, string data)
+            => InlineKeyboardButton.WithCallbackData(content, data);
+        protected List<InlineKeyboardButton> ButtonRow(string content, string data)
+            => new() { InlineKeyboardButton.WithCallbackData(content, data) };
+
 
         public ContentResult Execute(MessageContext ctx, string stageName = null)
         {
