@@ -7,8 +7,7 @@ using System.ComponentModel;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
-    [Route("/new-tagged-note")]
-    [Description("Use this command for creating notes")]
+    [Route("/new_tagged_note", "➕ New Tagged Note")]
     public class AddNoteUnderTagPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;

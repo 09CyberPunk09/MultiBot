@@ -30,7 +30,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         #endregion Injected members
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private static readonly Dictionary<string, Type> pipleineCommands;
+        private static readonly Dictionary<RouteAttribute, Type> pipleineCommands;
         public IMessagePipeline DefaultPipeline { get; set; }
 
         public MessageHandler(ILifetimeScope lifetimeScope)
@@ -51,7 +51,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         static MessageHandler()
         {
             //TODO:  make attribute multiparametrized,duplicate in list every entry which has more than one command
-            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttribute<RouteAttribute>() as RouteAttribute).Route);
+            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttribute<RouteAttribute>() as RouteAttribute));
         }
 
         public void ConsumeMessage(Message message)
@@ -128,12 +128,14 @@ namespace Infrastructure.TelegramBot.IOInstances
 
         private MessagePipelineBase MatchPipeline(string text, MessageContext ctx)
         {
-            var matchedPipelineType = pipleineCommands.ToList().FirstOrDefault(x => text.Contains(x.Key)).Value;
+            var matchedPipelineType = pipleineCommands
+                .ToList()
+                .FirstOrDefault(x => text.Contains(x.Key.Route) || (x.Key.AlternativeRoute != null && text.Contains(x.Key.AlternativeRoute))).Value;
             if (matchedPipelineType == null)
             {
                 var currentCommand = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_COMMAND, ctx.Recipient);
                 if (currentCommand != null)
-                    matchedPipelineType = pipleineCommands.ToList().FirstOrDefault(x => currentCommand.Contains(x.Key)).Value;
+                    matchedPipelineType = pipleineCommands.ToList().FirstOrDefault(x => (x.Key.AlternativeRoute != null &&currentCommand.Contains(x.Key.AlternativeRoute)) || currentCommand.Contains(x.Key.Route)).Value;
             }
 
             return matchedPipelineType != null ? _lifetimeScope.BeginLifetimeScope().Resolve(matchedPipelineType) as MessagePipelineBase : null;

@@ -8,7 +8,7 @@ using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 {
-    [Route("/track_in")]
+    [Route("/track_in", "📥 Track In")]
     public class TrackInPipeline : MessagePipelineBase
     {
         private readonly TimeTrackingAppService _service;

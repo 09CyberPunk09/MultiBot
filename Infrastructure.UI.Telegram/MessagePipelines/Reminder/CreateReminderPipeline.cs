@@ -5,7 +5,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
 {
-    [Route("/create_reminder")]
+    [Route("/create_reminder", "➕ Create Reminder")]
     public class CreateReminderPipeline : MessagePipelineBase
     {
         public const string REMINDERID_CACHEKEY = "NewlyCreatedReminderId";
@@ -36,8 +36,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
                 Text = "✅Gotcha. Do ypu want to make your reminder recurent or fire-and-forget?",
                 Buttons = new(new[]
                 {
-                    InlineKeyboardButton.WithCallbackData("⏱Fire-and-forget",GetCommand<MakeReminderOneTimeFiringPipeline>()),
-                    InlineKeyboardButton.WithCallbackData("♻️Recurent",GetCommand<MakeReminderRecurentPipeline>())
+                    InlineKeyboardButton.WithCallbackData("⏱Fire-and-forget",GetRoute<MakeReminderOneTimeFiringPipeline>().Route),
+                    InlineKeyboardButton.WithCallbackData("♻️Recurent",GetRoute<MakeReminderRecurentPipeline>().Route)
                 })
             };
         }

@@ -19,6 +19,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines
         public override void RegisterPipelineStages()
         {
             RegisterStage(Start);
+            //todo: implement
+           // IntegrateChunkPipeline<MenuPipeline>();
             IsLooped = true;
         }
 
@@ -27,8 +29,6 @@ namespace Infrastructure.TelegramBot.MessagePipelines
             var user = _userService.GetByTgId(ctx.Recipient);
             if (user == null)
             {
-                //add pipeline for gettin name
-                //TODO: Retrieve recipientUserId
                 var newUuser = _userService.CreateFromTelegram("", ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
@@ -38,7 +38,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines
                 user.TelegramLoggedIn = true;
                 _userService.Update(user);
             }
-            return Text("Telegram User successfully logged in. Welcome!");
+            
+            return new()
+            {
+                Text = "Telegram User successfully logged in. Welcome! To get the menu, use the command /menu",
+                //InvokeNextImmediately = true
+            };
         }
     }
 }

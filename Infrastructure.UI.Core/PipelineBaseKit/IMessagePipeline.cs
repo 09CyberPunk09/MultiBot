@@ -8,7 +8,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 	//todo: add missing methods to this interface
     public interface IMessagePipeline
     {
-        Action<Stage, MessageContext> StagePostAction { get; set; }
+        Action<Stage, MessageContext, ContentResult> StagePostAction { get; set; }
 
         ContentResult Execute(MessageContext ctx, string stageName);
 

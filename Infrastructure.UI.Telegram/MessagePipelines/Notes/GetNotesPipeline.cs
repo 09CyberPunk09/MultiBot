@@ -9,7 +9,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 {
-    [Route("/get-notes")]
+    [Route("/get-notes", "📋 Notes")]
     [Description("Get's all your notes")]
     public class GetNotesPipeline : MessagePipelineBase
     {

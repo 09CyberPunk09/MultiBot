@@ -7,8 +7,7 @@ using System.Text;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
-    [Route("/get-tags")]
-    [Description("Use this command for getting tag data")]
+    [Route("/get-tags", "📋 List Tags")]
     public class GetAllTagsPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;
@@ -20,21 +19,19 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 
         public override void RegisterPipelineStages()
         {
-            RegisterStage(AskForSetName);
-        }
-
-        public ContentResult AskForSetName(MessageContext ctx)
-        {
-            var tags = _tagService.GetAll(GetCurrentUser().Id);
-
-            int counter = 0;
-            StringBuilder b = new(Environment.NewLine);
-            foreach (var item in tags)
+            RegisterStage((ctx) =>
             {
-                b.AppendLine(++counter + " " + item.Name);
-            }
+                var tags = _tagService.GetAll(GetCurrentUser().Id);
 
-            return Text("All your tags:" + b.ToString());
+                int counter = 0;
+                StringBuilder b = new(Environment.NewLine);
+                foreach (var item in tags)
+                {
+                    b.AppendLine(++counter + " " + item.Name);
+                }
+
+                return Text("All your tags:" + b.ToString());
+            });
         }
     }
 }

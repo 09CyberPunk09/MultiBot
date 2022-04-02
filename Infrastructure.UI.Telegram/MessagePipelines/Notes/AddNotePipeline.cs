@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 {
-    [Route("/new-note")]
+    [Route("/new-note", "📋 New note")]
     [Description("Use this command for creating notes")]
     public class AddNotePipeline : MessagePipelineBase
     {

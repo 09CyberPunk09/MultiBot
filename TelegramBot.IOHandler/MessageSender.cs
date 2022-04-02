@@ -30,7 +30,17 @@ namespace TelegramBot.IOHandler
                 var message = await _uiClient.SendTextMessageAsync(
                 chatId: chatId,
                 text: text,
-                replyMarkup: markup);
+                replyMarkup: markup
+                );
+
+                if(contentResult.Menu != null)
+                {
+                    await _uiClient.SendTextMessageAsync(
+                        text: contentResult.Text, 
+                        chatId: chatId,
+                        replyMarkup: contentResult.Menu);
+                         
+                }
 
                 cache.SetValueForChat(lastMessageCacheey, message.MessageId, contentResult.RecipientChatId);
                 return message;

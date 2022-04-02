@@ -9,8 +9,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
-    [Route("/get-tag-data")]
-    [Description("Use this command for getting tag data")]
+    [Route("/get_tag", "📁 Get Tag Data")]
     public class GetTagDataPipeline : MessagePipelineBase
     {
         private readonly TagAppService _tagService;

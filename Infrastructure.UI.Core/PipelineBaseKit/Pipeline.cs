@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
+using System.Linq;
 using System.Reflection;
+using Telegram.Bot.Types.ReplyMarkups;
 using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
 
@@ -18,7 +20,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         public MessageContext MessageContext { get; set; }
 
         public bool IsLooped { get; set; }
-        public Action<Stage, MessageContext> StagePostAction { get; set; }
+        public Action<Stage, MessageContext,ContentResult> StagePostAction { get; set; }
         public int CurrentActionIndex { get; set; }
         public bool IsDone { get; set; }
         public ILifetimeScope _scope { get; set; }
@@ -44,11 +46,14 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         {
         }
 
-        protected static string GetCommand<TPpileline>() where TPpileline : Pipeline
+        protected static RouteAttribute GetRoute<TPpileline>() where TPpileline : Pipeline
         {
             var attr = typeof(TPpileline).GetCustomAttribute(typeof(RouteAttribute)) as RouteAttribute;
-            return attr.Route;
+            return attr;
         }
+
+        protected static string GetAlternativeRoute<TPpileline>() where TPpileline : Pipeline
+            => GetRoute<TPpileline>().AlternativeRoute;
 
         protected void InitBaseComponents()
         {
@@ -73,7 +78,17 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         public virtual void ConfigureBasicPostAction()
         {
-            StagePostAction = (stage, ctx) =>
+            StagePostAction += (Stage stage,MessageContext ctx, ContentResult result) =>
+            {
+                if(result.Menu != null)
+                {
+                    var temp = result.Menu.Keyboard.ToList();
+                    temp.Add(new[] { new KeyboardButton("🏡Home") });
+                    result.Menu.Keyboard = temp;
+                }
+            };
+
+            StagePostAction += (stage, ctx, result) =>
             {
                 IsDone = false;
                 if (stage.NextStage == null && ctx.PipelineStageSucceeded)

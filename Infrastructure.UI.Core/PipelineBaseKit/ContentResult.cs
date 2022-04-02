@@ -11,6 +11,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         public bool Edited { get; set; }
         public InlineKeyboardMarkup Buttons { get; set; }
         public List<ContentResult> MultiMessages { get; set; }
+        public ReplyKeyboardMarkup Menu { get; set; }
 
     }
 }

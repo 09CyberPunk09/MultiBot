@@ -6,7 +6,7 @@ using System;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 {
-    [Route("/track_out")]
+    [Route("/track_out", "📥 Track out")]
     //TODO: Add ability to select time where the track was out
     public class TrackOutPipeline : MessagePipelineBase
     {

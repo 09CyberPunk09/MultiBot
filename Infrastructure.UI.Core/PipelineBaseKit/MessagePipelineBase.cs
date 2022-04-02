@@ -21,6 +21,12 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         protected List<InlineKeyboardButton> ButtonRow(string content, string data)
             => new() { InlineKeyboardButton.WithCallbackData(content, data) };
 
+        protected KeyboardButton MenuButton(string text)
+            => new(text);
+        protected KeyboardButton[] MenuButtonRow(string text)
+            => new[] { new KeyboardButton(text) };
+        protected KeyboardButton[] MenuButtonRow(params KeyboardButton[] butotns)
+            => butotns;
 
         public ContentResult Execute(MessageContext ctx, string stageName = null)
         {
@@ -38,7 +44,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             ctx.CurrentStage = stage;
 
             var result = stage.Invoke(ctx);
-            StagePostAction?.Invoke(stage, ctx);
+            StagePostAction?.Invoke(stage, ctx, result);
             MessageContext = null;
             return result;
         }

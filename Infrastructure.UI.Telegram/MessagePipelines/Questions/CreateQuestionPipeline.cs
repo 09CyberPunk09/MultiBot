@@ -14,7 +14,7 @@ using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 {
-    [Route("/new-q")]
+    [Route("/new-q", "➕ Create Question")]
     [Description("Use this command for creating questions")]
     public class CreateQuestionPipeline : MessagePipelineBase
     {
