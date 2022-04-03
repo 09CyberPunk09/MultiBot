@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Persistence.Sql.Repositories
 {
-    public class UserRepositry : Repository<User>
+    public class UserRepositry : LifeTrackerRepository<User>
     {
         public UserRepositry(RelationalSchemaContext context) : base(context)
         { }

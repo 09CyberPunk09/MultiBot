@@ -9,14 +9,14 @@ namespace Application.Services
 {
     public class QuestionAppService : AppService
     {
-        private readonly Repository<Question> _questionRepo;
-        private readonly Repository<PredefinedAnswer> _predefinedAnswerRepo;
-        private readonly Repository<Answer> _answerRepo;
+        private readonly LifeTrackerRepository<Question> _questionRepo;
+        private readonly LifeTrackerRepository<PredefinedAnswer> _predefinedAnswerRepo;
+        private readonly LifeTrackerRepository<Answer> _answerRepo;
 
         public QuestionAppService(
-            Repository<Question> questionRepo,
-            Repository<PredefinedAnswer> predanswerRepo,
-            Repository<Answer> answerRepo)
+            LifeTrackerRepository<Question> questionRepo,
+            LifeTrackerRepository<PredefinedAnswer> predanswerRepo,
+            LifeTrackerRepository<Answer> answerRepo)
         {
             _questionRepo = questionRepo;
             _predefinedAnswerRepo = predanswerRepo;

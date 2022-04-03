@@ -8,8 +8,8 @@ namespace Application.Services
 {
     public class ReminderAppService : AppService
     {
-        private readonly Repository<Reminder> _reminderRepo;
-        public ReminderAppService(Repository<Reminder> reminderRepo)
+        private readonly LifeTrackerRepository<Reminder> _reminderRepo;
+        public ReminderAppService(LifeTrackerRepository<Reminder> reminderRepo)
         {
             _reminderRepo = reminderRepo;
         }

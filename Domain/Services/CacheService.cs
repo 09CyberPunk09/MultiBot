@@ -9,9 +9,9 @@ namespace Application.Services
     public class CacheService : AppService
     {
         private readonly TelegramCache _cache = new();
-        private readonly Repository<User> _userRepository;
+        private readonly LifeTrackerRepository<User> _userRepository;
 
-        public CacheService(Repository<User> userRepo)
+        public CacheService(LifeTrackerRepository<User> userRepo)
         {
             _userRepository = userRepo;
         }

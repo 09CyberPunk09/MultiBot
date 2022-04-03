@@ -7,9 +7,9 @@ namespace Application.Services
 {
     public class UserAppService : AppService
     {
-        private readonly Repository<User> _userRepository;
+        private readonly LifeTrackerRepository<User> _userRepository;
 
-        public UserAppService(Repository<User> userRepository)
+        public UserAppService(LifeTrackerRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }

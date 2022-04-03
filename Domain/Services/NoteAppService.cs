@@ -8,9 +8,9 @@ namespace Application.Services
 {
     public class NoteAppService : AppService
     {
-        private readonly Repository<Note> _noteRepository;
+        private readonly LifeTrackerRepository<Note> _noteRepository;
 
-        public NoteAppService(Repository<Note> noteRepository)
+        public NoteAppService(LifeTrackerRepository<Note> noteRepository)
         {
             _noteRepository = noteRepository;
         }

@@ -32,9 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Domain.TelegramBot\Domain.TelegramBot.csproj" />
     <ProjectReference Include="..\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
-    <ProjectReference Include="..\Infrastructure.UI.Core\Infrastructure.TextUI.Core.csproj" />
-    <ProjectReference Include="..\Infrastructure.UI.Telegram\Infrastructure.TelegramBot.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<Content Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />

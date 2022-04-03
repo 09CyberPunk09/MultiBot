@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Persistence.Sql.Repositories
 {
-    public class TagRepository : Repository<Tag>
+    public class TagRepository : LifeTrackerRepository<Tag>
     {
         public TagRepository(RelationalSchemaContext context) : base(context)
         { }

@@ -1,18 +1,19 @@
 ﻿using Common.BaseTypes;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess;
-using Persistence.Common.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Persistence.Sql
+namespace Persistence.Sql.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : AuditableEntity
+    public class LifeTrackerRepository<TEntity> where TEntity : AuditableEntity
     {
         protected readonly RelationalSchemaContext _context;
 
-        public Repository(RelationalSchemaContext ctx)
+        public LifeTrackerRepository(RelationalSchemaContext ctx)
         {
             _context = ctx;
         }
@@ -77,5 +78,6 @@ namespace Persistence.Sql
             entity.CreationDate = DateTime.Now;
             entity.Id = Guid.NewGuid();
         }
+
     }
 }

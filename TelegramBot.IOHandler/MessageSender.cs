@@ -1,5 +1,4 @@
-﻿using Infrastructure.TextUI.Core.Interfaces;
-using Infrastructure.TextUI.Core.PipelineBaseKit;
+﻿using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Persistence.Caching.Redis.TelegramCaching;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace TelegramBot.IOHandler
 {
-    internal class MessageSender : IResultSender
+    internal class MessageSender
     {
         private ITelegramBotClient _uiClient;
 

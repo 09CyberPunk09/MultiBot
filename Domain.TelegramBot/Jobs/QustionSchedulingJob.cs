@@ -52,7 +52,7 @@ namespace Infrastructure.TelegramBot.Jobs
             { 
                 logger.Info("Scheduling questions...");
                 var executor = _scope.Resolve<IJobExecutor>();
-                var userRepo = _scope.Resolve<Repository<User>>();
+                var userRepo = _scope.Resolve<LifeTrackerRepository<User>>();
                 var questionService = _scope.Resolve<QuestionAppService>();
                 var questionsToLoad = questionService.GetScheduledQuestions()
                     .Where(q => q.SchedulerInstanceId != executor.InstanceId).ToList();

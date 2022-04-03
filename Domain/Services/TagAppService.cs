@@ -8,10 +8,10 @@ namespace Application.Services
 {
     public class TagAppService : AppService
     {
-        private Repository<Tag> _tagRepository;
-        private Repository<Note> _noteRepository;
+        private LifeTrackerRepository<Tag> _tagRepository;
+        private LifeTrackerRepository<Note> _noteRepository;
 
-        public TagAppService(Repository<Tag> tagRepo, Repository<Note> noteRepository)
+        public TagAppService(LifeTrackerRepository<Tag> tagRepo, LifeTrackerRepository<Note> noteRepository)
         {
             _tagRepository = tagRepo;
             _noteRepository = noteRepository;

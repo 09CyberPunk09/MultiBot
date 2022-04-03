@@ -3,7 +3,7 @@ using Persistence.Common.DataAccess;
 
 namespace Persistence.Sql.Repositories
 {
-    public class AnswerRepository : Repository<Answer>
+    public class AnswerRepository : LifeTrackerRepository<Answer>
     {
         public AnswerRepository(RelationalSchemaContext context) : base(context)
         { }

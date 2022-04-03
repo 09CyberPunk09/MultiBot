@@ -9,13 +9,13 @@ namespace Application.Services
 {
     public class TimeTrackingAppService : AppService
     {
-        private readonly Repository<TimeTrackingActivity> _activityRepo;
-        private readonly Repository<TimeTrackingEntry> _entryRepo;
-        private readonly Repository<User> _userRepo;
+        private readonly LifeTrackerRepository<TimeTrackingActivity> _activityRepo;
+        private readonly LifeTrackerRepository<TimeTrackingEntry> _entryRepo;
+        private readonly LifeTrackerRepository<User> _userRepo;
         public TimeTrackingAppService(
-            Repository<TimeTrackingActivity> repo,
-            Repository<TimeTrackingEntry> entryRepo,
-            Repository<User> userRepo)
+            LifeTrackerRepository<TimeTrackingActivity> repo,
+            LifeTrackerRepository<TimeTrackingEntry> entryRepo,
+            LifeTrackerRepository<User> userRepo)
         {
             _activityRepo = repo;
             _entryRepo = entryRepo;

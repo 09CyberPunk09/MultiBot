@@ -24,5 +24,8 @@
 		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
 		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="BaseTypes\" />
+	</ItemGroup>
 
 </Project>
