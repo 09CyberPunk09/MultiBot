@@ -76,10 +76,17 @@ namespace Infrastructure.TelegramBot.Jobs
                 }
                 else
                 {
-                    await executor.ScheduleJob(new FireAndForgetReminderJobConfiguration(r.ReminderTime.Value)
+                    if (r.ReminderTime.HasValue)
                     {
-                        AdditionalData = dictionary
-                    });
+                        await executor.ScheduleJob(new FireAndForgetReminderJobConfiguration(r.ReminderTime.Value)
+                        {
+                            AdditionalData = dictionary
+                        });
+                    }
+                    else
+                    {
+                        logger.Error($"Reminder {r.Id} has not any schedule");
+                    }
                 }
 
                 r.SchedulerInstanceId = executor.InstanceId;

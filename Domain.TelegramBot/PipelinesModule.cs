@@ -25,7 +25,7 @@ namespace Infrastructure.TelegramBot
             _ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MessagePipelineBase))).ToArray()).InstancePerLifetimeScope();
             _ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(PipelineChunk))).ToArray()).InstancePerDependency();
 
-            _ = builder.RegisterModule<PersistenceModule>();
+            _ = builder.RegisterModule(new PersistenceModule(false));
             _ = builder.RegisterModule<DomainModule>();
 
             base.Load(builder);

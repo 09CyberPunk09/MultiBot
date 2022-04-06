@@ -1,5 +1,9 @@
-﻿using Common.Entites;
+﻿using Autofac;
+using Common.Entites;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Common.DataAccess.Extensions;
+using Persistence.Common.DataAccess.Interfaces;
+using System;
 
 namespace Persistence.Common.DataAccess
 {
@@ -14,5 +18,20 @@ namespace Persistence.Common.DataAccess
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<TimeTrackingActivity> TimeTrackingActivities { get; set; }
         public virtual DbSet<TimeTrackingEntry> TimeTrackingEntries { get; set; }
+
+        public static ContainerBuilder RegisterRepositories(ContainerBuilder builder,Type repositoryType)
+        {
+            var type = repositoryType;
+            _ = builder.RegisterRepository<Note>(type);
+            _ = builder.RegisterRepository<Reminder>(type);
+            _ = builder.RegisterRepository<PredefinedAnswer>(type);
+            _ = builder.RegisterRepository<Answer>(type);
+            _ = builder.RegisterRepository<Question>(type);
+            _ = builder.RegisterRepository<TimeTrackingActivity>(type);
+            _ = builder.RegisterRepository<User>(type);
+            _ = builder.RegisterRepository<Note>(type);
+            _ = builder.RegisterRepository<TimeTrackingEntry>(type);
+            return builder;
+        }
     }
 }

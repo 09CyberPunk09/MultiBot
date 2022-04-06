@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Kernel\Kernel.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextUI.Core", "TextUI.Core\TextUI.Core.csproj", "{5AB48931-45B5-4ADF-A0D9-15AF67E07415}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Synchronization", "Persistence.Synchronization\Persistence.Synchronization.csproj", "{BDC8F9F5-4C50-40A5-86AC-42140BB21E40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{5AB48931-45B5-4ADF-A0D9-15AF67E07415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AB48931-45B5-4ADF-A0D9-15AF67E07415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AB48931-45B5-4ADF-A0D9-15AF67E07415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDC8F9F5-4C50-40A5-86AC-42140BB21E40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDC8F9F5-4C50-40A5-86AC-42140BB21E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDC8F9F5-4C50-40A5-86AC-42140BB21E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDC8F9F5-4C50-40A5-86AC-42140BB21E40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{D8055EDF-42AE-46BE-A734-78CF892CE3B5} = {E543F4E5-E57C-4CC5-9176-3D7440B2E8EA}
 		{7D7A6FEF-B2B2-4DDE-B65A-5B8A0C35411D} = {7021F5C1-AE52-48D1-80B0-69E69CF00B14}
 		{5AB48931-45B5-4ADF-A0D9-15AF67E07415} = {7021F5C1-AE52-48D1-80B0-69E69CF00B14}
+		{BDC8F9F5-4C50-40A5-86AC-42140BB21E40} = {3D0B19C2-C88E-4B34-9073-677642831EB0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}

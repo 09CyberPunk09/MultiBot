@@ -1,6 +1,8 @@
 ﻿using Common.BaseTypes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Persistence.Common.DataAccess.Interfaces
 {
@@ -11,5 +13,10 @@ namespace Persistence.Common.DataAccess.Interfaces
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
         void Remove(TEntity entity);
+        IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
+        IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
+        IQueryable<TEntity> GetQuery();
+        long Count();
+        TEntity FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

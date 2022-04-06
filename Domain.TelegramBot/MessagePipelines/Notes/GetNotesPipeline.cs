@@ -30,10 +30,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
         {
             var result = _noteService.GetByUserId(GetCurrentUser().Id);
             //todo: add markup
-            var messagesToSend = new List<ContentResult>()
-            {
-                new ContentResult(){ Text = "Here are your notes:"}
-            };
+            var messagesToSend = new List<ContentResult>();
 
             messagesToSend.AddRange(result.Select(x => new ContentResult()
             {
@@ -48,9 +45,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
                         })
             }));
 
-            return new MultiMessageResult()
+            return new()
             {
-                Messages = messagesToSend
+                Text = "Here are your notes:",
+                MultiMessages = messagesToSend
             };
         }
     }

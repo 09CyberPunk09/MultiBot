@@ -3,7 +3,7 @@ using Autofac.Extras.Quartz;
 using Common;
 using Infrastructure.TelegramBot.Jobs;
 using NLog;
-using Persistence.Common.DataAccess.Jobs;
+using Persistence.Synchronization.Jobs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

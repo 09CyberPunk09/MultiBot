@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
       <PrivateAssets>all</PrivateAssets>
@@ -26,6 +27,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="BaseTypes\" />
+	  <Folder Include="Jobs\" />
 	</ItemGroup>
 
 </Project>

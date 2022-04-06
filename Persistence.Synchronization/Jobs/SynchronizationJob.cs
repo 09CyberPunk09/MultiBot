@@ -1,11 +1,14 @@
-﻿using Common;
+﻿using Autofac;
+using Common;
 using NLog;
+using Persistence.Caching.SqlLite;
+using Persistence.Common.DataAccess;
+using Persistence.Sql;
 using Quartz;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Persistence.Common.DataAccess.Jobs
+namespace Persistence.Synchronization.Jobs
 {
     public class SynchronizationJobConfiguration : IConfiguredJob
     {
@@ -42,10 +45,20 @@ namespace Persistence.Common.DataAccess.Jobs
 
         public virtual Task Execute(IJobExecutionContext context)
         {
-            using var syncDb = new SynchronizationDbContext();
-            var changes = syncDb.EntityChanges.ToList();
-            logger.Trace($"SynchronizationJob: {changes.Count()} entity changed detected");
-
+            try
+            {
+                ContainerBuilder masterContainerBuilder = new();
+                masterContainerBuilder.RegisterModule(new PersistenceModule(true));
+                ContainerBuilder testContainerBuilder = new();
+                testContainerBuilder.RegisterModule<SqlLiteModule>();
+                StorageSynchronizer synchronizer = new(masterContainerBuilder.Build(), testContainerBuilder.Build());
+                synchronizer.Synchronize();
+            }
+            catch (System.Exception ex)
+            {
+                logger.Error(ex);
+                throw;
+            }
             return Task.CompletedTask;
         }
     }

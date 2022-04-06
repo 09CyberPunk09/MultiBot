@@ -5,6 +5,7 @@ using Persistence.Common.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Persistence.Sql
 {
@@ -25,6 +26,8 @@ namespace Persistence.Sql
         public virtual TEntity Add(TEntity entity)
         {
             SetCreationAuditionFields(entity);
+            entity.LastModificationDate = DateTime.Now;
+
             var result = _context.Add(entity).Entity;
             _context.SaveChanges();
             return result;
@@ -32,7 +35,9 @@ namespace Persistence.Sql
 
         public virtual void Remove(TEntity entity)
         {
-            _context.Remove(entity);
+            entity.LastModificationDate = DateTime.Now;
+            entity.IsDeleted = true;
+            _context.Update(entity);
             _context.SaveChanges();
         }
         public virtual IEnumerable<TEntity> GetAll()
@@ -52,6 +57,8 @@ namespace Persistence.Sql
 
         public virtual TEntity Update(TEntity entity)
         {
+            entity.LastModificationDate = DateTime.Now;
+
             var result = _context.Update(entity).Entity;
             _context.SaveChanges();
             return result;
@@ -71,6 +78,37 @@ namespace Persistence.Sql
         {
             entity.CreationDate = DateTime.Now;
             entity.Id = Guid.NewGuid();
+        }
+
+        public virtual IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                _context.Add(entity);
+            }
+            _context.SaveChanges();
+            return entities;
+        }
+
+        public IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.LastModificationDate = DateTime.Now;
+                _context.Update(entity);
+            }
+            _context.SaveChanges();
+            return entities;
+        }
+
+        public long Count()
+        {
+            return _context.Set<TEntity>().Count();
+        }
+
+        public TEntity FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _context.Set<TEntity>().FirstOrDefault(predicate);
         }
     }
 }

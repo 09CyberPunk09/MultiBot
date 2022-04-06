@@ -52,7 +52,7 @@ namespace Infrastructure.TelegramBot.IOInstances
 
         private void ConfigurePersistence(ContainerBuilder builder)
         {
-            _ = builder.RegisterModule<PersistenceModule>();
+            _ = builder.RegisterModule(new PersistenceModule(false));
             _ = builder.RegisterModule<CachingModule>();
             logger.Info("Persistence Configured");
 

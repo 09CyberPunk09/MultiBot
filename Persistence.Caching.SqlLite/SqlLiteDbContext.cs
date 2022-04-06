@@ -7,12 +7,12 @@ namespace Persistence.Caching.SqlLite
     {
         public SqlLiteDbContext()
         {
-
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=CacheDB.db;");
+            optionsBuilder.UseSqlite("Data Source=C:\\Users\\1\\source\\repos\\vasylklapatyi\\MultiBot\\CacheDb\\CacheDB.db;");
         }
     }
 }

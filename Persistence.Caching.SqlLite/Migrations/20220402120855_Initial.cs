@@ -116,12 +116,6 @@ namespace Persistence.Caching.SqlLite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Answers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -136,12 +130,6 @@ namespace Persistence.Caching.SqlLite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PredefinedAnswers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PredefinedAnswers_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,12 +144,6 @@ namespace Persistence.Caching.SqlLite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Notes_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -174,18 +156,6 @@ namespace Persistence.Caching.SqlLite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NoteTag", x => new { x.NotesId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_NoteTag_Notes_NotesId",
-                        column: x => x.NotesId,
-                        principalTable: "Notes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NoteTag_Tags_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
