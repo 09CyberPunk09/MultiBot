@@ -3,7 +3,6 @@ using System;
 
 namespace Common.Entites
 {
-    //todo: divide the entity on two separate: base data and app-specific settings
     public class User : AuditableEntity
     {
         public long? TelegramChatId { get; set; }

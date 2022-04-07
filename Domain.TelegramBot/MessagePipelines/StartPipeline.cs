@@ -32,6 +32,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
                 var newUuser = _userService.CreateFromTelegram("", ctx.Recipient);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
+
             }
             else
             {

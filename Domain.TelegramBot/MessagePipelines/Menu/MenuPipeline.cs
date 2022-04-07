@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.TelegramBot.MessagePipelines.ToDoList;
 using Infrastructure.TelegramBot.MessagePipelines.Notes;
 using Infrastructure.TelegramBot.MessagePipelines.Questions;
 using Infrastructure.TelegramBot.MessagePipelines.Reminder;
@@ -10,6 +11,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace Infrastructure.TelegramBot.MessagePipelines.Menu
 {
     //note: if you are going to change the alternative route,please, change also the copy in the Pipeline type, it cannot be accessed through GetRoute<>() because of assembly cycle reference issue
+    //TODO: IMplement getitng a list of done todos
     [Route("/menu", "🏡Home")]
     public class MenuPipeline : MessagePipelineBase
     {
@@ -22,16 +24,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Menu
                 new KeyboardButton[]
                 {
                     new KeyboardButton(GetAlternativeRoute<TrackerInfoPipeline>()),
-                    new KeyboardButton(GetAlternativeRoute<NoteInfoPipeline>())
-                },
-                new KeyboardButton[]
-                {
                     new KeyboardButton(GetAlternativeRoute<ReminderInfoPipeline>()),
-                    new KeyboardButton(GetAlternativeRoute<QuestionInfoPipeline>()),
+                    new KeyboardButton(GetAlternativeRoute<ToDoinfoPipeline>())
                 },
                 new KeyboardButton[]
                 {
+                    new KeyboardButton(GetAlternativeRoute<QuestionInfoPipeline>()),
                     new KeyboardButton(GetAlternativeRoute<TagInfoPipeline>()),
+                    new KeyboardButton(GetAlternativeRoute<NoteInfoPipeline>())
                 },
                 new KeyboardButton[]
                 {

@@ -64,6 +64,13 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
                 return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.Recipient);
             }
         }
+
+        protected T GetCachedValue<T>(string key)
+            => cache.GetValueForChat<T>(key, MessageContext.Recipient);
+
+        protected void SetCachedValue(string key, object value)
+            => cache.SetValueForChat(key, value, MessageContext.Recipient);
+
     }
 
     public class StageMap

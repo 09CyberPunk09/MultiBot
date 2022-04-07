@@ -13,6 +13,7 @@ namespace Persistence.Common.DataAccess.Interfaces
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
         void Remove(TEntity entity);
+        void RemovePhysically(TEntity entity);
         IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
         IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
         IQueryable<TEntity> GetQuery();

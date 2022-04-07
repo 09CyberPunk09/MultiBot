@@ -11,6 +11,8 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         {
         }
 
+
+
         protected SystemUser GetCurrentUser(MessageContext ctx)
         {
             //todo: implement getting from cache

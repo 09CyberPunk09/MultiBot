@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
+using Domain.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Kernel;
 using System;
@@ -123,7 +124,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
                 var hours = GetCachedValue<byte>(HOUR, ctx.Recipient);
                 var date = GetCachedValue<DateTime>(DATE, ctx.Recipient);
                 var finalDate = date.AddMinutes(mins).AddHours(hours);
-                var reminderId = GetCachedValue<Guid>(CreateReminderPipeline.REMINDERID_CACHEKEY, ctx.Recipient);
+                var reminderId = GetCachedValue<Guid>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY, ctx.Recipient);
                 var reminder = _service.Get(reminderId);
                 reminder.ReminderTime = finalDate;
                 _service.Update(reminder);

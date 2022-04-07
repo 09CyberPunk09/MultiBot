@@ -65,6 +65,11 @@ namespace Persistence.Caching.SqlLite
             _context.SaveChanges();
         }
 
+        public void RemovePhysically(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Update(T entity)
         {
             var res = _context.Set<T>().Update(entity).Entity;

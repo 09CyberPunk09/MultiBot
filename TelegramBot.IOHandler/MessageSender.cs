@@ -39,7 +39,7 @@ namespace TelegramBot.IOHandler
                     if (contentResult.Menu != null)
                     {
                         await _uiClient.SendTextMessageAsync(
-                            text: contentResult.Text,
+                            text: "Menu updated",
                             chatId: chatId,
                             replyMarkup: contentResult.Menu);
 

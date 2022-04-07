@@ -110,5 +110,11 @@ namespace Persistence.Sql
         {
             return _context.Set<TEntity>().FirstOrDefault(predicate);
         }
+
+        public void RemovePhysically(TEntity entity)
+        {
+            _context.Set<TEntity>().Remove(entity);
+            _context.SaveChanges();
+        }
     }
 }

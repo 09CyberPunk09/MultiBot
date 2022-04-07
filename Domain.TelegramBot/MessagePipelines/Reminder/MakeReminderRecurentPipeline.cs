@@ -1,5 +1,6 @@
 ﻿using Application.Services;
 using Autofac;
+using Domain.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
@@ -21,10 +22,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
         public ContentResult AcceptSchedule(MessageContext ctx)
         {
             var cron = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY,ctx.Recipient);
-            var reminderId = GetCachedValue<string>(CreateReminderPipeline.REMINDERID_CACHEKEY,ctx.Recipient);
+            var reminderId = GetCachedValue<string>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY,ctx.Recipient);
             var reminder = _service.Get(Guid.Parse(reminderId));
 
-            //TODO: Add queue to schedule in runtime
             reminder.Recuring = true;
             reminder.RecuringCron = cron;
             _service.Update(reminder);
