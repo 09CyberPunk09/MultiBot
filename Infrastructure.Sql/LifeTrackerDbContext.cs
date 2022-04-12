@@ -1,11 +1,6 @@
-﻿using Common.BaseTypes;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Persistence.Common.DataAccess;
-using System;
-using System.Linq;
 
 namespace Persistence.Sql
 {
