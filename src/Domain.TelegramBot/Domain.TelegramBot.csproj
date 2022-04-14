@@ -27,16 +27,22 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="Telegram.Bot" Version="17.0.0" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
+    <ProjectReference Include="..\Domain\Domain\Application.csproj" />
+    <ProjectReference Include="..\Domain\TextUI.Core\TextUI.Core.csproj" />
+    <ProjectReference Include="..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
+    <ProjectReference Include="..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
-	<ItemGroup>
-		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
-		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
-	</ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
