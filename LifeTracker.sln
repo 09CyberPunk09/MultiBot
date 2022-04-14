@@ -25,11 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coomon", "Coomon", "{7021F5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileStorage", "FileStorage", "{7E4715C0-1B42-4624-9088-24435527DDFA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobExecutor", "src\Executables\JobExecutor\JobExecutor.csproj", "{991852CA-7B48-4BC1-B24F-3C4ADA499CED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeTracker.JobExecutor", "src\Executables\JobExecutor\LifeTracker.JobExecutor.csproj", "{991852CA-7B48-4BC1-B24F-3C4ADA499CED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot.Handlers", "src\Executables\TelegramBot.Handlers\TelegramBot.Handlers.csproj", "{257E5EB8-AD7B-4F91-B667-43CB0256A278}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeTracker.TelegramBot.Handlers", "src\Executables\TelegramBot.Handlers\LifeTracker.TelegramBot.Handlers.csproj", "{257E5EB8-AD7B-4F91-B667-43CB0256A278}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot.IOHandler", "src\Executables\TelegramBot.IOHandler\TelegramBot.IOHandler.csproj", "{F3460E99-DA19-4EF1-9439-65F3FD1EE23C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeTracker.TelegramBot.IOHandler", "src\Executables\TelegramBot.IOHandler\LifeTracker.TelegramBot.IOHandler.csproj", "{F3460E99-DA19-4EF1-9439-65F3FD1EE23C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Domain\Domain\Application.csproj", "{1B1212AA-A1AD-4A8B-A3DF-B115CE541FB0}"
 EndProject
