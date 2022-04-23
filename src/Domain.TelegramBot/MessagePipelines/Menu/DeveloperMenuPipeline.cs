@@ -1,11 +1,5 @@
 ﻿using Autofac;
 using Domain.TelegramBot.MessagePipelines.System;
-using Domain.TelegramBot.MessagePipelines.ToDoList;
-using Infrastructure.TelegramBot.MessagePipelines.Notes;
-using Infrastructure.TelegramBot.MessagePipelines.Questions;
-using Infrastructure.TelegramBot.MessagePipelines.Reminder;
-using Infrastructure.TelegramBot.MessagePipelines.Tags;
-using Infrastructure.TelegramBot.MessagePipelines.TimeTracker;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Telegram.Bot.Types.ReplyMarkups;
 

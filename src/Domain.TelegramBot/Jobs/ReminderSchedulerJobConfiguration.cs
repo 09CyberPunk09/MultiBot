@@ -19,7 +19,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public IJobDetail BuildJob()
         {
             var builder = JobBuilder.Create<ScheduleRemindersJob>();
-                                     //.WithIdentity("reminderSenderSetup", "telegram-reminders-setup");
+            //.WithIdentity("reminderSenderSetup", "telegram-reminders-setup");
             foreach (var item in AdditionalData)
             {
                 builder.UsingJobData(item.Key, item.Value);
@@ -66,7 +66,7 @@ namespace Infrastructure.TelegramBot.Jobs
                     { SendReminderJob.TEXT,r.Name },
                     { SendReminderJob.REMINDERID, r.Id.ToString() }
                 };
-               
+
                 if (r.Recuring)
                 {
                     await executor.ScheduleJob(new RecuringReminderJobConfiguration(r.RecuringCron)
@@ -141,7 +141,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public IJobDetail BuildJob()
         {
             var builder = JobBuilder.Create<SendReminderJob>();
-                                  //   .WithIdentity($"reminder{AdditionalData[SendReminderJob.REMINDERID]}", "telegram-reminders");
+            //   .WithIdentity($"reminder{AdditionalData[SendReminderJob.REMINDERID]}", "telegram-reminders");
             foreach (var item in AdditionalData)
             {
                 builder.UsingJobData(item.Key, item.Value);
@@ -152,7 +152,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public ITrigger GetTrigger()
         {
             return TriggerBuilder.Create()
-          //  .WithIdentity("reminder", "telegram-reminders")
+            //  .WithIdentity("reminder", "telegram-reminders")
             .StartNow()
             .WithCronSchedule(_cron)
             //.WithSchedule(SimpleScheduleBuilder.).Build();

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common.Infrastructure
 {
@@ -12,6 +8,6 @@ namespace Common.Infrastructure
         public string ApplicationInstanceID { get; set; }
         public string ApplicationName { get; set; }
     }
-    
+
 
 }

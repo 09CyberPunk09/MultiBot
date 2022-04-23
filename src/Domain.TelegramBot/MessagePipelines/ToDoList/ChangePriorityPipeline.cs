@@ -1,15 +1,14 @@
-﻿using Autofac;
-using Domain.TelegramBot.MessagePipelines.Scheduling.Chunks;
-using Infrastructure.TextUI.Core.PipelineBaseKit;
-using System.Collections.Generic;
-using System;
-using Application.Services;
+﻿using Application.Services;
+using Autofac;
 using Common.Entites;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.TelegramBot.MessagePipelines.ToDoList
 {
-    [Route("/change_proprity","🔛Change Priority")]
+    [Route("/change_proprity", "🔛Change Priority")]
     public class ChangePriorityPipeline : MessagePipelineBase
     {
         private readonly NoteAppService _noteService;
@@ -39,8 +38,8 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
             var noteId = numbers[t];
             var note = _noteService.Get(noteId);
-            var firstProioriteTag = _tagService.Get(Tag.FirstPriorityToDoTagName,GetCurrentUser().Id);
-            var secondProioriteTag = _tagService.Get(Tag.SecondPriorityToDoTagName,GetCurrentUser().Id);
+            var firstProioriteTag = _tagService.Get(Tag.FirstPriorityToDoTagName, GetCurrentUser().Id);
+            var secondProioriteTag = _tagService.Get(Tag.SecondPriorityToDoTagName, GetCurrentUser().Id);
 
             var newNote = _noteService.Create(note.Text, note.UserId);
 

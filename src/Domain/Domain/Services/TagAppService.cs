@@ -1,7 +1,6 @@
 ﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Sql;
-using Persistence.Sql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +40,8 @@ namespace Application.Services
         }
 
         public Tag Get(Guid id) => _tagRepository.Get(id);
-       
-        public Tag Get(string text,Guid userId) 
+
+        public Tag Get(string text, Guid userId)
             => _tagRepository
                             .GetTable()
                             .Include(x => x.Notes)

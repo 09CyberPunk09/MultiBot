@@ -55,7 +55,7 @@ namespace Application.Services
             return lastActivity;
         }
 
-        public TimeTrackingActivity CreateTimeTrackingActivity(string name,Guid userId)
+        public TimeTrackingActivity CreateTimeTrackingActivity(string name, Guid userId)
         {
             return _activityRepo.Add(new()
             {

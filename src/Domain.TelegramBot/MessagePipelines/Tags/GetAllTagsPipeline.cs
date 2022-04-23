@@ -2,7 +2,6 @@
 using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
-using System.ComponentModel;
 using System.Text;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags

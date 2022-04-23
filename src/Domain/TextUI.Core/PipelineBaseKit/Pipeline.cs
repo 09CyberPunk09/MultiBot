@@ -20,7 +20,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         public MessageContext MessageContext { get; set; }
 
         public bool IsLooped { get; set; }
-        public Action<Stage, MessageContext,ContentResult> StagePostAction { get; set; }
+        public Action<Stage, MessageContext, ContentResult> StagePostAction { get; set; }
         public int CurrentActionIndex { get; set; }
         public bool IsDone { get; set; }
         public ILifetimeScope _scope { get; set; }
@@ -78,9 +78,9 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         public virtual void ConfigureBasicPostAction()
         {
-            StagePostAction += (Stage stage,MessageContext ctx, ContentResult result) =>
+            StagePostAction += (Stage stage, MessageContext ctx, ContentResult result) =>
             {
-                if(result.Menu != null)
+                if (result.Menu != null)
                 {
                     var temp = result.Menu.Keyboard.ToList();
                     temp.Add(new[] { new KeyboardButton("🏡Home") });

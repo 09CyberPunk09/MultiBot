@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using Autofac;
-using Autofac.Core;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.Linq;

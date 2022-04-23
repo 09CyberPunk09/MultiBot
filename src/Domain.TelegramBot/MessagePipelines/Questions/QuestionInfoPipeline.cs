@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Infrastructure.TelegramBot.MessagePipelines.Reminder;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Telegram.Bot.Types.ReplyMarkups;
 

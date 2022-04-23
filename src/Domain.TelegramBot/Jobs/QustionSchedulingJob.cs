@@ -49,7 +49,7 @@ namespace Infrastructure.TelegramBot.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             try
-            { 
+            {
                 logger.Info("Scheduling questions...");
                 var executor = _scope.Resolve<IJobExecutor>();
                 var userRepo = _scope.Resolve<LifeTrackerRepository<User>>();

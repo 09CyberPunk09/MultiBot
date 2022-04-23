@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Caching.SqlLite
 {
@@ -35,7 +33,7 @@ namespace Persistence.Caching.SqlLite
 
         public long Count()
         {
-           return _context.Set<T>().Count(); 
+            return _context.Set<T>().Count();
         }
 
         public T FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
@@ -50,7 +48,7 @@ namespace Persistence.Caching.SqlLite
 
         public IEnumerable<T> GetAll()
         {
-           return _context.Set<T>().ToList();
+            return _context.Set<T>().ToList();
         }
 
         public IQueryable<T> GetQuery()

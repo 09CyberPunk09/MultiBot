@@ -2,7 +2,6 @@
 using Common.Entites;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess.Extensions;
-using Persistence.Common.DataAccess.Interfaces;
 using System;
 
 namespace Persistence.Common.DataAccess
@@ -19,7 +18,7 @@ namespace Persistence.Common.DataAccess
         public virtual DbSet<TimeTrackingActivity> TimeTrackingActivities { get; set; }
         public virtual DbSet<TimeTrackingEntry> TimeTrackingEntries { get; set; }
 
-        public static ContainerBuilder RegisterRepositories(ContainerBuilder builder,Type repositoryType)
+        public static ContainerBuilder RegisterRepositories(ContainerBuilder builder, Type repositoryType)
         {
             var type = repositoryType;
             _ = builder.RegisterRepository<Note>(type);

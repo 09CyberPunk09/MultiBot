@@ -10,7 +10,7 @@ namespace Integration.Applications
         public IJob Job { get; set; }
         public Dictionary<string, string> AdditionalData { get; set; } = new();
 
-        public ApplicationAccessibilityReporterJobConfiguration(string applicationName,Guid instanceId)
+        public ApplicationAccessibilityReporterJobConfiguration(string applicationName, Guid instanceId)
         {
             AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONNAME_KEY] = applicationName;
             AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONINSTANCEID_KEY] = instanceId.ToString();
@@ -49,7 +49,7 @@ namespace Integration.Applications
                 ApplicationInstanceID = context.JobDetail.JobDataMap[APPLICATIONINSTANCEID_KEY] as string,
                 LastIdleTime = DateTime.Now,
             };
-            cache.Set(dataObject.ApplicationName , dataObject);
+            cache.Set(dataObject.ApplicationName, dataObject);
             return Task.CompletedTask;
         }
     }

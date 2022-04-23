@@ -2,7 +2,6 @@
 using Autofac;
 using Domain.TelegramBot.MessagePipelines.Scheduling.Chunks;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using Kernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +54,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
                                                 DateTime.Today.AddDays(2 + counter).ToString());
                 counter2++;
                 buttons.Add(temp);
-            };            
+            };
 
             return new()
             {
@@ -66,7 +65,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
 
         public ContentResult AceptDateAndAskTime(MessageContext ctx)
         {
-            if (DateTime.TryParse(ctx.Message.Text,out var date))
+            if (DateTime.TryParse(ctx.Message.Text, out var date))
             {
                 SetCachedValue(DATE, date, ctx.Recipient);
 
@@ -92,11 +91,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
 
         public ContentResult AcceptTimeAndAskForMinutes(MessageContext ctx)
         {
-            if(byte.TryParse(ctx.Message.Text,out byte bt) && bt < 24 && bt >= 0)
+            if (byte.TryParse(ctx.Message.Text, out byte bt) && bt < 24 && bt >= 0)
             {
                 SetCachedValue(HOUR, bt, ctx.Recipient);
                 List<ushort> hours = new();
-                for (ushort i = 0; i < 60; i+=5)
+                for (ushort i = 0; i < 60; i += 5)
                 {
                     hours.Add(i);
                 }
@@ -118,7 +117,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
 
         public ContentResult SaveTime(MessageContext ctx)
         {
-            if(byte.TryParse(ctx.Message.Text,out var bt))
+            if (byte.TryParse(ctx.Message.Text, out var bt))
             {
                 var mins = bt;
                 var hours = GetCachedValue<byte>(HOUR, ctx.Recipient);

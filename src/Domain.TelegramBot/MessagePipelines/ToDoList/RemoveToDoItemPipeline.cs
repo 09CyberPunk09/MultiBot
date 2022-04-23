@@ -1,9 +1,9 @@
-﻿using Autofac;
+﻿using Application.Services;
+using Autofac;
 using Common.Entites;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using System.Collections.Generic;
 using System;
-using Application.Services;
+using System.Collections.Generic;
 
 namespace Domain.TelegramBot.MessagePipelines.ToDoList
 {
@@ -18,8 +18,8 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
     {
         public const string SELECTEDITEMID_CACHEKEY = "Selected Item Number To Delete";
 
-        private readonly NoteAppService _noteService; 
-        private readonly TagAppService _tagService; 
+        private readonly NoteAppService _noteService;
+        private readonly TagAppService _tagService;
         public RemoveToDoItemPipeline(ILifetimeScope scope) : base(scope)
         {
             _noteService = scope.Resolve<NoteAppService>();
@@ -54,7 +54,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
         public ContentResult AcceptChoice(MessageContext ctx)
         {
-            if(!Enum.TryParse<Choice>(ctx.Message.Text,out var ch))
+            if (!Enum.TryParse<Choice>(ctx.Message.Text, out var ch))
             {
                 ForbidMovingNext();
                 return Text("Please, select a value from the menu");
@@ -69,7 +69,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
             _noteService.RemovePhysically(note);
 
-            if(ch == Choice.MarkAsDone)
+            if (ch == Choice.MarkAsDone)
             {
                 var newNote = _noteService.Create(noteText, user.Id);
                 doneTag.Notes.Add(newNote);

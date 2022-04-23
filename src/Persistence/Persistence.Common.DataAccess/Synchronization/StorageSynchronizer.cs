@@ -21,7 +21,7 @@ namespace Persistence.Common.DataAccess
             SynchronizaEntity<Answer>();
         }
 
-        public ILifetimeScope SourceContainer { get;}
+        public ILifetimeScope SourceContainer { get; }
         public ILifetimeScope DestinationContainer { get; }
 
         public StorageSynchronizer(ILifetimeScope sourceContainer, ILifetimeScope destinationContainer)

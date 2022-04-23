@@ -21,8 +21,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
 
         public ContentResult AcceptSchedule(MessageContext ctx)
         {
-            var cron = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY,ctx.Recipient);
-            var reminderId = GetCachedValue<string>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY,ctx.Recipient);
+            var cron = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY, ctx.Recipient);
+            var reminderId = GetCachedValue<string>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY, ctx.Recipient);
             var reminder = _service.Get(Guid.Parse(reminderId));
 
             reminder.Recuring = true;

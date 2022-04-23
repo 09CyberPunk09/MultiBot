@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Domain.TelegramBot.MessagePipelines.ToDoList
 {
-    [Route("/create_reminder_from_todo","Make a Rmeinder from ToDo")]
+    [Route("/create_reminder_from_todo", "Make a Rmeinder from ToDo")]
     public class MakeToDoAsReminderPipeline : MessagePipelineBase
     {
         private readonly NoteAppService _noteService;
@@ -29,8 +29,8 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
         public ContentResult AcceptNumberForReminder(MessageContext ctx)
         {
             var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY);
-            if(!int.TryParse(ctx.Message.Text,out var t) || 
-                !numbers.TryGetValue(t,out var _))
+            if (!int.TryParse(ctx.Message.Text, out var t) ||
+                !numbers.TryGetValue(t, out var _))
             {
                 ForbidMovingNext();
                 return Text($"You must to enter a number which is in the range of todo items. If the list disaperared, enter {GetRoute<GetToDoListPipeline>().Route}.");

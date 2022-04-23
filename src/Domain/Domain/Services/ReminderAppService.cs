@@ -19,7 +19,7 @@ namespace Application.Services
             return _reminderRepo.GetAll().ToList();
         }
 
-        public Reminder Create(Reminder reminder,Guid userId)
+        public Reminder Create(Reminder reminder, Guid userId)
         {
             reminder.UserId = userId;
             return _reminderRepo.Add(reminder);

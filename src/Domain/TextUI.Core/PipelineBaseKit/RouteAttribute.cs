@@ -7,7 +7,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
     {
         private readonly string _coommand;
         private readonly string _alternativeRoute;
-        public RouteAttribute(string coommand,string alternativeRoute = null)
+        public RouteAttribute(string coommand, string alternativeRoute = null)
         {
             _alternativeRoute = alternativeRoute;
             _coommand = coommand;

@@ -5,8 +5,6 @@ using Common;
 using Infrastructure.TelegramBot.Jobs;
 using Integration.Applications;
 using NLog;
-using Persistence.Synchronization.Jobs;
-using SimpleScheduler;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -55,7 +53,7 @@ namespace LifeTracker.JobExecutor
             _containerBuilder.RegisterType<TType>();
             _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
         }
-        private static void AddJob<TType>(TType type) where TType : class 
+        private static void AddJob<TType>(TType type) where TType : class
         {
             _configurationTypes.Add(typeof(TType));
             _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);

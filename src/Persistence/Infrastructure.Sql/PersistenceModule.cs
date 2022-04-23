@@ -8,7 +8,7 @@ namespace Persistence.Sql
 {
     public class PersistenceModule : Autofac.Module
     {
-        public bool RegisterRepositorieaAsBaseTypes { get;}
+        public bool RegisterRepositorieaAsBaseTypes { get; }
 
         public PersistenceModule(bool registerRepositorieaAsBaseTypes)
         {
@@ -57,7 +57,7 @@ namespace Persistence.Sql
                 _ = builder.RegisterType<AnswerRepository>()
                     .As<IRepository<Answer>>()
                     .InstancePerLifetimeScope();
-                
+
             }
             else
             {

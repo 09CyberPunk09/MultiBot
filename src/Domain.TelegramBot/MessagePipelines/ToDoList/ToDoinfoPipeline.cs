@@ -9,7 +9,8 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
     {
         public ToDoinfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage(ctx => {
+            RegisterStage(ctx =>
+            {
                 return new()
                 {
                     Text = "ToDo menu",

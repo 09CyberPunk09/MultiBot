@@ -20,7 +20,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
         {
             RegisterStage(Start);
             //todo: implement
-           // IntegrateChunkPipeline<MenuPipeline>();
+            // IntegrateChunkPipeline<MenuPipeline>();
             IsLooped = true;
         }
 
@@ -39,7 +39,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines
                 user.TelegramLoggedIn = true;
                 _userService.Update(user);
             }
-            
+
             return new()
             {
                 Text = "Telegram User successfully logged in. Welcome! To get the menu, use the command /menu",

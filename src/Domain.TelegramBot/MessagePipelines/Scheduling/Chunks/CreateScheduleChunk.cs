@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using Kernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -3,7 +3,6 @@ using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
-using System.ComponentModel;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {

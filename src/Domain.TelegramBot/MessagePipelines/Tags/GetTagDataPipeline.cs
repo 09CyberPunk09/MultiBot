@@ -3,7 +3,6 @@ using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using Telegram.Bot.Types.ReplyMarkups;
 
