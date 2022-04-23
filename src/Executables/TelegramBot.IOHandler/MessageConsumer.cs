@@ -2,7 +2,7 @@
 using Infrastructure.Queuing;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 
-namespace TelegramBot.IOHandler
+namespace LifeTracker.TelegramBot.IOHandler
 {
     internal class MessageConsumer
     {

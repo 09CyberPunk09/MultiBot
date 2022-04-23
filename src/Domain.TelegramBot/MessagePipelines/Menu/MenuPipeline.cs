@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.TelegramBot.MessagePipelines.Menu;
 using Domain.TelegramBot.MessagePipelines.ToDoList;
 using Infrastructure.TelegramBot.MessagePipelines.Notes;
 using Infrastructure.TelegramBot.MessagePipelines.Questions;
@@ -36,6 +37,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Menu
                 new KeyboardButton[]
                 {
                     new KeyboardButton("List of all endpoints(Not implemented yet)"),
+                    //todo:make it dependent of user access level
+                    new KeyboardButton(GetAlternativeRoute<DeveloperMenuPipeline>())
                 }
                 };
                 var rkm = new ReplyKeyboardMarkup(t);

@@ -1,23 +1,22 @@
-﻿using Application;
-using Autofac;
-using Common;
+﻿using Common;
 using NLog;
 using Quartz;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace LifeTracker.JobExecutor
+namespace SimpleScheduler
 {
-    public class JobExecutor : IJobExecutor
+    /// <summary>
+    /// Simple job scheduler for jobs which do not need container support
+    /// </summary>
+    public class SimpleJobExecutor : IJobExecutor
     {
-        private readonly ILifetimeScope _scope;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-        public Guid InstanceId { get => InstanceIdentifier.Identifier; }
-        public JobExecutor(ILifetimeScope scope)
+        private readonly IScheduler _scheduler;
+        public SimpleJobExecutor()
         {
-            _scope = scope;
+            _scheduler = SchedulerBuilder.Create().Build().GetScheduler().Result;
         }
+
+        public Guid InstanceId { get; set; }
 
         public async Task ScheduleJob(IConfiguredJob configuredJob)
         {
@@ -26,14 +25,14 @@ namespace LifeTracker.JobExecutor
 
             var trigger = configuredJob.GetTrigger();
 
-            var scheduler = _scope.Resolve<IScheduler>();
+            var scheduler = _scheduler;
             await scheduler.ScheduleJob(job, trigger, cts.Token).ConfigureAwait(true);
             logger.Info($"{configuredJob.GetType().Name} added to scheduler");
         }
 
         public async Task StartExecuting()
         {
-            var scheduler = _scope.Resolve<IScheduler>();
+            var scheduler = _scheduler;
             await scheduler.Start().ConfigureAwait(true);
             logger.Info($"Scheduler started");
         }

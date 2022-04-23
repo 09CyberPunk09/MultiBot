@@ -3,7 +3,7 @@ using Autofac.Extras.Quartz;
 using Common;
 using System.Collections.Specialized;
 
-namespace Infrastructure.Jobs.Executor
+namespace LifeTracker.JobExecutor
 {
     public class JobExecutorModule : Module
     {

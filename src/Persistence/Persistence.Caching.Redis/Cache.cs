@@ -43,6 +43,14 @@ namespace Persistence.Caching.Redis
             db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
 
+        public List<string> GetAllkeys()
+        {
+            List<string> listKeys = new List<string>();
+            var keys = redis.GetServer(options.EndPoints.First()).Keys((int)_dbType);
+            listKeys.AddRange(keys.Select(key => (string)key).ToList());
+            return listKeys;
+        }
+
         public void PurgeDatabase()
         {
             redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType, CommandFlags.HighPriority);

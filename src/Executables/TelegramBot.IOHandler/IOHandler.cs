@@ -6,7 +6,7 @@ using NLog;
 using System;
 using Telegram.Bot;
 
-namespace TelegramBot.IOHandler
+namespace LifeTracker.TelegramBot.IOHandler
 {
     public class IOHandler
     {
@@ -54,7 +54,7 @@ namespace TelegramBot.IOHandler
             _queueListenner = new(hostName, queueName, username, password);
             _queueListenner.AddMessageHandler(response =>
             {
-                 logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");
+                logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");
                 _sender.SendMessage(response);
             });
             _queueListenner.StartConsuming();

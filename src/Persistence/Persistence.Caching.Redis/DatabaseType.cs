@@ -4,6 +4,7 @@
     {
         System = 1,
         Telegram,
-        DbCache
+        DbCache,
+        ApplicationAccessibility
     }
 }

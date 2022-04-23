@@ -1,16 +1,27 @@
-﻿using NLog;
+﻿using Application;
+using Integration.Applications;
+using NLog;
+using SimpleScheduler;
 using System;
+using System.Threading.Tasks;
 
-namespace TelegramBot.IOHandler
+namespace LifeTracker.TelegramBot.IOHandler
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var logger = LogManager.GetCurrentClassLogger();
             IOHandler handler = new();
             handler.Start();
             logger.Info("Logger started successfully");
+
+            // TODO: Code repeat
+            var jobExecutor = new SimpleJobExecutor();
+            await jobExecutor.ScheduleJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.TelegramBot.IOHandler", InstanceIdentifier.Identifier));
+            await jobExecutor.StartExecuting();
+
+            // TODO: Code repeat
             LoopConsoleClosing();
         }
 

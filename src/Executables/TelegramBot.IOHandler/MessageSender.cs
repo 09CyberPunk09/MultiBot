@@ -6,7 +6,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace TelegramBot.IOHandler
+namespace LifeTracker.TelegramBot.IOHandler
 {
     internal class MessageSender
     {

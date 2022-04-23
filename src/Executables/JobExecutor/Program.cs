@@ -1,14 +1,17 @@
-﻿using Autofac;
+﻿using Application;
+using Autofac;
 using Autofac.Extras.Quartz;
 using Common;
 using Infrastructure.TelegramBot.Jobs;
+using Integration.Applications;
 using NLog;
 using Persistence.Synchronization.Jobs;
+using SimpleScheduler;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Jobs.Executor
+namespace LifeTracker.JobExecutor
 {
     internal class Program
     {
@@ -33,14 +36,16 @@ namespace Infrastructure.Jobs.Executor
 
             });
             await executor.StartExecuting();
+
             LoopConsoleClosing();
         }
 
         private static void StartJobs()
         {
-            AddJob<SynchronizationJobConfiguration>();
+            //AddJob<SynchronizationJobConfiguration>();
             AddJob<QustionSchedulingJobConfiguration>();
             AddJob<ReminderSchedulerJobConfiguration>();
+            AddJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.JobExecutor", InstanceIdentifier.Identifier));
         }
 
         private static void AddJob<TType>() where TType : IConfiguredJob
@@ -48,6 +53,13 @@ namespace Infrastructure.Jobs.Executor
             _configurationTypes.Add(typeof(TType));
             _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
             _containerBuilder.RegisterType<TType>();
+            _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
+        }
+        private static void AddJob<TType>(TType type) where TType : class 
+        {
+            _configurationTypes.Add(typeof(TType));
+            _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
+            _containerBuilder.RegisterInstance(type);
             _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
         }
 

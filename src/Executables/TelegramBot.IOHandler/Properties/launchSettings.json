@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LifeTracker.TelegramBot.IOHandler": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
