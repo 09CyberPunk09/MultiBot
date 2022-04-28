@@ -9,14 +9,14 @@ namespace Persistence.Caching.Redis.TelegramCaching
         {
         }
 
-        public T GetValueForChat<T>(string key, long chatId)
+        public T GetValueForChat<T>(string key, long chatId, bool getThanDelete = false)
         {
             CachePayload get = new()
             {
                 ChatId = chatId,
                 Key = key
             };
-            return Get<T>(JsonConvert.SerializeObject(get));
+            return Get<T>(JsonConvert.SerializeObject(get), getThanDelete);
         }
 
         public void SetValueForChat(string key, object value, long chatId)

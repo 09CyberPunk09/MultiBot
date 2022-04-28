@@ -3,6 +3,7 @@ using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
+using System.Collections.Generic;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 {
@@ -25,13 +26,15 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 
         public ContentResult AskForNoteText(MessageContext ctx)
         {
-            Guid id;
-            if (!Guid.TryParse(ctx.Message.Text, out id))
+            var dict = GetCachedValue<Dictionary<int, Guid>>(GetTagIdChunk.TAGDICTIONARY_CACHEKEY,true);
+            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
-                ctx.MoveNext = false;
-                ctx.PipelineStageSucceeded = false;
-                return Text("Pick the set you want to modify,do not enter custom text.");
+                ForbidMovingNext();
+                return Text("⛔️ Enter a number form the suggested list");
             }
+
+            var id = dict[number];
+
             cache.SetValueForChat("AddSetItemSetId", id, ctx.Recipient);
             return Text("Note text:");
         }

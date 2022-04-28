@@ -4,6 +4,6 @@
     {
         void Set(string key, object value);
 
-        TResult Get<TResult>(string key);
+        TResult Get<TResult>(string key, bool getThanDelete = false);
     }
 }

@@ -10,6 +10,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 {
     [Route("/get-notes", "📋 Notes")]
     [Description("Get's all your notes")]
+    //TODO: think about reconstruction of notes. adding attachments,etc
     public class GetNotesPipeline : MessagePipelineBase
     {
         private readonly NoteAppService _noteService;

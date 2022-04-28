@@ -1,6 +1,8 @@
 ﻿using Application.Services;
 using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
+using System.Collections.Generic;
+using System;
 using System.Text;
 using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
 
@@ -22,20 +24,23 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 
         public ContentResult ListActivities(MessageContext ctx)
         {
-            StringBuilder sb = new();
-            sb.AppendLine("Your Activities");
-            sb.AppendLine();
             var activities = _service.GetAllActivities(GetCurrentUser().Id);
+            var b = new StringBuilder();
+            b.AppendLine("Activities: ");
+            int a = 1;
+
             activities.ForEach(activity =>
             {
-                sb.AppendLine(activity.Name);
+                b.AppendLine($"🔸 {a}. {activity.Name}");
+                a++;
             });
 
             return new()
             {
-                Text = sb.ToString(),
+                Text = b.ToString(),
                 Buttons = new(new[]
                 {
+                    //todo: change to use getroute
                     CallbackButton.WithCallbackData("Add","/add_activity"),
                     CallbackButton.WithCallbackData("Remove","/remove_activity")
                 }),

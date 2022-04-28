@@ -16,24 +16,23 @@ namespace Persistence.Caching.Redis
 
         private readonly ConfigurationOptions options = new()
         {
+            //todo: move to config.json
             EndPoints = { { "localhost", 6379 } },
             AllowAdmin = true
         };
 
-        //add an enuum with values System,PipelineMetadata, Pipeline where the value will be the database ids
         //todo: Add expiration
         public Cache(DatabaseType dbType = DatabaseType.System)
         {
-            //todo: move to config.json
             _dbType = dbType;
             redis = ConnectionMultiplexer.Connect(options);
             db = redis.GetDatabase((int)dbType);
         }
 
-        public TResult Get<TResult>(string key)
+        public TResult Get<TResult>(string key,bool getThanDelete = false)
         {
-            //TODO: Add key remove after getting
-            var data = db.StringGet(new RedisKey(key));
+            var redisKey = new RedisKey(key);
+            var data = getThanDelete ? db.StringGetDelete(redisKey) : db.StringGet(redisKey);
             return data != default ? JsonConvert.DeserializeObject<TResult>(data.ToString()) : default;
         }
 
@@ -53,7 +52,7 @@ namespace Persistence.Caching.Redis
 
         public void PurgeDatabase()
         {
-            redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType, CommandFlags.HighPriority);
+            redis.GetServer(options.EndPoints.First()).FlushDatabase((int)_dbType);
         }
 
         protected IEnumerable<RedisKey> GetALLKeys()

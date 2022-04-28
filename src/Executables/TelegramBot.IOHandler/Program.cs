@@ -17,6 +17,7 @@ namespace LifeTracker.TelegramBot.IOHandler
             logger.Info("Logger started successfully");
 
             // TODO: Code repeat
+            // TODO: Implement a applicaitonBuilder
             var jobExecutor = new SimpleJobExecutor();
             await jobExecutor.ScheduleJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.TelegramBot.IOHandler", InstanceIdentifier.Identifier));
             await jobExecutor.StartExecuting();

@@ -4,7 +4,6 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.TextUI.Core
 {
-    //todo: remove cope from core
     public static class ResponseTemplates
     {
         public static ContentResult Text(string text, bool invokeNextImmediately = false)

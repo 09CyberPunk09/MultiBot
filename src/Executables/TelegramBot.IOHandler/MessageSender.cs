@@ -25,7 +25,6 @@ namespace LifeTracker.TelegramBot.IOHandler
             try
             {
 
-
                 var chatId = new ChatId(contentResult.RecipientChatId);
                 string lastMessageCacheey = "LastPipelineMessageId";
                 async Task<Telegram.Bot.Types.Message> SendTextMessageAsync(string text = "", IReplyMarkup markup = null)
@@ -60,7 +59,7 @@ namespace LifeTracker.TelegramBot.IOHandler
                 {
                     await EditMessageAsync(contentResult);
                 }
-                else if (contentResult.MultiMessages != null)
+                if (contentResult.MultiMessages != null)
                 {
                     await SendTextMessageAsync(contentResult.Text, contentResult.Buttons);
                     contentResult.MultiMessages.ForEach(async x => await SendTextMessageAsync(x.Text));

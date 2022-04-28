@@ -58,15 +58,15 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         protected SystemUser GetCurrentUser()
         {
             //todo: implement getting from cache
-            //todo: add caching library
             using (var ctx = new LifeTrackerDbContext())
             {
                 return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.Recipient);
             }
         }
 
-        protected T GetCachedValue<T>(string key)
-            => cache.GetValueForChat<T>(key, MessageContext.Recipient);
+        //todo: go through all method calls and add getThanDelete where it is needed(everywhere, I guess)
+        protected T GetCachedValue<T>(string key, bool getThanDelete = false)
+            => cache.GetValueForChat<T>(key, MessageContext.Recipient, getThanDelete);
 
         protected void SetCachedValue(string key, object value)
             => cache.SetValueForChat(key, value, MessageContext.Recipient);

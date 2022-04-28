@@ -7,6 +7,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 {
     [Route("/create_todo", "📋➕ Add ToDo")]
     //TODO: Add remove todo pipeline
+    //TODO: Add activities to todo lists
     public class CreateToDoItempipeline : MessagePipelineBase
     {
         private const string NOTE_TEXT_CACHEKEY = "NoteText";

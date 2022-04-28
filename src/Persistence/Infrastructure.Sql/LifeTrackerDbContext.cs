@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.Entites;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence.Common.DataAccess;
 
@@ -24,6 +25,11 @@ namespace Persistence.Sql
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+            modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<TimeTrackingActivity>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<Note>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<Reminder>().HasQueryFilter(x => !x.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

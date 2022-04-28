@@ -13,8 +13,6 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
     {
         public StageMap Stages { get; set; } = new();
 
-        //todo: review which type of cache is inited in this project
-
         protected TelegramCache cache = new();
 
         public MessageContext MessageContext { get; set; }

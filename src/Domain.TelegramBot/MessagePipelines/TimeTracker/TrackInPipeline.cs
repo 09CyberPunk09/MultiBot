@@ -2,14 +2,15 @@
 using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
-using System.Linq;
-using CallbackButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 {
     [Route("/track_in", "📥 Track In")]
     public class TrackInPipeline : MessagePipelineBase
     {
+        private const string ACTIVITIES_CACHEKEY = "activitiesDictionary";
         private readonly TimeTrackingAppService _service;
         public TrackInPipeline(ILifetimeScope scope) : base(scope)
         {
@@ -31,25 +32,43 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
                 data = new() { activity };
             }
 
-            return new()
+
+            var b = new StringBuilder();
+            b.AppendLine("Enter a number near the Activity you want to track in:");
+
+            var counter = 0;
+            var dictionary = new Dictionary<int, Guid>();
+
+            foreach (var item in data)
             {
-                Text = "Activity you want to track in:",
-                Buttons = new(data.Select(a => CallbackButton.WithCallbackData(a.Name, a.Id.ToString())).ToList())
+                ++counter;
+                b.AppendLine($"🔸 {counter}. {item.Name}");
+                dictionary[counter] = item.Id;
+            }
+
+            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, ctx.Recipient);
+
+            return new ContentResult()
+            {
+                Text = b.ToString()
             };
         }
 
         public ContentResult AcceptTrackIn(MessageContext ctx)
         {
-            if (Guid.TryParse(ctx.Message.Text, out var result))
-            {
-                _service.TrackIn(result, DateTime.Now, GetCurrentUser().Id);
-                return Text($"✅Done. Started tracking at ⏱{DateTime.Now.ToString("HH:mm dd:MM:yyyy")}");
-            }
-            else
+            var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY);
+            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
                 ForbidMovingNext();
-                return Text("Select activity from the list");
+                return Text("⛔️ Enter a number form the suggested list");
             }
+
+            var id = dict[number];
+            _service.TrackIn(id, DateTime.Now, GetCurrentUser().Id);
+
+            //todo: make track in possible only if the previous entries are complete
+            //todo: make track out possible only if the previous entries are not complete
+            return Text($"✅Done. Started tracking at ⏱{DateTime.Now:HH:mm dd:MM:yyyy}");
         }
     }
 }

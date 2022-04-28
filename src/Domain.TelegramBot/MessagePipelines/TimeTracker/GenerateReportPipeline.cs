@@ -34,13 +34,13 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker
             int a = 1;
 
             activitiesDict[0] = Guid.Empty;
-            b.AppendLine($"{0}. All");
+            b.AppendLine($"🔸 {0}. All");
 
             activities.ForEach(activity =>
             {
                 activitiesDict[a] = activity.Id;
 
-                b.AppendLine($"{a}. {activity.Name}");
+                b.AppendLine($"🔸 {a}. {activity.Name}");
 
                 a++;
             });
@@ -72,8 +72,8 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker
             var activityId = dict[number];
             SetCachedValue(SELECTEDACTIVITY_CACHEKEY, activityId);
 
-            string activityText = "";
-            if(activityId == Guid.Empty)
+            string activityText;
+            if (activityId == Guid.Empty)
             {
                 activityText = "All";
             }
@@ -88,6 +88,7 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker
                 Text = $"Your selected Activity - \"{activityText}\". Select a report type:",
                 Buttons = new InlineKeyboardMarkup(new[]
                 {
+                    // todo: fix reporting
                     ButtonRow("Today",GetRoute<GetTodaysTimeTrackingReport>().Route),
                     ButtonRow("Yesterday",GetRoute<GetYesterdaysTimeTrackingReport>().Route),
                     ButtonRow("This Week",GetRoute<GetLastWeekTimeTrackingReportPipeline>().Route),
