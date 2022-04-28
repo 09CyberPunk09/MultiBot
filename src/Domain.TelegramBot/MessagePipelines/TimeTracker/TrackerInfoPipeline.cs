@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.TelegramBot.MessagePipelines.TimeTracker;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System.ComponentModel;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -31,7 +32,8 @@ Or, use the menu below:",
                 Menu = new(new KeyboardButton[][]
                 {
                     MenuButtonRow(MenuButton(GetRoute<TrackInPipeline>().AlternativeRoute),MenuButton(GetRoute<TrackOutPipeline>().AlternativeRoute)),
-                    MenuButtonRow(MenuButton(GetRoute<ActivityManagementPipeline>().AlternativeRoute))
+                    MenuButtonRow(MenuButton(GetRoute<ActivityManagementPipeline>().AlternativeRoute)),
+                    MenuButtonRow(MenuButton(GetRoute<GenerateReportPipeline>().AlternativeRoute))
                 })
             };
         }

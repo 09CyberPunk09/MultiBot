@@ -1,5 +1,4 @@
 ﻿using Common.BaseTypes;
-using Common.Enums;
 using System;
 
 namespace Common.Entites
@@ -8,7 +7,8 @@ namespace Common.Entites
     {
         public Guid UserId { get; set; }
         public Guid ActivityId { get; set; }
-        public DateTime TimeStamp { get; set; }
-        public EntryType EntryType { get; set; }
+        public DateTime StartTime { get; set; }
+        public bool Completed { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

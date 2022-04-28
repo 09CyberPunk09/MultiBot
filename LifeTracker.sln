@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Common.DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.FileStorage.Postgres", "src\Persistence\Persistence.FileStorage.Postgres\Persistence.FileStorage.Postgres.csproj", "{559F02F0-E619-4D3D-944E-DE088EF79E2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Sql", "src\Persistence\Infrastructure.Sql\Persistence.Sql.csproj", "{CB77B307-FF47-41C5-9B12-096BF2BA116D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Master", "src\Persistence\Infrastructure.Sql\Persistence.Master.csproj", "{CB77B307-FF47-41C5-9B12-096BF2BA116D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Queuing", "src\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj", "{1F11F477-C03F-4514-847A-D0B7ABD48A59}"
 EndProject
@@ -59,9 +59,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "src\Kernel\Kernel
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{B0A10E7E-E9FC-4369-992E-C5D17951F4F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Integration.Applications", "Integration.Applications\Integration.Applications.csproj", "{11437FC7-0006-4A20-95FF-71E0AE0F76B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Applications", "Integration.Applications\Integration.Applications.csproj", "{11437FC7-0006-4A20-95FF-71E0AE0F76B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleJobScheduler", "SimpleScheduler\SimpleJobScheduler.csproj", "{F5048E74-70B1-4057-BCF2-12B94EDD23F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleJobScheduler", "SimpleScheduler\SimpleJobScheduler.csproj", "{F5048E74-70B1-4057-BCF2-12B94EDD23F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

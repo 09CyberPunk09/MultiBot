@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Sql\Persistence.Sql.csproj" />
+    <ProjectReference Include="..\Infrastructure.Sql\Persistence.Master.csproj" />
     <ProjectReference Include="..\Persistence.Caching.SqlLite\Persistence.Caching.SqlLite.csproj" />
   </ItemGroup>
 

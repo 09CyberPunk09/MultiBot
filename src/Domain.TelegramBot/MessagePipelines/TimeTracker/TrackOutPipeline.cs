@@ -1,6 +1,5 @@
 ﻿using Application.Services;
 using Autofac;
-using Common.Enums;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using System;
 
@@ -25,7 +24,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
         {
             var user = GetCurrentUser();
             var lastActivity = _service.GetLastTrackedActivity(user.Id);
-            _service.Track(lastActivity.Id, EntryType.Out, user.Id);
+            _service.TrackOut(lastActivity.Id, DateTime.Now);
             return Text($"✅ Stopped tracking at ⏱{DateTime.Now.ToString("HH:mm dd:MM:yyyy")}");
         }
     }
