@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace Persistence.Caching.Redis
@@ -12,16 +14,21 @@ namespace Persistence.Caching.Redis
         private readonly IDatabase db;
         private readonly DatabaseType _dbType;
 
-        private readonly string _serverAddress = "localhost:6379";
+        private static ConfigurationOptions options;
 
-        private readonly ConfigurationOptions options = new()
+        static Cache()
         {
-            //todo: move to config.json
-            EndPoints = { { "localhost", 6379 } },
-            AllowAdmin = true
-        };
+            var configuration = new ConfigurationBuilder()
+              .AddJsonFile("appSettings.json").Build();
+            var host = configuration["Redis:Default:HostName"];
+            var port = configuration["Redis:Default:Port"];
+            options = new()
+            {
+                EndPoints = { { host, Convert.ToInt32(port) } },
+                AllowAdmin = true
+            };
+        }
 
-        //todo: Add expiration
         public Cache(DatabaseType dbType = DatabaseType.System)
         {
             _dbType = dbType;

@@ -2,6 +2,7 @@
 using Autofac;
 using Infrastructure.Queuing;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
+using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
 using Telegram.Bot;
@@ -31,7 +32,9 @@ namespace LifeTracker.TelegramBot.IOHandler
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
         {
-            var client = new TelegramBotClient("1740254100:AAGW32c6AWAqilo1xNYLUim5zsgTXn8g9x4")
+            var configuration = new ConfigurationBuilder()
+             .AddJsonFile("appSettings.json").Build();
+            var client = new TelegramBotClient(configuration["Telegram:BotAPIKey"])
             {
                 Timeout = TimeSpan.FromMinutes(10)
             };
@@ -45,10 +48,10 @@ namespace LifeTracker.TelegramBot.IOHandler
         private void ConfigureMessageSender()
         {
             var service = new ConfigurationAppService();
-            var hostName = service.Get("telegramQueueHost");
-            var queueName = service.Get("telegramMessageResponseQueue");
-            var username = service.Get("username");
-            var password = service.Get("password");
+            var hostName = service.Get("Telegram:QueueHost");
+            var queueName = service.Get("Telegram:MessageResponseQueue");
+            var username = service.Get("Telegram:QueueUsername");
+            var password = service.Get("Telegram:QueuePassword");
 
             _sender = _container.Resolve<MessageSender>();
             _queueListenner = new(hostName, queueName, username, password);
