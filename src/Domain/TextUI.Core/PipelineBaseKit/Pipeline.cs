@@ -117,8 +117,8 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         #endregion ResponseTemplates
 
-        protected T GetCachedValue<T>(string key, long chatId)
-            => cache.GetValueForChat<T>(key, chatId);
+        protected T GetCachedValue<T>(string key, long chatId,bool getThanDelete = false)
+            => cache.GetValueForChat<T>(key, chatId,getThanDelete);
 
         protected void SetCachedValue(string key, object value, long chatId)
             => cache.SetValueForChat(key, value, chatId);

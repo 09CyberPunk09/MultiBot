@@ -64,7 +64,6 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             }
         }
 
-        //todo: go through all method calls and add getThanDelete where it is needed(everywhere, I guess)
         protected T GetCachedValue<T>(string key, bool getThanDelete = false)
             => cache.GetValueForChat<T>(key, MessageContext.Recipient, getThanDelete);
 

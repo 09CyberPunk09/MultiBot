@@ -56,7 +56,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
 
         public ContentResult AcceptTrackIn(MessageContext ctx)
         {
-            var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY);
+            var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY,true);
             if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
                 ForbidMovingNext();

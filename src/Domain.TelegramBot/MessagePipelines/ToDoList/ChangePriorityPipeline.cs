@@ -28,7 +28,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
         public ContentResult AcceptPriorityChange(MessageContext ctx)
         {
-            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY);
+            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY,true);
             if (!int.TryParse(ctx.Message.Text, out var t) ||
                 !numbers.TryGetValue(t, out var _))
             {

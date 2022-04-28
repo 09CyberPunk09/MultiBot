@@ -54,7 +54,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
                 }
 
                 var tag = _tagService.Get(tagName, GetCurrentUser().Id);
-                _tagService.CreateNoteUnderTag(tag.Id, GetCachedValue<string>(NOTE_TEXT_CACHEKEY), GetCurrentUser().Id);
+                _tagService.CreateNoteUnderTag(tag.Id, GetCachedValue<string>(NOTE_TEXT_CACHEKEY,true), GetCurrentUser().Id);
                 return Text("✅ Done.");
             }
             else

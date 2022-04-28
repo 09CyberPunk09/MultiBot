@@ -54,7 +54,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 
         public ContentResult ReturnNotes(MessageContext ctx)
         {
-            var dict = GetCachedValue<Dictionary<int, Guid>>(TAGDICTIONARY_CACHEKEY);
+            var dict = GetCachedValue<Dictionary<int, Guid>>(TAGDICTIONARY_CACHEKEY,true);
             if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count())))
             {
                 ForbidMovingNext();

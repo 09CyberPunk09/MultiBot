@@ -18,7 +18,7 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker.Reports
             _service = scope.Resolve<TimeTrackingAppService>();
             RegisterStage(ctx =>
             {
-                var activityId = GetCachedValue<Guid>(GenerateReportPipeline.SELECTEDACTIVITY_CACHEKEY);
+                var activityId = GetCachedValue<Guid>(GenerateReportPipeline.SELECTEDACTIVITY_CACHEKEY,true);
                 List<TimeTrackingReportModel> report;
 
                 var dateFrom = DateTime.Now.AddDays(-7).Date;

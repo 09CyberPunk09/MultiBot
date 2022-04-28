@@ -163,7 +163,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
         public ContentResult SaveSchedule(MessageContext ctx)
         {
             var cronExpr = cache.GetValueForChat<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY, ctx.Recipient);
-            var questionId = GetCachedValue<Guid>(questionIdKey, ctx.Recipient);
+            var questionId = GetCachedValue<Guid>(questionIdKey, ctx.Recipient,true);
             _questionAppService.AddSchedule(questionId, cronExpr);
             return Text("✅Done. Question saved!");
         }

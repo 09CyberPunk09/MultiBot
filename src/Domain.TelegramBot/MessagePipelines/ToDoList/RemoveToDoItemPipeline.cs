@@ -35,7 +35,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
         public ContentResult AskAboutAction(MessageContext ctx)
         {
-            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY);
+            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY,true);
             if (!int.TryParse(ctx.Message.Text, out var t) ||
                 !numbers.TryGetValue(t, out var noteId))
             {
@@ -60,7 +60,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
                 return Text("Please, select a value from the menu");
             }
 
-            var noteId = GetCachedValue<Guid>(SELECTEDITEMID_CACHEKEY);
+            var noteId = GetCachedValue<Guid>(SELECTEDITEMID_CACHEKEY,true);
             var note = _noteService.Get(noteId);
             var user = GetCurrentUser();
             var doneTag = _tagService.Get(Tag.DoneToDoTagName, user.Id);
