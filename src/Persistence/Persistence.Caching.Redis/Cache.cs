@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using NLog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace Persistence.Caching.Redis
@@ -13,26 +13,50 @@ namespace Persistence.Caching.Redis
         private readonly ConnectionMultiplexer redis;
         private readonly IDatabase db;
         private readonly DatabaseType _dbType;
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static ConfigurationOptions options;
+
+        private static int _port;
+        private static string _host;
+
 
         static Cache()
         {
             var configuration = new ConfigurationBuilder()
               .AddJsonFile("appSettings.json").Build();
-            var host = configuration["Redis:Default:HostName"];
-            var port = configuration["Redis:Default:Port"];
-            options = new()
-            {
-                EndPoints = { { host, Convert.ToInt32(port) } },
-                AllowAdmin = true
-            };
+            _host = configuration["Redis:Default:HostName"];
+            _port = Convert.ToInt32(configuration["Redis:Default:Port"]);
+          
         }
 
         public Cache(DatabaseType dbType = DatabaseType.System)
         {
             _dbType = dbType;
-            redis = ConnectionMultiplexer.Connect(options);
+            try
+            {
+                logger.Info($"Trying to connect Reis on {_host}:{_port}");
+                options = new()
+                {
+                    EndPoints = { { _host, Convert.ToInt32(_port) } },
+                    AllowAdmin = true
+                };
+                redis = ConnectionMultiplexer.Connect(options);
+            }
+            catch (RedisConnectionException ex)
+            {
+               // logger.Error(ex);
+                logger.Info($"Failed to connect redis");
+                logger.Info($"Rettrying to connect redis on container host");
+                options = new()
+                {
+                    EndPoints = { { "redis" } },
+                    AllowAdmin = true
+                };
+                redis = ConnectionMultiplexer.Connect(options);           
+            }
+            
+            logger.Info($"Redis succesfully connected");
             db = redis.GetDatabase((int)dbType);
         }
 

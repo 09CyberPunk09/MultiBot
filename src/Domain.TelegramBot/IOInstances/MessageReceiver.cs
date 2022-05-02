@@ -14,12 +14,9 @@ namespace Infrastructure.TelegramBot.IOInstances
             _messageHandler = handler;
 
             var service = new ConfigurationAppService();
-            var hostName = service.Get("Telegram:QueueHost");
             var queueName = service.Get("Telegram:HandleMessageQueue");
-            var username = service.Get("Telegram:QueueUsername");
-            var password = service.Get("Telegram:QueuePassword");
 
-            _listener = new(hostName, queueName, username, password);
+            _listener = QueuingHelper.CreateListener<Message>(queueName);
         }
 
         public void StartReceiving()

@@ -48,13 +48,11 @@ namespace LifeTracker.TelegramBot.IOHandler
         private void ConfigureMessageSender()
         {
             var service = new ConfigurationAppService();
-            var hostName = service.Get("Telegram:QueueHost");
             var queueName = service.Get("Telegram:MessageResponseQueue");
-            var username = service.Get("Telegram:QueueUsername");
-            var password = service.Get("Telegram:QueuePassword");
-
             _sender = _container.Resolve<MessageSender>();
-            _queueListenner = new(hostName, queueName, username, password);
+
+            _queueListenner = QueuingHelper.CreateListener<ContentResult>(queueName);
+
             _queueListenner.AddMessageHandler(response =>
             {
                 logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");

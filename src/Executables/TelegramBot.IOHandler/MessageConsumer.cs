@@ -11,12 +11,9 @@ namespace LifeTracker.TelegramBot.IOHandler
         public MessageConsumer()
         {
             var service = new ConfigurationAppService();
-            var hostName = service.Get("Telegram:QueueHost");
             var queueName = service.Get("Telegram:HandleMessageQueue");
-            var username = service.Get("Telegram:QueueUsername");
-            var password = service.Get("Telegram:QueuePassword");
 
-            _publisher = new QueuePublisher(hostName, queueName, username, password);
+            _publisher = QueuingHelper.CreatePublisher(queueName);
         }
 
         public void ConsumeMessage(Message msg)

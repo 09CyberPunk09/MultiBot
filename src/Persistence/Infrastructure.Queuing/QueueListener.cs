@@ -12,6 +12,7 @@ namespace Infrastructure.Queuing
         private readonly string _queueName;
         private readonly string _username;
         private readonly string _password;
+        private readonly int _port;
 
         public delegate void QueueMessageHandlerDelegate(TQueryMessageType response);
 
@@ -20,18 +21,20 @@ namespace Infrastructure.Queuing
         private readonly IConnection _connection;
         private IModel _channel;
 
-        public QueueListener(string hostName, string queueName, string username, string password)
+        public QueueListener(string hostName, string queueName, string username, string password,int port)
         {
             _hostName = hostName;
             _queueName = queueName;
             _username = username;
             _password = password;
+            _port = port;
 
             var factory = new ConnectionFactory()
             {
                 HostName = _hostName,
                 Password = _password,
                 UserName = _username,
+                Port = _port
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();

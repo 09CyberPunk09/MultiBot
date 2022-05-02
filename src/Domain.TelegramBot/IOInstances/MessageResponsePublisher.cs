@@ -11,12 +11,8 @@ namespace Infrastructure.TelegramBot.IOInstances
         static MessageResponsePublisher()
         {
             var service = new ConfigurationAppService();
-            var hostName = service.Get("telegramQueueHost");
             var queueName = service.Get("telegramMessageResponseQueue");
-            var username = service.Get("username");
-            var password = service.Get("password");
-
-            _publisher = new(hostName, queueName, username, password);
+            _publisher = QueuingHelper.CreatePublisher(queueName);
         }
 
         public void SendMessage(ContentResult message)

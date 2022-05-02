@@ -10,13 +10,15 @@ namespace Infrastructure.Queuing
         private readonly string _queueName;
         private readonly string _username;
         private readonly string _password;
+        private readonly int _port;
 
-        public QueuePublisher(string hostName, string queueName, string username, string password)
+        public QueuePublisher(string hostName, string queueName, string username, string password,int port)
         {
             _hostName = hostName;
             _queueName = queueName;
             _username = username;
             _password = password;
+            _port = port;
         }
 
         public void Publish(object objectToSend)
@@ -25,7 +27,8 @@ namespace Infrastructure.Queuing
             {
                 HostName = _hostName,
                 UserName = _username,
-                Password = _password
+                Password = _password,
+                Port = _port
             };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
