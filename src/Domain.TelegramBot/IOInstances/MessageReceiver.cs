@@ -15,7 +15,7 @@ namespace Infrastructure.TelegramBot.IOInstances
 
             var service = new ConfigurationAppService();
             var queueName = service.Get("Telegram:HandleMessageQueue");
-
+            
             _listener = QueuingHelper.CreateListener<Message>(queueName);
         }
 
