@@ -12,8 +12,8 @@ namespace Integration.Applications
 
         public ApplicationAccessibilityReporterJobConfiguration(string applicationName, Guid instanceId)
         {
-            AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONNAME_KEY] = applicationName;
             AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONINSTANCEID_KEY] = instanceId.ToString();
+            AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONNAME_KEY] = applicationName;
         }
 
         public IJobDetail BuildJob()
