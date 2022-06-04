@@ -40,6 +40,7 @@ namespace Integration.Applications
     {
         public const string APPLICATIONNAME_KEY = "ApplicationName";
         public const string APPLICATIONINSTANCEID_KEY = "ApplicationInstanceId";
+
         public Task Execute(IJobExecutionContext context)
         {
             var cache = new Cache(DatabaseType.ApplicationAccessibility);
