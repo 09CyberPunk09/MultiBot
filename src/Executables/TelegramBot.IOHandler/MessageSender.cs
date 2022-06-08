@@ -41,7 +41,6 @@ namespace LifeTracker.TelegramBot.IOHandler
                             text: "Menu updated",
                             chatId: chatId,
                             replyMarkup: contentResult.Menu);
-
                     }
 
                     cache.SetValueForChat(lastMessageCacheey, message.MessageId, contentResult.RecipientChatId);
