@@ -12,8 +12,8 @@ namespace Integration.Applications
 
         public ApplicationAccessibilityReporterJobConfiguration(string applicationName, Guid instanceId)
         {
-            AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONNAME_KEY] = applicationName;
             AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONINSTANCEID_KEY] = instanceId.ToString();
+            AdditionalData[ApplicationAccessibilityReporterJob.APPLICATIONNAME_KEY] = applicationName;
         }
 
         public IJobDetail BuildJob()
@@ -40,6 +40,7 @@ namespace Integration.Applications
     {
         public const string APPLICATIONNAME_KEY = "ApplicationName";
         public const string APPLICATIONINSTANCEID_KEY = "ApplicationInstanceId";
+
         public Task Execute(IJobExecutionContext context)
         {
             var cache = new Cache(DatabaseType.ApplicationAccessibility);
