@@ -5,6 +5,7 @@
         System = 1,
         Telegram,
         DbCache,
-        ApplicationAccessibility
+        ApplicationAccessibility,
+        WebApp
     }
 }
