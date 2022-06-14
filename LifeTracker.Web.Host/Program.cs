@@ -1,6 +1,10 @@
+using Application;
 using Application.Services;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using LifeTracker.Web.Host;
 using Microsoft.OpenApi.Models;
+using Persistence.Sql;
 
 IConfigurationRoot _appConfiguration;
 
@@ -8,6 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 _appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
+{
+    builder.RegisterModule(new PersistenceModule(false));
+    builder.RegisterModule<DomainModule>();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 AuthConfigurer.Configure(builder.Services, _appConfiguration);
