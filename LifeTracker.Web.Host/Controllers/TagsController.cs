@@ -37,7 +37,7 @@ namespace LifeTracker.Web.Host.Controllers
         }
 
         [HttpGet]
-        public Tag Get([FromQuery] string text, [FromQuery] Guid userId)
+        public Tag GetByText([FromQuery] string text, [FromQuery] Guid userId)
         {
             return _service.Get(text, userId);
         }
