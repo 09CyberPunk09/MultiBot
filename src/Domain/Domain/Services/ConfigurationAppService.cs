@@ -12,7 +12,10 @@ namespace Application.Services
              .AddJsonFile("appSettings.json");
             _configuration = configurationBuilder.Build();
         }
-
+        public IConfigurationRoot GetConfigurationRoot()
+        {
+            return _configuration;
+        }
         public string Get(string key)
         {
             return _configuration[key];
