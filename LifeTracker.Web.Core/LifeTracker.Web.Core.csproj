@@ -10,4 +10,8 @@
     <Folder Include="Models\ViewModels\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\Common\Common.csproj" />
+  </ItemGroup>
+
 </Project>
