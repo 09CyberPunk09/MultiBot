@@ -2,6 +2,7 @@ using Application;
 using Application.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using LifeTracker.Web.Core.Meiddlewares;
 using LifeTracker.Web.Host;
 using Microsoft.OpenApi.Models;
 using Persistence.Sql;
@@ -59,6 +60,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
 
 app.MapControllers();
 
