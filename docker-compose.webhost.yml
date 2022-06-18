@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  lifetracker-api:
+    #restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./LifeTracker.Web.Host/Dockerfile
+    ports:
+      - 5005:5005
+      - 80:80
+  
