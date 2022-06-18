@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\Common\Common.csproj" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
   </ItemGroup>
 
