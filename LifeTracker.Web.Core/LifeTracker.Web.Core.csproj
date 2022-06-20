@@ -13,6 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\src\Common\Common.csproj" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="NLog" Version="4.7.15" />
   </ItemGroup>
 
 </Project>
