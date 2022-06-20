@@ -49,5 +49,24 @@ namespace Application.Services
             _tagService.InitializeBaseComponentsPerUser(userId);
         }
 
+        public void SignUp(string name, string email, string password)
+        {
+            var existingUser = _userRepository.FirstOrDefault(x => x.EmailAddress == email);
+
+            if (existingUser != null)
+                throw new Exception("User with this email address already exists!");
+            else
+            {
+                var newUser = new User()
+                {
+                    EmailAddress = email,
+                    Password = password,
+                    Name = name,
+                    TelegramLoggedIn = false
+                };
+
+                _userRepository.Add(newUser);
+            }
+        }
     }
 }

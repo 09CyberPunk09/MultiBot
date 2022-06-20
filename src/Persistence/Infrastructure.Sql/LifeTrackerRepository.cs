@@ -40,6 +40,7 @@ namespace Persistence.Sql
             _context.Update(entity);
             _context.SaveChanges();
         }
+
         public virtual IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();
@@ -106,7 +107,7 @@ namespace Persistence.Sql
             return _context.Set<TEntity>().Count();
         }
 
-        public TEntity FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().FirstOrDefault(predicate);
         }

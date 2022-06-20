@@ -18,6 +18,6 @@ namespace Persistence.Common.DataAccess.Interfaces
         IEnumerable<TEntity> UpdateRange(IEnumerable<TEntity> entities);
         IQueryable<TEntity> GetQuery();
         long Count();
-        TEntity FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+        TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
     }
 }
