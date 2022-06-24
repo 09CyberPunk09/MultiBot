@@ -1,6 +1,6 @@
 ﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Sql;
+using Persistence.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,7 @@
 ﻿using Application;
 using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using Persistence.Sql;
+using Persistence.Master;
 using System.Linq;
 
 namespace Infrastructure.TelegramBot

@@ -1,6 +1,6 @@
 ﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Sql;
+using Persistence.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +18,6 @@ namespace Application.Services
             _noteRepository = noteRepository;
         }
 
-        public void InitializeBaseComponentsPerUser(Guid userId)
-        {
-            Create(Tag.FirstPriorityToDoTagName, userId);
-            Create(Tag.SecondPriorityToDoTagName, userId);
-            Create(Tag.DoneToDoTagName, userId);
-        }
-
         public Tag Update(Tag tag)
         {
             return _tagRepository.Update(tag);
@@ -35,7 +28,8 @@ namespace Application.Services
             return _tagRepository.Add(new()
             {
                 Name = name,
-                UserId = userId
+                UserId = userId,
+                IsSystem = true
             });
         }
 

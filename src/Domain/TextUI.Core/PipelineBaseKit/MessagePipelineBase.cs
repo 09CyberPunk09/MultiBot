@@ -1,5 +1,7 @@
 ﻿using Autofac;
-using Persistence.Sql;
+using Newtonsoft.Json;
+using Persistence.Master;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -8,6 +10,7 @@ using SystemUser = Common.Entites.User;
 
 namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
+    //TODO: Divide inner class logic into different classes
     public class MessagePipelineBase : Pipeline, IMessagePipeline
     {
         //TODO: https://autofac.readthedocs.io/en/latest/register/prop-method-injection.html
@@ -30,16 +33,31 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         public ContentResult Execute(MessageContext ctx, string stageName = null)
         {
+            //Set message context which is accessigble in the whole class
             MessageContext = ctx;
-            Stage stage;
-            if (stageName != null)
+
+            //Find and set a stage which needs to be executed
+            Stage stage = stageName != null ?
+                Stages.Stages.FirstOrDefault(x => x.MethodName == stageName) :
+                 Stages.Stages.FirstOrDefault();
+
+            //If the pipeline stage is still not found, we rise an exception
+            //TODO: Move anywhere from here
+            if(stage == null)
             {
-                stage = Stages.Stages.FirstOrDefault(x => x.MethodName == stageName);
+                //cache key - CurrentMessagePipelineCommand
+                //TODO: Put consts to one place to use them from different layers
+                var currentMessagePipelineCommand = cache.GetValueForChat<string>("CurrentMessagePipelineCommand", ctx.Recipient);
+                var currntPipelineStageName = cache.GetValueForChat<string>("CurrntPipelineStageName", ctx.Recipient);
+                var helpData = JsonConvert.SerializeObject(new
+                {
+                    currentMessagePipelineCommand,
+                    currntPipelineStageName
+                },Formatting.Indented);
+                throw new Exception($"Could not find any stage to execute.Additional data: {helpData}");
             }
-            else
-            {
-                stage = Stages.Stages.FirstOrDefault();
-            }
+
+
 
             ctx.CurrentStage = stage;
 

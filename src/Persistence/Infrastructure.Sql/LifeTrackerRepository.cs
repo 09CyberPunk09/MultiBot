@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Persistence.Sql
+namespace Persistence.Master
 {
     public class LifeTrackerRepository<TEntity> : IRepository<TEntity> where TEntity : AuditableEntity
     {
@@ -33,13 +33,17 @@ namespace Persistence.Sql
             return result;
         }
 
-        public virtual void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity) => RemoveAction(entity);
+        public virtual void Remove(Guid id) => RemoveAction(_context.Set<TEntity>().Find(id));
+
+        private void RemoveAction(TEntity entity)
         {
             entity.LastModificationDate = DateTime.Now;
             entity.IsDeleted = true;
             _context.Update(entity);
             _context.SaveChanges();
         }
+
         public virtual IEnumerable<TEntity> GetAll()
         {
             return _context.Set<TEntity>().ToList();

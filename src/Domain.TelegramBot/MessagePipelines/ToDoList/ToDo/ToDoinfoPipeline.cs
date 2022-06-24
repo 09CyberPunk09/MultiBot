@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.TelegramBot.MessagePipelines.ToDoList.Categories;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -17,6 +18,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
                     Menu = new(new KeyboardButton[][]
                 {
                     MenuButtonRow(GetRoute<CreateToDoItempipeline>().AlternativeRoute),
+                    MenuButtonRow(GetRoute<CategoriesInfoPipeline>().AlternativeRoute),
                     MenuButtonRow(GetRoute<GetToDoListPipeline>().AlternativeRoute)
                 })
                 };

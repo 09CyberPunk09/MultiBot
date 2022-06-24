@@ -3,7 +3,7 @@ using Autofac;
 using Common;
 using Common.Entites;
 using NLog;
-using Persistence.Sql;
+using Persistence.Master;
 using Quartz;
 using System.Collections.Generic;
 using System.Linq;

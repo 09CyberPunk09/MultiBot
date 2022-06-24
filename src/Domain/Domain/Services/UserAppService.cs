@@ -1,5 +1,5 @@
 ﻿using Common.Entites;
-using Persistence.Sql;
+using Persistence.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace Application.Services
 
         public void InitializeUserEntities(Guid userId)
         {
-            _tagService.InitializeBaseComponentsPerUser(userId);
+            //TODO: Add here some initialization code in future
         }
 
     }

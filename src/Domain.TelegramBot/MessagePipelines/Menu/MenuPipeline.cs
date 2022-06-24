@@ -31,7 +31,6 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Menu
                 new KeyboardButton[]
                 {
                     new KeyboardButton(GetAlternativeRoute<QuestionInfoPipeline>()),
-                    new KeyboardButton(GetAlternativeRoute<TagInfoPipeline>()),
                     new KeyboardButton(GetAlternativeRoute<NoteInfoPipeline>())
                 },
                 new KeyboardButton[]

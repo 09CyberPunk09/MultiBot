@@ -4,7 +4,7 @@ using Persistence.Common.DataAccess;
 using System;
 using System.Linq;
 
-namespace Persistence.Sql.Repositories
+namespace Persistence.Master.Repositories
 {
     public class TagRepository : LifeTrackerRepository<Tag>
     {

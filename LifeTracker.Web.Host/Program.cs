@@ -5,7 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using LifeTracker.Web.Core.Meiddlewares;
 using LifeTracker.Web.Host;
 using Microsoft.OpenApi.Models;
-using Persistence.Sql;
+using Persistence.Master;
 
 IConfigurationRoot _appConfiguration;
 

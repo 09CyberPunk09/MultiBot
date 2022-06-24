@@ -18,12 +18,10 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
     {
         public const string SELECTEDITEMID_CACHEKEY = "Selected Item Number To Delete";
 
-        private readonly NoteAppService _noteService;
-        private readonly TagAppService _tagService;
+        private readonly ToDoAppService _todoService;
         public RemoveToDoItemPipeline(ILifetimeScope scope) : base(scope)
         {
-            _noteService = scope.Resolve<NoteAppService>();
-            _tagService = scope.Resolve<TagAppService>();
+            _todoService = scope.Resolve<ToDoAppService>();
 
             RegisterStage(AskAboutToDoItem);
             RegisterStage(AskAboutAction);
@@ -35,7 +33,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
 
         public ContentResult AskAboutAction(MessageContext ctx)
         {
-            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.NOTESORDER_CACHEKEY,true);
+            var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.TODOSORDER_CACHEKEY);
             if (!int.TryParse(ctx.Message.Text, out var t) ||
                 !numbers.TryGetValue(t, out var noteId))
             {
@@ -60,22 +58,17 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
                 return Text("Please, select a value from the menu");
             }
 
-            var noteId = GetCachedValue<Guid>(SELECTEDITEMID_CACHEKEY,true);
-            var note = _noteService.Get(noteId);
-            var user = GetCurrentUser();
-            var doneTag = _tagService.Get(Tag.DoneToDoTagName, user.Id);
-
-            string noteText = note.Text;
-
-            _noteService.RemovePhysically(note);
-
+            var todoItemId = GetCachedValue<Guid>(SELECTEDITEMID_CACHEKEY,true);
+            var todoItem = _todoService.GetToDoItem(todoItemId);
             if (ch == Choice.MarkAsDone)
             {
-                var newNote = _noteService.Create(noteText, user.Id);
-                doneTag.Notes.Add(newNote);
-                _tagService.Update(doneTag);
+                todoItem.IsDone = true;
+                _todoService.UpdateToDoItem(todoItem);
             }
-
+            else
+            {
+                _todoService.DeleteToDoItem(todoItem);
+            }
             return Text("✅ Done");
         }
     }

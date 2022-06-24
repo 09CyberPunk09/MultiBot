@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence.Common.DataAccess;
 
-namespace Persistence.Sql
+namespace Persistence.Master
 {
     public class LifeTrackerDbContext : RelationalSchemaContext
     {

@@ -3,7 +3,7 @@ using Common;
 using NLog;
 using Persistence.Caching.SqlLite;
 using Persistence.Common.DataAccess;
-using Persistence.Sql;
+using Persistence.Master;
 using Quartz;
 using System.Collections.Generic;
 using System.Threading.Tasks;

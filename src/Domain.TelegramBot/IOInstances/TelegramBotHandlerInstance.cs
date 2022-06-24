@@ -2,7 +2,7 @@
 using Autofac;
 using NLog;
 using Persistence.Caching.Redis;
-using Persistence.Sql;
+using Persistence.Master;
 using System;
 
 namespace Infrastructure.TelegramBot.IOInstances

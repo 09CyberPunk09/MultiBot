@@ -10,7 +10,7 @@ namespace Persistence.Caching.SqlLite
             _ = builder.RegisterType<SqlLiteDbContext>()
             .InstancePerLifetimeScope();
 
-            _ = RelationalSchemaContext.RegisterRepositories(builder, typeof(SqlLiteRepositoryBase<>));
+            RelationalSchemaContext.RegisterRepositories(builder, typeof(SqlLiteRepositoryBase<>));
 
             base.Load(builder);
         }

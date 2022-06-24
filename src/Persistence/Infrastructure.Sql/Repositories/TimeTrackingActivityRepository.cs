@@ -1,7 +1,7 @@
 ﻿using Common.Entites;
 using Persistence.Common.DataAccess;
 
-namespace Persistence.Sql.Repositories
+namespace Persistence.Master.Repositories
 {
     public class TimeTrackingActivityRepository : LifeTrackerRepository<TimeTrackingActivity>
     {

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Infrastructure.TelegramBot.MessagePipelines.Tags;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -15,7 +16,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
                 Menu = new(new KeyboardButton[][]
                 {
                     MenuButtonRow(GetAlternativeRoute<AddNotePipeline>()),
-                    MenuButtonRow(GetAlternativeRoute<GetNotesPipeline>())
+                    MenuButtonRow(GetAlternativeRoute<GetNotesPipeline>()),
+                    MenuButtonRow(GetAlternativeRoute<TagInfoPipeline>()),
                 })
             });
         }

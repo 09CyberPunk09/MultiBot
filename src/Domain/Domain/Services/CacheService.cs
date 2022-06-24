@@ -2,7 +2,7 @@
 using Common.Infrastructure;
 using Persistence.Caching.Redis;
 using Persistence.Caching.Redis.TelegramCaching;
-using Persistence.Sql;
+using Persistence.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;

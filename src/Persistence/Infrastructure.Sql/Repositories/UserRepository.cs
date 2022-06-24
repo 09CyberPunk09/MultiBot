@@ -2,7 +2,7 @@
 using Persistence.Common.DataAccess;
 using System.Collections.Generic;
 
-namespace Persistence.Sql.Repositories
+namespace Persistence.Master.Repositories
 {
     public class UserRepositry : LifeTrackerRepository<User>
     {

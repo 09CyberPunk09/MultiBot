@@ -2,11 +2,11 @@
 using Common.Entites;
 using Persistence.Common.DataAccess;
 using Persistence.Common.DataAccess.Interfaces;
-using Persistence.Sql.Repositories;
+using Persistence.Master.Repositories;
 
-namespace Persistence.Sql
+namespace Persistence.Master
 {
-    public class PersistenceModule : Autofac.Module
+    public class PersistenceModule : Module
     {
         public bool RegisterRepositorieaAsBaseTypes { get; }
 
@@ -18,9 +18,18 @@ namespace Persistence.Sql
         {
             _ = builder.RegisterType<LifeTrackerDbContext>().As<RelationalSchemaContext>().InstancePerLifetimeScope();
 
+            //TODO: REVIEW AND REFACTOR
             //DO NOT FORGET TO ADD TWO VERSIONS OF COMPONENT REGISTRATION WHEN YOU ADD A REPOSITORY
             if (RegisterRepositorieaAsBaseTypes)
             {
+                _ = builder.RegisterType<ToDoItemRepository>()
+                    .As<IRepository<ToDoItem>>()
+                    .InstancePerLifetimeScope();
+
+                _ = builder.RegisterType<ToDoCategoryRepository>()
+                    .As<IRepository<ToDoCategory>>()
+                    .InstancePerLifetimeScope();
+
 
                 _ = builder.RegisterType<NoteRepositry>()
                     .As<IRepository<Note>>()
@@ -61,9 +70,19 @@ namespace Persistence.Sql
             }
             else
             {
+                _ = builder.RegisterType<ToDoItemRepository>()
+                    .As<LifeTrackerRepository<ToDoItem>>()
+                    .InstancePerLifetimeScope();
+
+                _ = builder.RegisterType<ToDoCategoryRepository>()
+                    .As<LifeTrackerRepository<ToDoCategory>>()
+                    .InstancePerLifetimeScope();
+
+
                 _ = builder.RegisterType<NoteRepositry>()
                       .As<LifeTrackerRepository<Note>>()
                       .InstancePerLifetimeScope();
+
                 _ = builder.RegisterType<ReminderRepository>()
                     .As<LifeTrackerRepository<Reminder>>()
                     .InstancePerLifetimeScope();
@@ -95,7 +114,6 @@ namespace Persistence.Sql
                 _ = builder.RegisterType<AnswerRepository>()
                     .As<LifeTrackerRepository<Answer>>()
                     .InstancePerLifetimeScope();
-
             }
 
             base.Load(builder);

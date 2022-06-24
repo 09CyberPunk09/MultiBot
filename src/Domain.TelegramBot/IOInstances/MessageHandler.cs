@@ -16,7 +16,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         #region Cache Keys
 
         private const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
-        private const string CURRENT_MESSAGEPIPELINE_COMMAND = "CurrentMessagePipelineCommand";
+        public const string CURRENT_MESSAGEPIPELINE_COMMAND = "CurrentMessagePipelineCommand";
 
         #endregion Cache Keys
 
@@ -50,7 +50,7 @@ namespace Infrastructure.TelegramBot.IOInstances
 
         static MessageHandler()
         {
-            pipleineCommands = GetPipelineTypes().ToDictionary(x => (x.GetCustomAttribute<RouteAttribute>() as RouteAttribute));
+            pipleineCommands = GetPipelineTypes().ToDictionary(x => x.GetCustomAttribute<RouteAttribute>());
         }
 
         public void ConsumeMessage(Message message)
@@ -74,59 +74,67 @@ namespace Infrastructure.TelegramBot.IOInstances
                 string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
                 bool executeNextImmediately = false;
 
-                var routeName = (pipeline.GetType().GetCustomAttribute<RouteAttribute>() as RouteAttribute).Route;
-                logger.Info($"{routeName}.{current}: Message {ctx.Message} started being processed");
-                var result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
-                logger.Info($"{routeName}.{current}: Message {ctx.Message} finished being processed");
-
-                if (result != null)
+                var routeName = pipeline.GetType().GetCustomAttribute<RouteAttribute>().Route;
+                ContentResult result;
+                try
                 {
-                    if (ctx.PipelineStageSucceeded)
-                    {
-                        executeNextImmediately = result.InvokeNextImmediately;
+                    result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
+                    logger.Info($"{routeName}.{current}: Message {ctx.Message} processed");
 
-                        string nextName = ctx.CurrentStage.NextStage?.MethodName;
-                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
+                    if (result != null)
+                    {
+                        if (ctx.PipelineStageSucceeded)
+                        {
+                            executeNextImmediately = result.InvokeNextImmediately;
+
+                            string nextName = ctx.CurrentStage.NextStage?.MethodName;
+                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
+                        }
+
+                        string commandToSet = null;
+                        if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
+                        {
+                            commandToSet = GetRoute(pipeline);
+                        }
+
+                        if (pipeline.IsDone)//if it is true - we make null values in cache
+                        {
+                            PurgePipelineInfo(ctx.Recipient);
+                        }
+                        else//else - we leave the command name as it is
+                        {
+                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
+                        }
+
+                        result.RecipientChatId = ctx.Recipient;
+                        _sender.SendMessage(result);
+
+                        //if a pipeline signed that a next method should be executed immediately,we invoke again this method
+                        if (executeNextImmediately)
+                        {
+                            ExecutePieplineStage(pipeline, ctx);
+                        }
                     }
-
-                    string commandToSet = null;
-                    if (!ctx.PipelineStageSucceeded || ctx.MoveNext)
+                    else
                     {
-                        commandToSet = (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route;
-                    }
-
-                    if (pipeline.IsDone)//if it is true - we make null values in cache
-                    {
-                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, ctx.Recipient);
-                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, ctx.Recipient);
-                    }
-                    else//else - we leave the command name as it is
-                    {
-                        _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
-                    }
-
-                    result.RecipientChatId = ctx.Recipient;
-                    _sender.SendMessage(result);
-
-                    //if a pipeline signed that a next method should be executed immediately,we invoke again this method
-                    if (executeNextImmediately)
-                    {
-                        ExecutePieplineStage(pipeline, ctx);
+                        _sender.SendMessage(new TextResult("Error! no message pipeline found", ctx.Recipient));
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _sender.SendMessage(new TextResult("Error! no message pipeline found", ctx.Recipient));
+                    HandleException(ex,ctx);
+                    throw;
                 }
             }
             else
             {
-                _sender.SendMessage(new TextResult("An error occured while handling your message", ctx.Recipient));
+                _sender.SendMessage(new TextResult("No corresponding pipeline found", ctx.Recipient));
             }
         }
 
         private MessagePipelineBase MatchPipeline(string text, MessageContext ctx)
         {
+            //TODO: BUG: Example: /create_todo and /create_todo_category conflict
             var matchedPipelineType = pipleineCommands
                 .ToList()
                 .FirstOrDefault(x => text.Contains(x.Key.Route) || (x.Key.AlternativeRoute != null && text.Contains(x.Key.AlternativeRoute))).Value;
@@ -145,5 +153,27 @@ namespace Infrastructure.TelegramBot.IOInstances
             var basePipelineType = typeof(MessagePipelineBase);
             return typeof(StartPipeline).Assembly.GetTypes().Where(t => t.IsSubclassOf(basePipelineType)).ToList();
         }
+
+
+        #region service methods
+        private void HandleException(Exception ex, MessageContext ctx)
+        {
+            logger.Error(ex);
+            //TODO: In future,move any message sending logics to pipelines
+            _sender.SendMessage(new TextResult($"An exception occured while processing your message. Exception: {ex.Message}. {Environment.NewLine} Stack Trace: {ex.StackTrace}"));
+            PurgePipelineInfo(ctx.Recipient);
+            _sender.SendMessage(new TextResult("Rolled back last command. Please, try again."));
+        }
+
+        private void PurgePipelineInfo(long recipientId)
+        {
+            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, null, recipientId);
+            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, null, recipientId);
+        }
+
+        private string GetRoute(MessagePipelineBase pipeline)
+            => (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route;
+
+        #endregion
     }
 }

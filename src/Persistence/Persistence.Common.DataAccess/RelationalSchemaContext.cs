@@ -17,8 +17,10 @@ namespace Persistence.Common.DataAccess
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<TimeTrackingActivity> TimeTrackingActivities { get; set; }
         public virtual DbSet<TimeTrackingEntry> TimeTrackingEntries { get; set; }
+        public virtual DbSet<ToDoCategory> ToDoCategories { get; set; }
+        public virtual DbSet<ToDoItem> ToDoItems { get; set; }
 
-        public static ContainerBuilder RegisterRepositories(ContainerBuilder builder, Type repositoryType)
+        public static void RegisterRepositories(ContainerBuilder builder, Type repositoryType)
         {
             var type = repositoryType;
             _ = builder.RegisterRepository<Note>(type);
@@ -30,7 +32,8 @@ namespace Persistence.Common.DataAccess
             _ = builder.RegisterRepository<User>(type);
             _ = builder.RegisterRepository<Note>(type);
             _ = builder.RegisterRepository<TimeTrackingEntry>(type);
-            return builder;
+            _ = builder.RegisterRepository<ToDoCategory>(type);
+            _ = builder.RegisterRepository<ToDoItem>(type);
         }
     }
 }

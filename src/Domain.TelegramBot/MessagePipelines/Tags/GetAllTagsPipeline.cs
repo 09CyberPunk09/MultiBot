@@ -1,8 +1,7 @@
 ﻿using Application.Services;
 using Autofac;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Tags
@@ -17,7 +16,8 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
             _tagService = tagService;
             RegisterStage((ctx) =>
             {
-                var tags = _tagService.GetAll(GetCurrentUser().Id);
+                var tags = _tagService.GetAll(GetCurrentUser().Id)
+                                      .Where(t => !t.IsSystem);
 
                 var b = new StringBuilder();
                 b.AppendLine("All your tags:");

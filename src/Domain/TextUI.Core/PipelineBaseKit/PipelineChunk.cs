@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Persistence.Sql;
+using Persistence.Master;
 using System.Linq;
 using SystemUser = Common.Entites.User;
 

@@ -13,6 +13,7 @@ namespace SimpleScheduler
         private readonly IScheduler _scheduler;
         public SimpleJobExecutor()
         {
+            Quartz.Logging.LogProvider.IsDisabled = true;
             _scheduler = SchedulerBuilder.Create().Build().GetScheduler().Result;
         }
 
