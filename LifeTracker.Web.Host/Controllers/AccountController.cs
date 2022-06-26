@@ -1,5 +1,7 @@
 ﻿using Application.Services;
+using Autofac.Core;
 using LifeTracker.Web.Core.Models.IncomeModels.Account;
+using LifeTracker.Web.Core.Models.IncomeModels.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,10 +16,14 @@ namespace LifeTracker.Web.Host.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : ControllerBase
     {
-        public AccountController()
+        private readonly UserAppService _service;
+
+        public AccountController(UserAppService service)
         {
+            _service = service;
         }
-        private record Person(string Login, string Password,string Role);
+
+        private record Person(string Login, string Password, string Role);
 
         //TODO: Add real user getting instead of mock
         private List<Person> people = new List<Person>
@@ -106,6 +112,14 @@ namespace LifeTracker.Web.Host.Controllers
             }
 
             return null;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult SignUp(SignUpIncomeModel model)
+        {
+            _service.SignUp(model.Name, model.Password, model.Email);
+            return Ok();
         }
     }
 }

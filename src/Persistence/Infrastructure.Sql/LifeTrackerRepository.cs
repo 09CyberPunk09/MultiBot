@@ -110,7 +110,7 @@ namespace Persistence.Master
             return _context.Set<TEntity>().Count();
         }
 
-        public TEntity FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return _context.Set<TEntity>().FirstOrDefault(predicate);
         }

@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence.Master;
+using Persistence.Sql;
 
 #nullable disable
 
 namespace Persistence.Sql.Migrations
 {
     [DbContext(typeof(LifeTrackerDbContext))]
-    partial class SqlServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220618135958_UserEntityModified")]
+    partial class UserEntityModified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,9 +194,6 @@ namespace Persistence.Sql.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSystem")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationDate")
                         .HasColumnType("datetime2");
 
@@ -268,69 +267,6 @@ namespace Persistence.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TimeTrackingEntries");
-                });
-
-            modelBuilder.Entity("Common.Entites.ToDoCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ToDoCategories");
-                });
-
-            modelBuilder.Entity("Common.Entites.ToDoItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("Priority")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ToDoCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ToDoCategoryId");
-
-                    b.ToTable("ToDoItems");
                 });
 
             modelBuilder.Entity("Common.Entites.User", b =>
@@ -407,17 +343,6 @@ namespace Persistence.Sql.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Common.Entites.ToDoItem", b =>
-                {
-                    b.HasOne("Common.Entites.ToDoCategory", "ToDoCategory")
-                        .WithMany("ToDoItems")
-                        .HasForeignKey("ToDoCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ToDoCategory");
-                });
-
             modelBuilder.Entity("NoteTag", b =>
                 {
                     b.HasOne("Common.Entites.Note", null)
@@ -438,11 +363,6 @@ namespace Persistence.Sql.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("PredefinedAnswers");
-                });
-
-            modelBuilder.Entity("Common.Entites.ToDoCategory", b =>
-                {
-                    b.Navigation("ToDoItems");
                 });
 #pragma warning restore 612, 618
         }

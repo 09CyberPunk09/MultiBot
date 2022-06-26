@@ -36,7 +36,7 @@ namespace Persistence.Caching.SqlLite
             return _context.Set<T>().Count();
         }
 
-        public T FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        public T FirstOrDefault(Expression<Func<T, bool>> predicate)
         {
             return _context.Set<T>().FirstOrDefault(predicate);
         }
