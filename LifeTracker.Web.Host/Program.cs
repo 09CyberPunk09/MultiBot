@@ -51,7 +51,20 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.AddCors();
 var app = builder.Build();
+
+app.UseCors(builder => builder.WithOrigins(
+    "http://localhost:3000/",
+    "*",
+    "cloudiy.*",
+    "https://stellular-fairy-b304a4.netlify.app/",
+    "https://stellular-fairy-b304a4.netlify.app/*",
+    "https://stellular-fairy-b304a4.netlify.app")
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
