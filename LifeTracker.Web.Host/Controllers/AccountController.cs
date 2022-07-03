@@ -5,10 +5,8 @@ using LifeTracker.Web.Core.Models.IncomeModels.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace LifeTracker.Web.Host.Controllers
 {
@@ -88,23 +86,24 @@ namespace LifeTracker.Web.Host.Controllers
 
             var response = new
             {
-                access_token = encodedJwt,
-                username = identity.Name
+                access_token = encodedJwt
             };
 
             return Ok(response);
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private ClaimsIdentity GetIdentity(string emailAddress, string password)
         {
-            Person person = people.FirstOrDefault(x => x.Login == username && x.Password == password);
-            if (person != null)
+            var person = _service.GetUser(emailAddress);
+
+            if (person != null && person.Password.Equals(password))
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.EmailAddress),
+                    new Claim("UserId", person.Id.ToString())
                 };
+
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);

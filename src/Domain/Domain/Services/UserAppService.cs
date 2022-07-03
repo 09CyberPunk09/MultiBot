@@ -49,6 +49,11 @@ namespace Application.Services
             //TODO: Add here some initialization code in future
         }
 
+        public User GetUser(string emailAddress)
+        {
+            return _userRepository.GetQuery().FirstOrDefault(x => x.EmailAddress == emailAddress);
+        }
+
         public void SignUp(string name, string email, string password)
         {
             var existingUser = _userRepository.FirstOrDefault(x => x.EmailAddress == email);
