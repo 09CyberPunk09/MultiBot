@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BaseTypes\**" />
+    <Compile Remove="Jobs\**" />
+    <EmbeddedResource Remove="BaseTypes\**" />
+    <EmbeddedResource Remove="Jobs\**" />
+    <None Remove="BaseTypes\**" />
+    <None Remove="Jobs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
@@ -24,10 +33,6 @@
 	<ItemGroup>
 		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
 		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="BaseTypes\" />
-	  <Folder Include="Jobs\" />
 	</ItemGroup>
 
 </Project>

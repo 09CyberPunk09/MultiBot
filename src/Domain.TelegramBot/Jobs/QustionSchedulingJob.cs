@@ -2,6 +2,7 @@
 using Autofac;
 using Common;
 using Common.Entites;
+using Newtonsoft.Json;
 using NLog;
 using Persistence.Master;
 using Quartz;
@@ -66,7 +67,10 @@ namespace Infrastructure.TelegramBot.Jobs
                     var currentUser = users.FirstOrDefault(u => u.Id == q.UserId);
                     var dictionary = new Dictionary<string, string>
                     {
-                        { SendQustionJob.QuestionId, q.Id.ToString() },
+                        { SendQustionJob.Question, JsonConvert.SerializeObject(q,new JsonSerializerSettings()
+                        {
+                             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        }) },
                         { SendQustionJob.ChatId, currentUser.TelegramChatId.ToString() },
                         { JobsConsts.cron, q.CronExpression }
                     };

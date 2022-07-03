@@ -13,5 +13,6 @@ namespace Common.Entites
         public List<PredefinedAnswer> PredefinedAnswers { get; set; } = new();
         public List<Answer> Answers { get; set; } = new();
         public string CronExpression { get; set; }
+
     }
 }

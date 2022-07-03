@@ -15,7 +15,7 @@ namespace Infrastructure.TelegramBot.IOInstances
     {
         #region Cache Keys
 
-        private const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
+        public const string CURRENT_MESSAGEPIPELINE_STAGE_NAME = "CurrntPipelineStageName";
         public const string CURRENT_MESSAGEPIPELINE_COMMAND = "CurrentMessagePipelineCommand";
 
         #endregion Cache Keys

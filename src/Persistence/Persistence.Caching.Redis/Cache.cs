@@ -20,7 +20,6 @@ namespace Persistence.Caching.Redis
         private static int _port;
         private static string _host;
 
-
         static Cache()
         {
             var configuration = new ConfigurationBuilder()

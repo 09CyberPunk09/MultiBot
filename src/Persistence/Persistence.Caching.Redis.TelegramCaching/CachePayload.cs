@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Persistence.Caching.Redis
+namespace Persistence.Caching.Redis.TelegramCaching
 {
     [Serializable]
     public class CachePayload
