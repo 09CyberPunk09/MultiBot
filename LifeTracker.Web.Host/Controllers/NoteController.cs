@@ -3,13 +3,14 @@ using Common.Entites;
 using LifeTracker.Web.Core.Models.IncomeModels.Notes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Telegram.Bot.Types;
 
 namespace LifeTracker.Web.Host.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class NoteController : ControllerBase
+    public class NoteController : LifeTrackerController
     {
         private readonly NoteAppService _service;
 
@@ -33,7 +34,7 @@ namespace LifeTracker.Web.Host.Controllers
         [HttpPost]
         public Note Create([FromBody] CreateNoteIncomeModel model)
         {
-            return _service.Create(model.Text, model.UserId);
+            return _service.Create(model.Text, userId);
         }
 
         [HttpDelete]
@@ -43,7 +44,7 @@ namespace LifeTracker.Web.Host.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Note> GetByUserId([FromQuery] Guid userId)
+        public IEnumerable<Note> GetAllByUserId()
         {
             return _service.GetByUserId(userId);
         }
