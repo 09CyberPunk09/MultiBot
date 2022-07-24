@@ -28,10 +28,10 @@ namespace Infrastructure.TelegramBot.IOInstances
         private MessageReceiver _receiver;
 
         #endregion Injected members
+
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Dictionary<RouteAttribute, Type> pipleineCommands;
-        public IMessagePipeline DefaultPipeline { get; set; }
 
         public MessageHandler(ILifetimeScope lifetimeScope)
         {
@@ -122,7 +122,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                 }
                 catch (Exception ex)
                 {
-                    HandleException(ex,ctx);
+                    HandleException(ex, ctx);
                     throw;
                 }
             }
@@ -154,8 +154,8 @@ namespace Infrastructure.TelegramBot.IOInstances
             return typeof(StartPipeline).Assembly.GetTypes().Where(t => t.IsSubclassOf(basePipelineType)).ToList();
         }
 
-
         #region service methods
+
         private void HandleException(Exception ex, MessageContext ctx)
         {
             logger.Error(ex);
@@ -174,6 +174,6 @@ namespace Infrastructure.TelegramBot.IOInstances
         private string GetRoute(MessagePipelineBase pipeline)
             => (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route;
 
-        #endregion
+        #endregion service methods
     }
 }

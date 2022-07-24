@@ -20,8 +20,10 @@ namespace Application.Services
             return _noteRepository.Get(id);
         }
 
-        public Note Update(Note note)
+        public Note Update(Guid id, string text)
         {
+            var note = _noteRepository.Get(id);
+            note.Text = text;
             return _noteRepository.Update(note);
         }
 
@@ -32,6 +34,11 @@ namespace Application.Services
                 Text = text,
                 UserId = userId
             });
+        }
+
+        public void Remove(Guid id)
+        {
+            _noteRepository.Remove(id);
         }
 
         public void RemovePhysically(Note entity)

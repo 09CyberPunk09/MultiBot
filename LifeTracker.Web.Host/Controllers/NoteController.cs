@@ -3,7 +3,6 @@ using Common.Entites;
 using LifeTracker.Web.Core.Models.IncomeModels.Notes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Telegram.Bot.Types;
 
 namespace LifeTracker.Web.Host.Controllers
 {
@@ -26,9 +25,9 @@ namespace LifeTracker.Web.Host.Controllers
         }
 
         [HttpPut]
-        public Note Update([FromBody] Note note)
+        public Note Update([FromBody] UpdateNoteIncomeModel model)
         {
-            return _service.Update(note);
+            return _service.Update(model.Id, model.Text);
         }
 
         [HttpPost]
@@ -37,10 +36,10 @@ namespace LifeTracker.Web.Host.Controllers
             return _service.Create(model.Text, userId);
         }
 
-        [HttpDelete]
-        public void RemovePhysically(Note entity)
+        [HttpDelete("{id}")]
+        public void Remove(Guid id)
         {
-            _service.RemovePhysically(entity);
+            _service.Remove(id);
         }
 
         [HttpGet]
