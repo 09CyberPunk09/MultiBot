@@ -13,7 +13,6 @@
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
     <PackageReference Include="Quartz" Version="3.4.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Kernel;
 using NLog;
-using System;
 
 namespace Infrastructure.Queuing
 {
@@ -9,18 +8,12 @@ namespace Infrastructure.Queuing
         public static Logger _logger = LogManager.GetCurrentClassLogger();
         public static QueuePublisher CreatePublisher(string queueName)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appSettings.json").Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
 
-            var hostKey = IsDebugMode ? "RabbitMQ:Host" : "RabbitMQ:ContainerHost";
-           // var hostKey = "RabbitMQ:Host";
-            _logger.Info($"Debug Mode: {IsDebugMode}. RabbitMQ host: {configuration[hostKey]}");
-            var hostName = configuration[hostKey];
-            var username = configuration["RabbitMQ:Username"];
-            var password = configuration["RabbitMQ:Password"];
-            var port = configuration["RabbitMQ:Port"];
+            var hostName = configuration["Redis:Default:HostName"];
+            var port = int.Parse(configuration["Redis:Default:Port"]);
 
-            return new(hostName, queueName, username, password,Int32.Parse(port));
+            return new(hostName ,port, queueName);
         }
         public static bool IsDebugMode
         {
@@ -35,19 +28,12 @@ namespace Infrastructure.Queuing
         }
         public static QueueListener<TQueryMessageType> CreateListener<TQueryMessageType>(string queueName)
         {
-            var configuration = new ConfigurationBuilder()
-              .AddJsonFile("appSettings.json").Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
 
-             var hostKey = IsDebugMode ? "RabbitMQ:Host" : "RabbitMQ:ContainerHost";
-           // var hostKey = "RabbitMQ:Host";
-            _logger.Info($"Debug Mode: {IsDebugMode}. RabbitMQ host: {configuration[hostKey]}");
+            var hostName = configuration["Redis:Default:HostName"];
+            var port = int.Parse(configuration["Redis:Default:Port"]);
 
-            var hostName = configuration[hostKey];
-            var username = configuration["RabbitMQ:Username"];
-            var password = configuration["RabbitMQ:Password"];
-            var port = configuration["RabbitMQ:Port"];
-
-            return new(hostName, queueName, username, password,Int32.Parse(port));
+            return new(hostName, port, queueName);
         }
     }
 }

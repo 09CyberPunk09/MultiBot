@@ -1,52 +1,22 @@
 ﻿using Newtonsoft.Json;
-using RabbitMQ.Client;
-using System.Text;
+using ServiceStack.Redis;
 
 namespace Infrastructure.Queuing
 {
     public class QueuePublisher
     {
-        private readonly string _hostName;
+        private readonly RedisClient _client;
         private readonly string _queueName;
-        private readonly string _username;
-        private readonly string _password;
-        private readonly int _port;
-
-        public QueuePublisher(string hostName, string queueName, string username, string password,int port)
+        public QueuePublisher(string hostName, int port, string queueName)
         {
-            _hostName = hostName;
+            _client = new(hostName, port);
             _queueName = queueName;
-            _username = username;
-            _password = password;
-            _port = port;
         }
 
         public void Publish(object objectToSend)
         {
-            var factory = new ConnectionFactory()
-            {
-                HostName = _hostName,
-                UserName = _username,
-                Password = _password,
-                Port = _port
-            };
-            var connection = factory.CreateConnection();
-            var channel = connection.CreateModel();
-            {
-                channel.QueueDeclare(queue: _queueName,
-                                     durable: false,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-
-                string objectJson = JsonConvert.SerializeObject(objectToSend);
-                var body = Encoding.UTF8.GetBytes(objectJson);
-
-                channel.BasicPublish(exchange: "",
-                                     routingKey: _queueName,
-                                     basicProperties: null,
-                                     body: body);
-            }
+            var message = JsonConvert.SerializeObject(objectToSend);
+            _client.PublishMessage(_queueName, message);
         }
     }
 }
