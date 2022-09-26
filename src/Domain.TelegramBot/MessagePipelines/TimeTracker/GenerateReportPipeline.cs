@@ -45,7 +45,7 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker
                 a++;
             });
 
-            SetCachedValue(ACTIVITIES_CACHEKEY, activitiesDict, ctx.Recipient);
+            SetCachedValue(ACTIVITIES_CACHEKEY, activitiesDict);
 
             return new()
             {

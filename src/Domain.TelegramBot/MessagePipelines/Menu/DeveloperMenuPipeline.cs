@@ -20,7 +20,10 @@ namespace Domain.TelegramBot.MessagePipelines.Menu
                     new KeyboardButton(GetAlternativeRoute<GetApplicationsPipleine>()),
                 }
                 };
-                var rkm = new ReplyKeyboardMarkup(t);
+                var rkm = new ReplyKeyboardMarkup(t)
+                {
+                    ResizeKeyboard = true
+                };
 
                 return new()
                 {

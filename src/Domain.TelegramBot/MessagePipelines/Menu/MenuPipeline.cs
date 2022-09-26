@@ -40,11 +40,13 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Menu
                     new KeyboardButton(GetAlternativeRoute<DeveloperMenuPipeline>())
                 }
                 };
-                var rkm = new ReplyKeyboardMarkup(t);
+                var rkm = new ReplyKeyboardMarkup(t)
+                {
+                    ResizeKeyboard = true
+                };
 
                 return new()
                 {
-                    Text = "Menu:",
                     Menu = rkm
                 };
             });

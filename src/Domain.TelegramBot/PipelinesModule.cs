@@ -1,5 +1,6 @@
 ﻿using Application;
 using Autofac;
+using Domain.TelegramBot.IOInstances;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using Persistence.Master;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace Infrastructure.TelegramBot
 
             _ = builder.RegisterModule(new PersistenceModule(false));
             _ = builder.RegisterModule<DomainModule>();
+            _ = builder.RegisterType<MiddlewareHandler>().SingleInstance();
 
             base.Load(builder);
         }

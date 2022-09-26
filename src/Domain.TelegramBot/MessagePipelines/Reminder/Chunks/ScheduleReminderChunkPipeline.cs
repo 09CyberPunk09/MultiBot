@@ -17,13 +17,13 @@ namespace Domain.TelegramBot.MessagePipelines.Scheduling.Chunks
             _service = scope.Resolve<ReminderAppService>();
             RegisterStage(ctx =>
             {
-                string text = GetCachedValue<string>(REMINDERTEXT_CACHEKEY, ctx.Recipient);
+                string text = GetCachedValue<string>(REMINDERTEXT_CACHEKEY, ctx.RecipientChatId);
                 var res = _service.Create(new()
                 {
                     Name = text
                 }, GetCurrentUser(ctx).Id);
 
-                SetCachedValue(REMINDERID_CACHEKEY, res.Id, ctx.Recipient);
+                SetCachedValue(REMINDERID_CACHEKEY, res.Id, ctx.RecipientChatId);
 
                 return new()
                 {

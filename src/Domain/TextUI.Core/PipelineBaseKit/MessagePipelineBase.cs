@@ -47,8 +47,8 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             {
                 //cache key - CurrentMessagePipelineCommand
                 //TODO: Put consts to one place to use them from different layers
-                var currentMessagePipelineCommand = cache.GetValueForChat<string>("CurrentMessagePipelineCommand", ctx.Recipient);
-                var currntPipelineStageName = cache.GetValueForChat<string>("CurrntPipelineStageName", ctx.Recipient);
+                var currentMessagePipelineCommand = cache.GetValueForChat<string>("CurrentMessagePipelineCommand", ctx.RecipientChatId);
+                var currntPipelineStageName = cache.GetValueForChat<string>("CurrntPipelineStageName", ctx.RecipientChatId);
                 var helpData = JsonConvert.SerializeObject(new
                 {
                     currentMessagePipelineCommand,
@@ -78,15 +78,15 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             //todo: implement getting from cache
             using (var ctx = new LifeTrackerDbContext())
             {
-                return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.Recipient);
+                return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.RecipientChatId);
             }
         }
 
         protected T GetCachedValue<T>(string key, bool getThanDelete = false)
-            => cache.GetValueForChat<T>(key, MessageContext.Recipient, getThanDelete);
+            => cache.GetValueForChat<T>(key, MessageContext.RecipientChatId, getThanDelete);
 
         protected void SetCachedValue(string key, object value)
-            => cache.SetValueForChat(key, value, MessageContext.Recipient);
+            => cache.SetValueForChat(key, value, MessageContext.RecipientChatId);
 
     }
 

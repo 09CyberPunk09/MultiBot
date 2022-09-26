@@ -41,7 +41,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
                 a++;
             });
 
-            SetCachedValue(ACTIVITIES_CACHEKEY, activitiesDict, ctx.Recipient);
+            SetCachedValue(ACTIVITIES_CACHEKEY, activitiesDict);
 
             return new()
             {
@@ -85,7 +85,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             {
                 if (result)
                 {
-                    _service.RemoveActivity(Guid.Parse(GetCachedValue<string>(ID_CACHEKEY, ctx.Recipient)));
+                    _service.RemoveActivity(Guid.Parse(GetCachedValue<string>(ID_CACHEKEY)));
                     return Text("✅ Done");
                 }
             }

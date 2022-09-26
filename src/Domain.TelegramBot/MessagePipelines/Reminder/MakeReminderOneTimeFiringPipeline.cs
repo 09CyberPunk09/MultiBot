@@ -67,7 +67,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
         {
             if (DateTime.TryParse(ctx.Message.Text, out var date))
             {
-                SetCachedValue(DATE, date, ctx.Recipient);
+                SetCachedValue(DATE, date, ctx.RecipientChatId);
 
                 List<ushort> hours = new();
                 for (ushort i = 0; i < 24; i++)
@@ -93,7 +93,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
         {
             if (byte.TryParse(ctx.Message.Text, out byte bt) && bt < 24 && bt >= 0)
             {
-                SetCachedValue(HOUR, bt, ctx.Recipient);
+                SetCachedValue(HOUR, bt);
                 List<ushort> hours = new();
                 for (ushort i = 0; i < 60; i += 5)
                 {
@@ -120,10 +120,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             if (byte.TryParse(ctx.Message.Text, out var bt))
             {
                 var mins = bt;
-                var hours = GetCachedValue<byte>(HOUR, ctx.Recipient);
-                var date = GetCachedValue<DateTime>(DATE, ctx.Recipient);
+                var hours = GetCachedValue<byte>(HOUR,true);
+                var date = GetCachedValue<DateTime>(DATE,true);
                 var finalDate = date.AddMinutes(mins).AddHours(hours);
-                var reminderId = GetCachedValue<Guid>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY, ctx.Recipient);
+                var reminderId = GetCachedValue<Guid>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY,true);
                 var reminder = _service.Get(reminderId);
                 reminder.ReminderTime = finalDate;
                 _service.Update(reminder);

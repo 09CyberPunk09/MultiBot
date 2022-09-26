@@ -28,7 +28,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
 
         public ContentResult ScheduleDay(MessageContext ctx)
         {
-            cache.SetValueForChat(DAYS_CACHEKEY, new List<DayOfWeek>(), ctx.Recipient);
+            cache.SetValueForChat(DAYS_CACHEKEY, new List<DayOfWeek>(), ctx.RecipientChatId);
 
             return new()
             {
@@ -55,9 +55,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
             {
                 case MenuActiotype.Selection:
                     {
-                        var cachedDays = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.Recipient);
+                        var cachedDays = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.RecipientChatId);
                         cachedDays.Add(payload);
-                        cache.SetValueForChat(DAYS_CACHEKEY, cachedDays, ctx.Recipient);
+                        cache.SetValueForChat(DAYS_CACHEKEY, cachedDays, ctx.RecipientChatId);
 
                         var avaliableMenuItems = daysMenu.Where(x => !cachedDays.Any(y => y.DayOfWeek == x.DayOfWeek));
 
@@ -81,12 +81,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
                     }
                 case MenuActiotype.Undo:
                     {
-                        var cachedDays = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.Recipient);
+                        var cachedDays = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.RecipientChatId);
                         if (cachedDays.Count != 0)
                         {
                             cachedDays.Remove(cachedDays[^1]);
                         }
-                        cache.SetValueForChat(DAYS_CACHEKEY, cachedDays, ctx.Recipient);
+                        cache.SetValueForChat(DAYS_CACHEKEY, cachedDays, ctx.RecipientChatId);
                         var avaliableMenuItems = daysMenu.Where(x => !cachedDays.Any(y => y.DayOfWeek == x.DayOfWeek));
 
                         var buttons = BuildDaysMenu(avaliableMenuItems);
@@ -145,7 +145,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
                 return Text("Please,choose a correct time from the menu");
             }
 
-            cache.SetValueForChat(HOUR_CACHEKEY, ctx.Message.Text, ctx.Recipient);
+            cache.SetValueForChat(HOUR_CACHEKEY, ctx.Message.Text, ctx.RecipientChatId);
 
             List<int> mins = new();
             for (int i = 0; i < 60; i += 5)
@@ -175,9 +175,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
                 return Text("Incorrect minutes selected. Try again.");
             }
 
-            int hours = cache.GetValueForChat<int>(HOUR_CACHEKEY, ctx.Recipient);
+            int hours = GetCachedValue<int>(HOUR_CACHEKEY, ctx.RecipientChatId);
 
-            var days = cache.GetValueForChat<List<DayPayload>>(DAYS_CACHEKEY, ctx.Recipient);
+            var days = GetCachedValue<List<DayPayload>>(DAYS_CACHEKEY, ctx.RecipientChatId);
 
             var stringDays = days.Select(x => Enum.GetName(x.DayOfWeek.Value)).ToList();
 
@@ -186,7 +186,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Scheduling.Chunks
             //0 	    24      	12 	        ? 	            * 	SUN,MON,TUE 	*
             string cronExpression = $"0 {mins} {hours} ? * {string.Join(",", daysShortNames)} *";
 
-            cache.SetValueForChat(CRONEXPR_CACHEKEY, cronExpression, ctx.Recipient);
+            cache.SetValueForChat(CRONEXPR_CACHEKEY, cronExpression, ctx.RecipientChatId);
 
             return Text($"You scheduled the message on every {string.Join(", ", stringDays)} at {hours}:{mins}. Cron expression: { cronExpression }", true);
         }

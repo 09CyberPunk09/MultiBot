@@ -35,6 +35,9 @@ Or, use the menu below:",
                     MenuButtonRow(MenuButton(GetRoute<ActivityManagementPipeline>().AlternativeRoute)),
                     MenuButtonRow(MenuButton(GetRoute<GenerateReportPipeline>().AlternativeRoute))
                 })
+                {
+                    ResizeKeyboard = true
+                }
             };
         }
     }

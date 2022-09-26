@@ -26,10 +26,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines
 
         public ContentResult Start(MessageContext ctx)
         {
-            var user = _userService.GetByTgId(ctx.Recipient);
+            var user = _userService.GetByTgId(ctx.RecipientChatId);
             if (user == null)
             {
-                var newUuser = _userService.CreateFromTelegram("", ctx.Recipient);
+                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientChatId);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
 

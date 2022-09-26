@@ -46,7 +46,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
                 dictionary[counter] = item.Id;
             }
 
-            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, ctx.Recipient);
+            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, ctx.RecipientChatId);
 
             return new ContentResult()
             {

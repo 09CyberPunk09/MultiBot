@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Infrastructure.TelegramBot.MessagePipelines.Tags;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
+using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Infrastructure.TelegramBot.MessagePipelines.Notes
@@ -13,12 +14,18 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
             RegisterStage((ctx) => new()
             {
                 Text = "Menu of notes",
-                Menu = new(new KeyboardButton[][]
+                Menu = new(new List<List<KeyboardButton>>()
                 {
-                    MenuButtonRow(GetAlternativeRoute<AddNotePipeline>()),
-                    MenuButtonRow(GetAlternativeRoute<GetNotesPipeline>()),
-                    MenuButtonRow(GetAlternativeRoute<TagInfoPipeline>()),
+                    new()
+                    { 
+                        GetAlternativeRoute<AddNotePipeline>(),
+                        GetAlternativeRoute<GetNotesPipeline>()
+                    },
+                    new(){GetAlternativeRoute<TagInfoPipeline>() },
                 })
+                {
+                    ResizeKeyboard = true
+                }
             });
         }
 

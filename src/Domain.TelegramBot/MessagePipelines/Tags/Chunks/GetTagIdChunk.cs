@@ -39,7 +39,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks
                 dictionary[counter] = item.Id;
             }
 
-            SetCachedValue(TAGDICTIONARY_CACHEKEY, dictionary, ctx.Recipient);
+            SetCachedValue(TAGDICTIONARY_CACHEKEY, dictionary, ctx.RecipientChatId);
 
             return new ContentResult()
             {

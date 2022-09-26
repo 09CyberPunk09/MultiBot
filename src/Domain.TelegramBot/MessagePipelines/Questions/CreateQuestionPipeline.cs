@@ -54,7 +54,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
         public ContentResult AcceptQuestionTextAndConfirmAnswers(MessageContext ctx)
         {
             string questionText = ctx.Message.Text;
-            cache.SetValueForChat(questionTextKey, questionText, ctx.Recipient);
+            SetCachedValue(questionTextKey, questionText);
 
             List<CallbackButton> buttons = new()
             {
@@ -78,7 +78,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 {
                     case AnswerSelectionOptions.YesNo:
 
-                        cache.SetValueForChat(answersKey, new List<string>() { "Yes", "No" }, ctx.Recipient);
+                        SetCachedValue(answersKey, new List<string>() { "Yes", "No" });
                         return ConfirmResults(ctx);
 
                     case AnswerSelectionOptions.Confirm:
@@ -90,7 +90,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             }
             else
             {
-                cache.SetValueForChat(hasPredefinedAnswersKey, true, ctx.Recipient);
+                SetCachedValue(hasPredefinedAnswersKey, true);
                 return AddAnswer(ctx);
             }
         }
@@ -116,9 +116,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             else
             {
                 ForbidMovingNext();
-                var savedAnswers = cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new();
+                var savedAnswers = GetCachedValue<List<string>>(answersKey) ?? new();
                 savedAnswers.Add(input);
-                cache.SetValueForChat(answersKey, savedAnswers, ctx.Recipient);
+                SetCachedValue(answersKey, savedAnswers);
 
                 StringBuilder output = savedAnswers.ToListString("Your answers:");
 
@@ -138,14 +138,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 
         public ContentResult ConfirmResults(MessageContext ctx)
         {
-            var predefinedAnswers = cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient) ?? new List<string>();
+            var predefinedAnswers = GetCachedValue<List<string>>(answersKey) ?? new List<string>();
             var question = _questionAppService.Create(new Question()
             {
-                Text = cache.GetValueForChat<string>(questionTextKey, ctx.Recipient),
+                Text = GetCachedValue<string>(questionTextKey),
                 HasPredefinedAnswers = predefinedAnswers.Count > 0,
             }, GetCurrentUser().Id);
 
-            SetCachedValue(questionIdKey, question.Id, ctx.Recipient);
+            SetCachedValue(questionIdKey, question.Id);
 
             List<PredefinedAnswer> answers = predefinedAnswers
                                     .Select(t => new PredefinedAnswer()
@@ -156,14 +156,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                                     .ToList();
             _questionAppService.InsertAnswers(answers);
 
-            cache.SetValueForChat(answersKey, null, ctx.Recipient);
+            SetCachedValue(answersKey, null);
             return new EmptyResult();
         }
 
         public ContentResult SaveSchedule(MessageContext ctx)
         {
-            var cronExpr = cache.GetValueForChat<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY, ctx.Recipient);
-            var questionId = GetCachedValue<Guid>(questionIdKey, ctx.Recipient,true);
+            var cronExpr = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY);
+            var questionId = GetCachedValue<Guid>(questionIdKey, true);
             _questionAppService.AddSchedule(questionId, cronExpr);
             return Text("✅Done. Question saved!");
         }
@@ -171,7 +171,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
         public ContentResult CancelLast(MessageContext ctx)
         {
             ForbidMovingNext();
-            var savedAnswers = cache.GetValueForChat<List<string>>(answersKey, ctx.Recipient);
+            var savedAnswers = GetCachedValue<List<string>>(answersKey);
             savedAnswers.SmartRemove(savedAnswers[^1]);
             cache.Set(answersKey, savedAnswers);
 

@@ -46,6 +46,9 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
                     MenuButtonRow(GetRoute<CreateToDoCategoryPipeline>().AlternativeRoute),
                     MenuButtonRow(GetRoute<RemoveToDoCategoryPipeline>().AlternativeRoute),
                 })
+                    {
+                        ResizeKeyboard = true
+                    }
                 };
             });
         }

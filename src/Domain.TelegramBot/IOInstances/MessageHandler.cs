@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Domain.TelegramBot.IOInstances;
 using Infrastructure.TelegramBot.MessagePipelines;
 using Infrastructure.TelegramBot.ResponseTypes;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {
@@ -26,6 +28,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         private readonly ILifetimeScope _lifetimeScope;
         private readonly TelegramCache _cache;
         private MessageReceiver _receiver;
+        private readonly MiddlewareHandler _middlewareHandler;
 
         #endregion Injected members
 
@@ -39,6 +42,7 @@ namespace Infrastructure.TelegramBot.IOInstances
             _sender = new();
             _cache = new();
 
+            _middlewareHandler = lifetimeScope.Resolve<MiddlewareHandler>();
             StartReceiving();
         }
 
@@ -59,7 +63,7 @@ namespace Infrastructure.TelegramBot.IOInstances
             {
                 Message = message,
                 MoveNext = true,
-                Recipient = message.ChatId,
+                RecipientChatId = message.ChatId,
                 TimeStamp = DateTime.Now
             };
 
@@ -67,17 +71,24 @@ namespace Infrastructure.TelegramBot.IOInstances
             ExecutePieplineStage(pipeline, ctx);
         }
 
-        private void ExecutePieplineStage(MessagePipelineBase pipeline, MessageContext ctx)
+        private async Task ExecutePieplineStage(MessagePipelineBase pipeline, MessageContext ctx)
         {
             if (pipeline != null)
             {
-                string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.Recipient);
+                string current = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_STAGE_NAME, ctx.RecipientChatId);
                 bool executeNextImmediately = false;
 
                 var routeName = pipeline.GetType().GetCustomAttribute<RouteAttribute>().Route;
                 ContentResult result;
                 try
                 {
+                    //execute middlewares
+                    var middlewaresExecuted = await _middlewareHandler.ExecuteStages(ctx); ;
+                    if (!middlewaresExecuted)
+                        return;
+                    //    throw new Exception("There are not passed middlewares");//TODO: Add descriotion
+
+                    //execute stage
                     result = current == null ? pipeline.Execute(ctx) : pipeline.Execute(ctx, current);
                     logger.Info($"{routeName}.{current}: Message {ctx.Message} processed");
 
@@ -88,7 +99,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                             executeNextImmediately = result.InvokeNextImmediately;
 
                             string nextName = ctx.CurrentStage.NextStage?.MethodName;
-                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.Recipient);
+                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_STAGE_NAME, nextName, ctx.RecipientChatId);
                         }
 
                         string commandToSet = null;
@@ -99,14 +110,14 @@ namespace Infrastructure.TelegramBot.IOInstances
 
                         if (pipeline.IsDone)//if it is true - we make null values in cache
                         {
-                            PurgePipelineInfo(ctx.Recipient);
+                            PurgePipelineInfo(ctx.RecipientChatId);
                         }
                         else//else - we leave the command name as it is
                         {
-                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.Recipient);
+                            _cache.SetValueForChat(CURRENT_MESSAGEPIPELINE_COMMAND, commandToSet, ctx.RecipientChatId);
                         }
 
-                        result.RecipientChatId = ctx.Recipient;
+                        result.RecipientChatId = ctx.RecipientChatId;
                         _sender.SendMessage(result);
 
                         //if a pipeline signed that a next method should be executed immediately,we invoke again this method
@@ -117,7 +128,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                     }
                     else
                     {
-                        _sender.SendMessage(new TextResult("Error! no message pipeline found", ctx.Recipient));
+                        _sender.SendMessage(new TextResult("Error! no message pipeline found", ctx.RecipientChatId));
                     }
                 }
                 catch (Exception ex)
@@ -128,10 +139,9 @@ namespace Infrastructure.TelegramBot.IOInstances
             }
             else
             {
-                _sender.SendMessage(new TextResult("No corresponding pipeline found", ctx.Recipient));
+                _sender.SendMessage(new TextResult("No corresponding pipeline found", ctx.RecipientChatId));
             }
         }
-
         private MessagePipelineBase MatchPipeline(string text, MessageContext ctx)
         {
             //TODO: BUG: Example: /create_todo and /create_todo_category conflict
@@ -140,7 +150,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                 .FirstOrDefault(x => text.Contains(x.Key.Route) || (x.Key.AlternativeRoute != null && text.Contains(x.Key.AlternativeRoute))).Value;
             if (matchedPipelineType == null)
             {
-                var currentCommand = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_COMMAND, ctx.Recipient);
+                var currentCommand = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_COMMAND, ctx.RecipientChatId);
                 if (currentCommand != null)
                     matchedPipelineType = pipleineCommands.ToList().FirstOrDefault(x => (x.Key.AlternativeRoute != null && currentCommand.Contains(x.Key.AlternativeRoute)) || currentCommand.Contains(x.Key.Route)).Value;
             }
@@ -161,7 +171,7 @@ namespace Infrastructure.TelegramBot.IOInstances
             logger.Error(ex);
             //TODO: In future,move any message sending logics to pipelines
             _sender.SendMessage(new TextResult($"An exception occured while processing your message. Exception: {ex.Message}. {Environment.NewLine} Stack Trace: {ex.StackTrace}"));
-            PurgePipelineInfo(ctx.Recipient);
+            PurgePipelineInfo(ctx.RecipientChatId);
             _sender.SendMessage(new TextResult("Rolled back last command. Please, try again."));
         }
 

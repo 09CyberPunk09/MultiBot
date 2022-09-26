@@ -20,6 +20,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
                                   MenuButton(GetAlternativeRoute<GetTagDataPipeline>())),
                    // MenuButtonRow("List questions(not implemented already)")
                 })
+                {
+                    ResizeKeyboard = true
+                }
             });
         }
     }

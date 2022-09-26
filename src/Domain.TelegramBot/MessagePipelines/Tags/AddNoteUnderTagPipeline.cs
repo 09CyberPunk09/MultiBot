@@ -35,13 +35,13 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
 
             var id = dict[number];
 
-            cache.SetValueForChat("AddSetItemSetId", id, ctx.Recipient);
+            cache.SetValueForChat("AddSetItemSetId", id, ctx.RecipientChatId);
             return Text("Note text:");
         }
 
         private ContentResult SaveNote(MessageContext ctx)
         {
-            var tagId = cache.GetValueForChat<Guid>("AddSetItemSetId", ctx.Recipient);
+            var tagId = cache.GetValueForChat<Guid>("AddSetItemSetId", ctx.RecipientChatId);
             _tagService.CreateNoteUnderTag(tagId, ctx.Message.Text, GetCurrentUser().Id);
             return Text("✅ Note saved");
         }

@@ -58,6 +58,14 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             ConfigureBasicPostAction();
         }
 
+        public void EndPipeline()
+        {
+            MessageContext.PipelineStageSucceeded = true;
+            MessageContext.PipelineEnded = true;
+            MessageContext.MoveNext = false;
+            IsDone = true;
+        }
+
         public void ForbidMovingNext()
         {
             MessageContext.MoveNext = false;

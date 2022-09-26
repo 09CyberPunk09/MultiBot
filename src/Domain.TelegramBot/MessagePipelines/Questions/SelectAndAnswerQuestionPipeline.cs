@@ -53,7 +53,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 buttons = question.PredefinedAnswers.Select(q => new List<CallbackButton> { Button(q.Content, q.Content) }).ToList();
             }
 
-            cache.SetValueForChat(selectedQustionCacheKey, question.Id, ctx.Recipient);
+            cache.SetValueForChat(selectedQustionCacheKey, question.Id, ctx.RecipientChatId);
 
             return new ContentResult()
             {
@@ -64,7 +64,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
 
         public ContentResult Answer(MessageContext ctx)
         {
-            var question = _questionAppService.Get(cache.GetValueForChat<Guid>(selectedQustionCacheKey, ctx.Recipient));
+            var question = _questionAppService.Get(cache.GetValueForChat<Guid>(selectedQustionCacheKey, ctx.RecipientChatId));
             var answer = ctx.Message.Text;
             if (question.HasPredefinedAnswers)
             {
