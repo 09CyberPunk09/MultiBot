@@ -17,14 +17,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
             IsLooped = true;
         }
 
-        public ContentResult AskForTagName(MessageContext ctx)
+        public ContentResult AskForTagName()
         {
             return Text("Enter Tag name:");
         }
 
-        public ContentResult SaveTag(MessageContext ctx)
+        public ContentResult SaveTag()
         {
-            _tagService.Create(ctx.Message.Text, GetCurrentUser().Id);
+            _tagService.Create(MessageContext.Message.Text, MessageContext.User.Id);
             return Text("✅ Tag saved");
         }
     }

@@ -16,14 +16,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             RegisterStage(Save);
         }
 
-        public ContentResult AskName(MessageContext ctx)
+        public ContentResult AskName()
         {
             return Text("Enater new activity name:");
         }
 
-        public ContentResult Save(MessageContext ctx)
+        public ContentResult Save()
         {
-            _service.CreateTimeTrackingActivity(ctx.Message.Text, GetCurrentUser().Id);
+            _service.CreateTimeTrackingActivity(MessageContext.Message.Text, MessageContext.User.Id);
             return Text("✅ Done");
         }
 

@@ -11,7 +11,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
     {
         public NoteInfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) => new()
+            RegisterStage(() => new()
             {
                 Text = "Menu of notes",
                 Menu = new(new List<List<KeyboardButton>>()

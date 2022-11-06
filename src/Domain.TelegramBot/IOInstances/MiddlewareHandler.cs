@@ -24,16 +24,6 @@ namespace Domain.TelegramBot.IOInstances
             _stages.Add(middleware);
         }
 
-        public async Task<bool> ExecuteStages(MessageContext ctx)
-        {
-            foreach (var stage in _stages)
-            {
-                var result = await stage.Execute(_scope, ctx);
-                if (!result)
-                    return false;
-            }
-            return true;
-        }
     }
 
 }

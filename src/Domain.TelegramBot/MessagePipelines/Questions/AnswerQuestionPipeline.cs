@@ -16,13 +16,13 @@ namespace Domain.TelegramBot.MessagePipelines.Questions
             RegisterStage(AcceptAnswer);
         }
 
-        public ContentResult AcceptAnswer(MessageContext ctx)
+        public ContentResult AcceptAnswer()
         {
             var questionId = GetCachedValue<Guid>(QUESTIONID_CACHEKEY,true);
             _service.SaveAnswer(new()
             {
                 QuestionId = questionId,
-                Content = ctx.Message.Text
+                Content = MessageContext.Message.Text
             });
             return new()
             {

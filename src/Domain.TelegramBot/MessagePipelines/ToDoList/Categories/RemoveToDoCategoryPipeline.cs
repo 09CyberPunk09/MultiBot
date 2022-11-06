@@ -21,17 +21,17 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
             RegisterStage(Remove);
         }
 
-        public ContentResult AskForActivity(MessageContext ctx)
+        public ContentResult AskForActivity()
         {
             return Text("Now, enter a number near your desicion to delete the activity");
         }
 
-        public ContentResult Confirm(MessageContext ctx)
+        public ContentResult Confirm()
         {
             var dict = GetCachedValue<Dictionary<int, Guid>>(CategoriesInfoPipeline.TODO_CATEGORIES_CACHEKEY);
-            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("⛔️ Enter a number form the suggested list");
             }
 
@@ -49,9 +49,9 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
             };
         }
 
-        public ContentResult Remove(MessageContext ctx)
+        public ContentResult Remove()
         {
-            if (bool.TryParse(ctx.Message.Text, out var result))
+            if (bool.TryParse(MessageContext.Message.Text, out var result))
             {
                 if (result)
                 {

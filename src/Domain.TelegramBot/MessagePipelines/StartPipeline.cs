@@ -24,12 +24,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines
             IsLooped = true;
         }
 
-        public ContentResult Start(MessageContext ctx)
+        public ContentResult Start()
         {
-            var user = _userService.GetByTgId(ctx.RecipientChatId);
+            var user = _userService.GetByTgId(MessageContext.RecipientChatId);
             if (user == null)
             {
-                var newUuser = _userService.CreateFromTelegram("", ctx.RecipientChatId);
+                var newUuser = _userService.CreateFromTelegram("", MessageContext.RecipientChatId);
                 newUuser.TelegramLoggedIn = true;
                 _userService.Update(newUuser);
 

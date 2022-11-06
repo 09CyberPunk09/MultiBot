@@ -26,9 +26,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
             IsLooped = true;
         }
 
-        private ContentResult GetNotes(MessageContext ctx)
+        private ContentResult GetNotes()
         {
-            var result = _noteService.GetByUserId(GetCurrentUser().Id);
+            var result = _noteService.GetByUserId(MessageContext.User.Id);
             //todo: add markup
             var messagesToSend = new List<ContentResult>();
 

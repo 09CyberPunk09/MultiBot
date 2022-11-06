@@ -23,12 +23,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             RegisterStage(AcceptTrackIn);
         }
 
-        public ContentResult AskForActivity(MessageContext ctx)
+        public ContentResult AskForActivity()
         {
-            var data = _service.GetAllActivities(GetCurrentUser().Id);
+            var data = _service.GetAllActivities(MessageContext.User.Id);
             if (data == null || data.Count == 0)
             {
-                var activity = _service.CreateTimeTrackingActivity("Default", GetCurrentUser().Id);
+                var activity = _service.CreateTimeTrackingActivity("Default", MessageContext.User.Id);
                 data = new() { activity };
             }
 
@@ -46,7 +46,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
                 dictionary[counter] = item.Id;
             }
 
-            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, ctx.RecipientChatId);
+            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, MessageContext.RecipientChatId);
 
             return new ContentResult()
             {
@@ -54,17 +54,17 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             };
         }
 
-        public ContentResult AcceptTrackIn(MessageContext ctx)
+        public ContentResult AcceptTrackIn()
         {
             var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY,true);
-            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("⛔️ Enter a number form the suggested list");
             }
 
             var id = dict[number];
-            _service.TrackIn(id, DateTime.Now, GetCurrentUser().Id);
+            _service.TrackIn(id, DateTime.Now, MessageContext.User.Id);
 
             //todo: make track in possible only if the previous entries are complete
             //todo: make track out possible only if the previous entries are not complete

@@ -24,9 +24,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             RegisterStage(Remove);
         }
 
-        public ContentResult AskForActivity(MessageContext ctx)
+        public ContentResult AskForActivity()
         {
-            var activities = _service.GetAllActivities(GetCurrentUser().Id);
+            var activities = _service.GetAllActivities(MessageContext.User.Id);
             var b = new StringBuilder();
             b.AppendLine("Activities: ");
             var activitiesDict = new Dictionary<int, Guid>();
@@ -56,12 +56,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             };
         }
 
-        public ContentResult Confirm(MessageContext ctx)
+        public ContentResult Confirm()
         {
             var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY,true);
-            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("⛔️ Enter a number form the suggested list");
             }
 
@@ -79,9 +79,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             };
         }
 
-        public ContentResult Remove(MessageContext ctx)
+        public ContentResult Remove()
         {
-            if (bool.TryParse(ctx.Message.Text, out var result))
+            if (bool.TryParse(MessageContext.Message.Text, out var result))
             {
                 if (result)
                 {

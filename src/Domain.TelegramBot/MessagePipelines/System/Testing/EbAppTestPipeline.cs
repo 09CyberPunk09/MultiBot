@@ -9,7 +9,7 @@ namespace Domain.TelegramBot.MessagePipelines.System.Testing
     {
         public EbAppTestPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
                 return new()
                 {

@@ -27,9 +27,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             RegisterStage(Answer);
         }
 
-        public ContentResult SelectQuestion(MessageContext ctx)
+        public ContentResult SelectQuestion()
         {
-            var questions = _questionAppService.GetQuestions(GetCurrentUser().Id);
+            var questions = _questionAppService.GetQuestions(MessageContext.User.Id);
             var buttons = questions.Select(q => new CallbackButton[] { Button(q.Text, q.Id.ToString()) });
             return new ContentResult()
             {
@@ -38,11 +38,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             };
         }
 
-        public ContentResult SendQuestion(MessageContext ctx)
+        public ContentResult SendQuestion()
         {
-            if (!Guid.TryParse(ctx.Message.Text, out Guid input))
+            if (!Guid.TryParse(MessageContext.Message.Text, out Guid input))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("Please,select the question form the menu");
             }
 
@@ -53,7 +53,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 buttons = question.PredefinedAnswers.Select(q => new List<CallbackButton> { Button(q.Content, q.Content) }).ToList();
             }
 
-            cache.SetValueForChat(selectedQustionCacheKey, question.Id, ctx.RecipientChatId);
+            cache.SetValueForChat(selectedQustionCacheKey, question.Id, MessageContext.RecipientChatId);
 
             return new ContentResult()
             {
@@ -62,10 +62,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             };
         }
 
-        public ContentResult Answer(MessageContext ctx)
+        public ContentResult Answer()
         {
-            var question = _questionAppService.Get(cache.GetValueForChat<Guid>(selectedQustionCacheKey, ctx.RecipientChatId));
-            var answer = ctx.Message.Text;
+            var question = _questionAppService.Get(cache.GetValueForChat<Guid>(selectedQustionCacheKey, MessageContext.RecipientChatId));
+            var answer = MessageContext.Message.Text;
             if (question.HasPredefinedAnswers)
             {
                 if (question.PredefinedAnswers.Any(x => x.Content == answer))
@@ -78,7 +78,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                 }
                 else
                 {
-                    ForbidMovingNext();
+                    Response.ForbidNextStageInvokation();
                     return Text("You should select the answer from the menu.");
                 }
             }

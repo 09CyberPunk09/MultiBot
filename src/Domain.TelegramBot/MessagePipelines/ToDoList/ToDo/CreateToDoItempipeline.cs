@@ -23,14 +23,14 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             RegisterStage(AcceptCategoryAndSaveToDo);
         }
 
-        public ContentResult AskText(MessageContext ctx)
+        public ContentResult AskText()
             => Text("Enter note text:");
 
-        public ContentResult AccpetPriorityAndSave(MessageContext ctx)
+        public ContentResult AccpetPriorityAndSave()
         {
-            SetCachedValue(NOTE_TEXT_CACHEKEY, ctx.Message.Text);
+            SetCachedValue(NOTE_TEXT_CACHEKEY, MessageContext.Message.Text);
 
-            var categories = _todoService.GetAllCategories(GetCurrentUser().Id, false);
+            var categories = _todoService.GetAllCategories(MessageContext.User.Id, false);
             var b = new StringBuilder();
             b.AppendLine("Your Categories: ");
 
@@ -59,18 +59,18 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             };
         }
 
-        public ContentResult AcceptCategoryAndSaveToDo(MessageContext ctx)
+        public ContentResult AcceptCategoryAndSaveToDo()
         {
             var dict = GetCachedValue<Dictionary<int, Guid>>(CATEGORIES_LIST_CACHEKEY, true);
-            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && (number >= 0 && number <= dict.Count)))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("⛔️ Enter a number form the suggested list");
             }
 
             var categoryId = dict[number];
             var todoItemText = GetCachedValue<string>(NOTE_TEXT_CACHEKEY, true);
-            _todoService.CreateItem(GetCurrentUser().Id, categoryId, todoItemText);
+            _todoService.CreateItem(MessageContext.User.Id, categoryId, todoItemText);
 
             return Text("✅ Done.");
         }

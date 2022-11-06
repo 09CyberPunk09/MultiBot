@@ -27,9 +27,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
             RegisterStage(ReturnNotes);
         }
 
-        public ContentResult AskForSetName(MessageContext ctx)
+        public ContentResult AskForSetName()
         {
-            var tags = _tagService.GetAll(GetCurrentUser().Id);
+            var tags = _tagService.GetAll(MessageContext.User.Id);
 
             var b = new StringBuilder();
             b.AppendLine("Enter a number near the tag you want to open:");
@@ -52,12 +52,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
             };
         }
 
-        public ContentResult ReturnNotes(MessageContext ctx)
+        public ContentResult ReturnNotes()
         {
             var dict = GetCachedValue<Dictionary<int, Guid>>(TAGDICTIONARY_CACHEKEY,true);
-            if (!(int.TryParse(ctx.Message.Text, out var number) && (number >= 0 && number <= dict.Count())))
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && (number >= 0 && number <= dict.Count())))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("⛔️ Enter a number form the suggested list");
             }
 

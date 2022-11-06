@@ -13,13 +13,13 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
 
 
-        protected SystemUser GetCurrentUser(MessageContext ctx)
+        protected SystemUser GetCurrentUser()
         {
             //todo: implement getting from cache
             //todo: add caching library
             using (var _dbContext = new LifeTrackerDbContext())
             {
-                return _dbContext.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == ctx.RecipientChatId);
+                return _dbContext.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.RecipientChatId);
             }
         }
     }

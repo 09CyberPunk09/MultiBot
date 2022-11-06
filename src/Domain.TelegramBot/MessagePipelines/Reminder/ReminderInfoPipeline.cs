@@ -10,7 +10,12 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
     {
         public ReminderInfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) => new()
+            RegisterStageMethod(Method);
+        }
+
+        public ContentResult Method()
+        {
+            return new()
             {
                 Text = "Reminders menu",
                 Menu = new(new List<List<KeyboardButton>>
@@ -22,7 +27,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
                 {
                     ResizeKeyboard = true
                 }
-            });
+            };
         }
     }
 }

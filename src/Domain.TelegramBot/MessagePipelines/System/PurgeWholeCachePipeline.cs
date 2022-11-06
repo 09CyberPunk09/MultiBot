@@ -23,15 +23,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
             RegisterStage(Purge);
         }
 
-        public ContentResult Confirm(MessageContext ctx) => ResponseTemplates.YesNo("Are you shure you want to purge this chat data?");
+        public ContentResult Confirm() => ResponseTemplates.YesNo("Are you shure you want to purge this chat data?");
 
-        public ContentResult Purge(MessageContext ctx)
+        public ContentResult Purge()
         {
             bool answer;
-            if (!bool.TryParse(ctx.Message.Text, out answer))
+            if (!bool.TryParse(MessageContext.Message.Text, out answer))
             {
-                ctx.MoveNext = false;
-                ctx.PipelineStageSucceeded = false;
+                Response.ForbidNextStageInvokation();
                 return Text("Please use the dialog for confirming this operation.");
             }
 

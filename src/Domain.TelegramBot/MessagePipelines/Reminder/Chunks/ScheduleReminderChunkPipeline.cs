@@ -15,15 +15,15 @@ namespace Domain.TelegramBot.MessagePipelines.Scheduling.Chunks
         public ScheduleReminderChunkPipeline(ILifetimeScope scope) : base(scope)
         {
             _service = scope.Resolve<ReminderAppService>();
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
-                string text = GetCachedValue<string>(REMINDERTEXT_CACHEKEY, ctx.RecipientChatId);
+                string text = GetCachedValue<string>(REMINDERTEXT_CACHEKEY, MessageContext.RecipientChatId);
                 var res = _service.Create(new()
                 {
                     Name = text
-                }, GetCurrentUser(ctx).Id);
-
-                SetCachedValue(REMINDERID_CACHEKEY, res.Id, ctx.RecipientChatId);
+                }, MessageContext.User.Id);
+                var t = MessageContext;
+                SetCachedValue(REMINDERID_CACHEKEY, res.Id, MessageContext.RecipientChatId);
 
                 return new()
                 {

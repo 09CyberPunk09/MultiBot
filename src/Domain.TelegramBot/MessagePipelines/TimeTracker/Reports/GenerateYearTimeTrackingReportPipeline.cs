@@ -17,7 +17,7 @@ namespace Domain.TelegramBot.MessagePipelines.TimeTracker.Reports
         public GenerateYearTimeTrackingReportPipeline(ILifetimeScope scope) : base(scope)
         {
             _service = scope.Resolve<TimeTrackingAppService>();
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
                 var activityId = GetCachedValue<Guid>(GenerateReportPipeline.SELECTEDACTIVITY_CACHEKEY,true);
                 List<TimeTrackingReportModel> report;

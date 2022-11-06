@@ -22,9 +22,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             RegisterStage(ListActivities);
         }
 
-        public ContentResult ListActivities(MessageContext ctx)
+        public ContentResult ListActivities()
         {
-            var activities = _service.GetAllActivities(GetCurrentUser().Id);
+            var activities = _service.GetAllActivities(MessageContext.User.Id);
             var b = new StringBuilder();
             b.AppendLine("Activities: ");
             int a = 1;

@@ -14,7 +14,7 @@ namespace Domain.TelegramBot.MessagePipelines.System
         public GetApplicationsPipleine(ILifetimeScope scope) : base(scope)
         {
             _service = scope.Resolve<CacheService>();
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
                 var message = new StringBuilder();
                 var apps = _service.GetIdleApplications();

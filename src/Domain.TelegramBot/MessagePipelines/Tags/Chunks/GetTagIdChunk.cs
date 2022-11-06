@@ -22,9 +22,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks
             RegisterStage(AskForSetName);
         }
 
-        public ContentResult AskForSetName(MessageContext ctx)
+        public ContentResult AskForSetName()
         {
-            var tags = _tagService.GetAll(GetCurrentUser(ctx).Id);
+            var tags = _tagService.GetAll(GetCurrentUser().Id);
 
             var b = new StringBuilder();
             b.AppendLine("Enter a number near the tag you want to open:");
@@ -39,7 +39,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags.Chunks
                 dictionary[counter] = item.Id;
             }
 
-            SetCachedValue(TAGDICTIONARY_CACHEKEY, dictionary, ctx.RecipientChatId);
+            SetCachedValue(TAGDICTIONARY_CACHEKEY, dictionary, MessageContext.RecipientChatId);
 
             return new ContentResult()
             {

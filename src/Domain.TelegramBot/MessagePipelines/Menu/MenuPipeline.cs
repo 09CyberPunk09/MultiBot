@@ -18,7 +18,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Menu
     {
         public MenuPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) =>
+            RegisterStage(() =>
             {
                 var t = new KeyboardButton[][]
                 {

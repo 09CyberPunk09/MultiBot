@@ -10,7 +10,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
     {
         public ToDoinfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
                 return new()
                 {

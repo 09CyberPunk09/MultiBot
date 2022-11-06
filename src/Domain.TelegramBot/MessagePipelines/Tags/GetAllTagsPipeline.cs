@@ -14,9 +14,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
         public GetAllTagsPipeline(TagAppService tagService, ILifetimeScope scope) : base(scope)
         {
             _tagService = tagService;
-            RegisterStage((ctx) =>
+            RegisterStage(() =>
             {
-                var tags = _tagService.GetAll(GetCurrentUser().Id)
+                var tags = _tagService.GetAll(MessageContext.User.Id)
                                       .Where(t => !t.IsSystem);
 
                 var b = new StringBuilder();

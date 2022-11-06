@@ -16,9 +16,9 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
         public CategoriesInfoPipeline(ILifetimeScope scope) : base(scope)
         {
             var todoService = scope.Resolve<ToDoAppService>();
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
-                var userId = GetCurrentUser().Id;
+                var userId = MessageContext.User.Id;
                 var categories = todoService.GetAllCategories(userId, true);
                 var sb = new StringBuilder();
                 sb.AppendLine("Your TODO items: ");

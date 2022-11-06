@@ -23,21 +23,21 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
         {
             _todoService = scope.Resolve<ToDoAppService>();
 
-            RegisterStage(AskAboutToDoItem);
-            RegisterStage(AskAboutAction);
-            RegisterStage(AcceptChoice);
+            RegisterStageMethod(AskAboutToDoItem);
+            RegisterStageMethod(AskAboutAction);
+            RegisterStageMethod(AcceptChoice);
         }
 
-        public ContentResult AskAboutToDoItem(MessageContext ctx)
+        public ContentResult AskAboutToDoItem()
         => Text("Enter a number near a ToDo item which you want to delete:");
 
-        public ContentResult AskAboutAction(MessageContext ctx)
+        public ContentResult AskAboutAction()
         {
             var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.TODOSORDER_CACHEKEY);
-            if (!int.TryParse(ctx.Message.Text, out var t) ||
+            if (!int.TryParse(MessageContext.Message.Text, out var t) ||
                 !numbers.TryGetValue(t, out var noteId))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text($"You must to enter a number which is in the range of todo items. If the list disaperared, enter {GetRoute<GetToDoListPipeline>().Route}.");
             }
             SetCachedValue(SELECTEDITEMID_CACHEKEY, noteId);
@@ -50,11 +50,11 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             };
         }
 
-        public ContentResult AcceptChoice(MessageContext ctx)
+        public ContentResult AcceptChoice()
         {
-            if (!Enum.TryParse<Choice>(ctx.Message.Text, out var ch))
+            if (!Enum.TryParse<Choice>(MessageContext.Message.Text, out var ch))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("Please, select a value from the menu");
             }
 

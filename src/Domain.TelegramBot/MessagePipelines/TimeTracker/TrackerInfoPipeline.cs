@@ -20,7 +20,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             IsLooped = true;
         }
 
-        public ContentResult ReturnInfo(MessageContext ctx)
+        public ContentResult ReturnInfo()
         {
             return new ContentResult()
             {

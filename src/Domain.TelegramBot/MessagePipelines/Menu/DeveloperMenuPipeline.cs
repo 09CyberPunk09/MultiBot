@@ -11,7 +11,7 @@ namespace Domain.TelegramBot.MessagePipelines.Menu
     {
         public DeveloperMenuPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) =>
+            RegisterStage(() =>
             {
                 var t = new KeyboardButton[][]
                 {

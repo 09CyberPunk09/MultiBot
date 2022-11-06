@@ -17,13 +17,13 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
             RegisterStage(AskName);
             RegisterStage(AcceptNameAndSave);
         }
-        public ContentResult AskName(MessageContext ctx)
+        public ContentResult AskName()
         {
             return Text("Enter new ToDo category name:");
         }
-        public ContentResult AcceptNameAndSave(MessageContext ctx)
+        public ContentResult AcceptNameAndSave()
         {
-            _todoService.CreateCategory(GetCurrentUser().Id, ctx.Message.Text);
+            _todoService.CreateCategory(MessageContext.User.Id, MessageContext.Message.Text);
             return Text("✅ Done");
         }
         

@@ -46,14 +46,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             RegisterStage(SaveSchedule);
         }
 
-        public ContentResult AskForQuestionText(MessageContext ctx)
+        public ContentResult AskForQuestionText()
         {
             return Text("Enter question text:");
         }
 
-        public ContentResult AcceptQuestionTextAndConfirmAnswers(MessageContext ctx)
+        public ContentResult AcceptQuestionTextAndConfirmAnswers()
         {
-            string questionText = ctx.Message.Text;
+            string questionText = MessageContext.Message.Text;
             SetCachedValue(questionTextKey, questionText);
 
             List<CallbackButton> buttons = new()
@@ -69,9 +69,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             };
         }
 
-        public ContentResult TryAcceptAnswers(MessageContext ctx)
+        public ContentResult TryAcceptAnswers()
         {
-            string input = ctx.Message.Text;
+            string input = MessageContext.Message.Text;
             if (Enum.TryParse(typeof(AnswerSelectionOptions), input, out object choice))
             {
                 switch ((AnswerSelectionOptions)choice)
@@ -79,10 +79,10 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
                     case AnswerSelectionOptions.YesNo:
 
                         SetCachedValue(answersKey, new List<string>() { "Yes", "No" });
-                        return ConfirmResults(ctx);
+                        return ConfirmResults();
 
                     case AnswerSelectionOptions.Confirm:
-                        return ConfirmResults(ctx);
+                        return ConfirmResults();
 
                     default:
                         return Text("Unkonown result");
@@ -91,31 +91,31 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             else
             {
                 SetCachedValue(hasPredefinedAnswersKey, true);
-                return AddAnswer(ctx);
+                return AddAnswer();
             }
         }
 
-        public ContentResult AddAnswer(MessageContext ctx)
+        public ContentResult AddAnswer()
         {
-            string input = ctx.Message.Text;
+            string input = MessageContext.Message.Text;
             if (Enum.TryParse(typeof(AnswerSelectionOptions), input, out object choice))
             {
                 switch ((AnswerSelectionOptions)choice)
                 {
                     case AnswerSelectionOptions.Confirm:
-                        return ConfirmResults(ctx);
+                        return ConfirmResults();
 
                     case AnswerSelectionOptions.CancelLast:
-                        return CancelLast(ctx);
+                        return CancelLast();
 
                     default:
-                        ForbidMovingNext();
+                        Response.ForbidNextStageInvokation();
                         return Text("Unkown result");
                 }
             }
             else
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 var savedAnswers = GetCachedValue<List<string>>(answersKey) ?? new();
                 savedAnswers.Add(input);
                 SetCachedValue(answersKey, savedAnswers);
@@ -136,14 +136,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             }
         }
 
-        public ContentResult ConfirmResults(MessageContext ctx)
+        public ContentResult ConfirmResults()
         {
             var predefinedAnswers = GetCachedValue<List<string>>(answersKey) ?? new List<string>();
             var question = _questionAppService.Create(new Question()
             {
                 Text = GetCachedValue<string>(questionTextKey),
                 HasPredefinedAnswers = predefinedAnswers.Count > 0,
-            }, GetCurrentUser().Id);
+            }, MessageContext.User.Id);
 
             SetCachedValue(questionIdKey, question.Id);
 
@@ -160,7 +160,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             return new EmptyResult();
         }
 
-        public ContentResult SaveSchedule(MessageContext ctx)
+        public ContentResult SaveSchedule()
         {
             var cronExpr = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY);
             var questionId = GetCachedValue<Guid>(questionIdKey, true);
@@ -168,9 +168,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
             return Text("✅Done. Question saved!");
         }
 
-        public ContentResult CancelLast(MessageContext ctx)
+        public ContentResult CancelLast()
         {
-            ForbidMovingNext();
+            Response.ForbidNextStageInvokation();
             var savedAnswers = GetCachedValue<List<string>>(answersKey);
             savedAnswers.SmartRemove(savedAnswers[^1]);
             cache.Set(answersKey, savedAnswers);

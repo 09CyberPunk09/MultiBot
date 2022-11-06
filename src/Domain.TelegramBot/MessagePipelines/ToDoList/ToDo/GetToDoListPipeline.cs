@@ -17,9 +17,9 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
         public GetToDoListPipeline(ILifetimeScope scope) : base(scope)
         {
             var todoService = scope.Resolve<ToDoAppService>();
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
-                var userId = GetCurrentUser().Id;
+                var userId = MessageContext.User.Id;
                 var categories = todoService.GetAllCategories(userId, true);
                 var sb = new StringBuilder();
                 int counter = 0;

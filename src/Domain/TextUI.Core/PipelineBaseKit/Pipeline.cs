@@ -5,13 +5,19 @@ using System.Linq;
 using System.Reflection;
 using Telegram.Bot.Types.ReplyMarkups;
 using CallbackButtonButton = Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton;
-using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
+using AsyncStageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
+using System.Collections.Generic;
+using TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
     public class Pipeline
     {
-        public StageMap Stages { get; set; } = new();
+        public Response Response { get; set; } = new();
+        public StageMap Stages { get; set; }
+        public Dictionary<string, StageDelegate> Delegates { get; set; } = new();
+        public List<AsyncStageDelegate> AsyncDelegates { get; set; }
 
         protected TelegramCache cache = new();
 
@@ -19,29 +25,73 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         public bool IsLooped { get; set; }
         public Action<Stage, MessageContext, ContentResult> StagePostAction { get; set; }
-        public int CurrentActionIndex { get; set; }
-        public bool IsDone { get; set; }
         public ILifetimeScope _scope { get; set; }
-
-        public void InitLifeTimeScope(ILifetimeScope scope)
-        {
-            _scope = scope;
-        }
 
         public Pipeline(ILifetimeScope scope)
         {
             _scope = scope;
+            Stages = new(this);
             InitBaseComponents();
             RegisterPipelineStages();
         }
 
-        public Pipeline()
+        public PipelineExecutionResponse Execute(MessageContext ctx,Type pipelineType, int stageIndex = -1)
         {
+            Stage stage;
+            stage = stageIndex != -1 ? Stages[stageIndex] : Stages.Root;
+            ContentResult result;
+            if(stage.OverridedStage != null)
+            {
+                var chunkType = GetType().Assembly.GetTypes().FirstOrDefault(x => x.FullName == stage.OverridedStage.TypeFullName);
 
+                var chunk = _scope.Resolve(chunkType) as Pipeline;
+                chunk.MessageContext = MessageContext;
+                var res = chunk.Execute(MessageContext, chunkType, stage.OverridedStage.Index);
+                res.Result.RecipientChatId = MessageContext.RecipientChatId;
+                bool pipelineEnded = stage.NextStage == null;
+                return new PipelineExecutionResponse()
+                {
+                    Result = res.Result,
+                    CanIvokeNext = res.CanIvokeNext,
+                    DeleteLastBotMessage = res.DeleteLastBotMessage,
+                    DeleteLastUserMessage = res.DeleteLastUserMessage,
+                    PipelineEnded = pipelineEnded,
+                    NextPipelineTypeFullName = res.NextPipelineTypeFullName == null ? stage.NextStage.TypeFullName : res.NextPipelineTypeFullName,
+                    NextStageIndex = pipelineEnded ? -1 : stage.NextStage.Index,
+                };
+            }
+            else
+            {
+                bool pipelineEnded  = Response.PipelineEnded ? Response.PipelineEnded : stage.NextStage == null;
+                if (stage.IsLambdaExpr)
+                {
+                    result = Delegates[stage.MethodName].Invoke();
+                }
+                else
+                {
+                    result = pipelineType.GetMethod(stage.MethodName,
+                        BindingFlags.Instance |
+                        BindingFlags.IgnoreCase |
+                        BindingFlags.Public |
+                        BindingFlags.NonPublic).Invoke(this, null) as ContentResult;
+                }
+                result.RecipientChatId = MessageContext.RecipientChatId;
+                return new PipelineExecutionResponse()
+                {
+                    Result = result,
+                    CanIvokeNext = Response.CanIvokeNext,
+                    DeleteLastBotMessage = Response.DeleteLastBotMessage,
+                    DeleteLastUserMessage = Response.DeleteLastUserMessage,
+                    PipelineEnded = pipelineEnded,
+                    NextPipelineTypeFullName = pipelineEnded ? null : stage.NextStage.TypeFullName,
+                    NextStageIndex = pipelineEnded ? -1 : stage.NextStage.Index,
+                };
+            }
         }
 
         public virtual void RegisterPipelineStages()
         {
+
         }
 
         protected static RouteAttribute GetRoute<TPpileline>() where TPpileline : Pipeline
@@ -58,30 +108,6 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             ConfigureBasicPostAction();
         }
 
-        public void EndPipeline()
-        {
-            MessageContext.PipelineStageSucceeded = true;
-            MessageContext.PipelineEnded = true;
-            MessageContext.MoveNext = false;
-            IsDone = true;
-        }
-
-        public void ForbidMovingNext()
-        {
-            MessageContext.MoveNext = false;
-            MessageContext.PipelineStageSucceeded = false;
-            MessageContext.PipelineEnded = false;
-            IsDone = false;
-        }
-
-        public void ForbidMovingNext(MessageContext ctx)
-        {
-            ctx.MoveNext = false;
-            ctx.PipelineStageSucceeded = false;
-            ctx.PipelineEnded = false;
-            IsDone = false;
-        }
-
         public virtual void ConfigureBasicPostAction()
         {
             StagePostAction += (Stage stage, MessageContext ctx, ContentResult result) =>
@@ -96,27 +122,44 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
             StagePostAction += (stage, ctx, result) =>
             {
-                IsDone = false;
-                if (stage.NextStage == null && ctx.PipelineStageSucceeded)
-                {
-                    ctx.MoveNext = false;
-                    IsDone = true;
-                    ctx.PipelineEnded = true;
-                }
+                //IsDone = false;
+                //if (stage.NextStage == null && ctx.PipelineStageSucceeded)
+                //{
+                //    ctx.MoveNext = false;
+                //    IsDone = true;
+                //    ctx.PipelineEnded = true;
+                //}
             };
         }
 
         protected CallbackButtonButton Button(string text, string callbackData)
             => CallbackButtonButton.WithCallbackData(text, callbackData);
 
-        protected void RegisterStage(StageDelegate stage)
+        protected void RegisterStage(string stageName)
         {
-            Stages.Add(new Stage(stage));
+            Stages.Add(stageName);
+        }
+        protected void RegisterStage(StageDelegate @delegate)
+        {
+            Stages.Add(@delegate);
+        }
+        public void IntegrateChunkPipeline<TPipeline>() where TPipeline : PipelineChunk
+        {
+            var chunk = _scope.Resolve<TPipeline>();
+            var currentTypeFullName = GetType().FullName;
+            chunk.Stages.Stages.ForEach(x =>
+            {
+                Stages.Add(new Stage(x.MethodName, currentTypeFullName)
+                {
+                   OverridedStage = x    
+                });
+            });
         }
 
-        protected void RegisterStage(Stage stage)
+        public void RegisterStageMethod(StageDelegate @delegate)
         {
-            Stages.Add(stage);
+            string methodName = @delegate.Method.Name;
+            Stages.Add(methodName);
         }
 
         #region ResponseTemplates

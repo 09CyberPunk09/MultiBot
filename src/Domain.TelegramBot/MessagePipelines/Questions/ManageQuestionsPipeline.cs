@@ -15,9 +15,9 @@ namespace Domain.TelegramBot.MessagePipelines.Questions
         private readonly QuestionAppService _service;
         public ManageQuestionsPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage(ctx =>
+            RegisterStage(() =>
             {
-                var questions = _service.GetQuestions(GetCurrentUser().Id);
+                var questions = _service.GetQuestions(MessageContext.User.Id);
                 var sb  = new StringBuilder();
                 sb.AppendLine("Your questions: ");
                 int counter = 0;

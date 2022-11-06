@@ -16,7 +16,7 @@ namespace Domain.TelegramBot.Helpers
         public static void SetPipeline<TPipeline>(long chatId) where TPipeline : MessagePipelineBase
         {
             var command = typeof(TPipeline).GetCustomAttribute<RouteAttribute>().Route;
-            _cache.SetValueForChat(MessageHandler.CURRENT_MESSAGEPIPELINE_COMMAND, command, chatId);
+            _cache.SetValueForChat(MessageHandler.CURRENT_MESSAGEPIPELINE_TYPE_NAME, command, chatId);
         }
     }
 }

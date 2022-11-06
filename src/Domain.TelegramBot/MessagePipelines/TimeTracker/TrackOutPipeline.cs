@@ -20,9 +20,9 @@ namespace Infrastructure.TelegramBot.MessagePipelines.TimeTracker
             RegisterStage(TrackOut);
         }
 
-        public ContentResult TrackOut(MessageContext ctx)
+        public ContentResult TrackOut()
         {
-            var user = GetCurrentUser();
+            var user = MessageContext.User;
             var lastActivity = _service.GetLastTrackedActivity(user.Id);
             _service.TrackOut(lastActivity.Id, DateTime.Now);
             return Text($"✅ Stopped tracking at ⏱{DateTime.Now.ToString("HH:mm dd:MM:yyyy")}");

@@ -18,19 +18,19 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
             RegisterStage(AcceptSuperSercretCode);
         }
 
-        public ContentResult AskForSuperSercretCode(MessageContext ctx)
+        public ContentResult AskForSuperSercretCode()
         {
             return Text("Доброго здоров'ячка! Ану скинь суперсекретний пароль,який покаже,чи справді ти той самий Розробник,чи ні");
         }
 
-        public ContentResult AcceptSuperSercretCode(MessageContext ctx)
+        public ContentResult AcceptSuperSercretCode()
         {
-            if (Guid.TryParse(ctx.Message.Text, out var res))
+            if (Guid.TryParse(MessageContext.Message.Text, out var res))
             {
                 var supersercretCode = (new ConfigurationAppService()).Get("SpecialSercretKey");
-                if (supersercretCode.Equals(ctx.Message.Text, StringComparison.OrdinalIgnoreCase))
+                if (supersercretCode.Equals(MessageContext.Message.Text, StringComparison.OrdinalIgnoreCase))
                 {
-                    var user = _service.GetByTgId(ctx.RecipientChatId);
+                    var user = _service.GetByTgId(MessageContext.RecipientChatId);
                     user.IsSpecial = true;
                     _service.Update(user);
 

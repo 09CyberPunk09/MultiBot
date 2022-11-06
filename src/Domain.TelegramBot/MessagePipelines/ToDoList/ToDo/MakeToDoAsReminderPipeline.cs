@@ -23,16 +23,16 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             IntegrateChunkPipeline<ScheduleReminderChunkPipeline>();
         }
 
-        public ContentResult AskAboutToDoItem(MessageContext ctx)
+        public ContentResult AskAboutToDoItem()
             => Text("Enter a number near a ToDo item which you want to make reminder:");
 
-        public ContentResult AcceptNumberForReminder(MessageContext ctx)
+        public ContentResult AcceptNumberForReminder()
         {
             var numbers = GetCachedValue<Dictionary<int, Guid>>(GetToDoListPipeline.TODOSORDER_CACHEKEY);
-            if (!int.TryParse(ctx.Message.Text, out var t) ||
+            if (!int.TryParse(MessageContext.Message.Text, out var t) ||
                 !numbers.TryGetValue(t, out var _))
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text($"You must to enter a number which is in the range of todo items. If the list disaperared, enter {GetRoute<GetToDoListPipeline>().Route}.");
             }
 

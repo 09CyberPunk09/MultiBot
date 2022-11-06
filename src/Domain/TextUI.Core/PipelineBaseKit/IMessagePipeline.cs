@@ -1,4 +1,5 @@
 ﻿using System;
+using TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
@@ -10,12 +11,9 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
     {
         Action<Stage, MessageContext, ContentResult> StagePostAction { get; set; }
 
-        ContentResult Execute(MessageContext ctx, string stageName);
+        PipelineExecutionResponse Execute(MessageContext ctx,Type pipelineType, int stageIndex);
 
         void RegisterPipelineStages();
-
-        public int CurrentActionIndex { get; set; }
-        public bool IsDone { get; set; }
 
         bool IsLooped { get; set; }
 

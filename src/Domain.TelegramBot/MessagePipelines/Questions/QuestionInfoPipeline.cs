@@ -10,7 +10,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Questions
     {
         public QuestionInfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) => new()
+            RegisterStage(() => new()
             {
                 Text = "Questions menu",
                 Menu = new(new List<List<KeyboardButton>>

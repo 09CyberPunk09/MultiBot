@@ -9,7 +9,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Tags
     {
         public TagInfoPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage((ctx) => new()
+            RegisterStage(() => new()
             {
                 Text = "Tags menu",
                 Menu = new(new KeyboardButton[][]

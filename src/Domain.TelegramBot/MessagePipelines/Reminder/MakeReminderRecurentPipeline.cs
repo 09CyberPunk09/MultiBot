@@ -19,7 +19,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             RegisterStage(AcceptSchedule);
         }
 
-        public ContentResult AcceptSchedule(MessageContext ctx)
+        public ContentResult AcceptSchedule()
         {
             var cron = GetCachedValue<string>(CreateScheduleChunk.CRONEXPR_CACHEKEY);
             var reminderId = GetCachedValue<string>(ScheduleReminderChunkPipeline.REMINDERID_CACHEKEY);

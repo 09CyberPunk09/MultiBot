@@ -1,12 +1,9 @@
 ﻿using Autofac;
-using Newtonsoft.Json;
-using Persistence.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot.Types.ReplyMarkups;
-using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.MessageContext, Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
-using SystemUser = Common.Entites.User;
+using StageDelegate = System.Func<Infrastructure.TextUI.Core.PipelineBaseKit.ContentResult>;
 
 namespace Infrastructure.TextUI.Core.PipelineBaseKit
 {
@@ -31,57 +28,6 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         protected KeyboardButton[] MenuButtonRow(params KeyboardButton[] butotns)
             => butotns;
 
-        public ContentResult Execute(MessageContext ctx, string stageName = null)
-        {
-            //Set message context which is accessigble in the whole class
-            MessageContext = ctx;
-
-            //Find and set a stage which needs to be executed
-            Stage stage = stageName != null ?
-                Stages.Stages.FirstOrDefault(x => x.MethodName == stageName) :
-                 Stages.Stages.FirstOrDefault();
-
-            //If the pipeline stage is still not found, we rise an exception
-            //TODO: Move anywhere from here
-            if(stage == null)
-            {
-                //cache key - CurrentMessagePipelineCommand
-                //TODO: Put consts to one place to use them from different layers
-                var currentMessagePipelineCommand = cache.GetValueForChat<string>("CurrentMessagePipelineCommand", ctx.RecipientChatId);
-                var currntPipelineStageName = cache.GetValueForChat<string>("CurrntPipelineStageName", ctx.RecipientChatId);
-                var helpData = JsonConvert.SerializeObject(new
-                {
-                    currentMessagePipelineCommand,
-                    currntPipelineStageName
-                },Formatting.Indented);
-                throw new Exception($"Could not find any stage to execute.Additional data: {helpData}");
-            }
-
-
-
-            ctx.CurrentStage = stage;
-
-            var result = stage.Invoke(ctx);
-            StagePostAction?.Invoke(stage, ctx, result);
-            MessageContext = null;
-            return result;
-        }
-
-        protected void IntegrateChunkPipeline<TChunk>() where TChunk : PipelineChunk
-        {
-            var chunk = _scope.Resolve<TChunk>(new NamedParameter("ctx", MessageContext));
-            chunk.Stages.Stages.ForEach(stage => RegisterStage(stage));
-        }
-
-        protected SystemUser GetCurrentUser()
-        {
-            //todo: implement getting from cache
-            using (var ctx = new LifeTrackerDbContext())
-            {
-                return ctx.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.RecipientChatId);
-            }
-        }
-
         protected T GetCachedValue<T>(string key, bool getThanDelete = false)
             => cache.GetValueForChat<T>(key, MessageContext.RecipientChatId, getThanDelete);
 
@@ -92,13 +38,33 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
     public class StageMap
     {
+        public Stage this[int index]
+        {
+            get { return Stages[index]; }
+        }
+        public StageMap(Pipeline pipeline)
+        {
+            Pipeline = pipeline;
+        }
+        public Pipeline Pipeline { get; set; }
+        public Type PipelineType => Pipeline.GetType();
+        public int MethodNameCounter { get; set; } = 0;
         public List<Stage> Stages { get; set; } = new();
         public Stage Root { get; set; }
 
-        public Stage this[int index]
+        public void Add(StageDelegate @delegate)
         {
-            get => Stages[index];
-            set => Stages[index] = value;
+            var typeName = PipelineType.FullName;
+            var delegateName = (++MethodNameCounter).ToString();
+            Pipeline.Delegates.TryAdd(delegateName, @delegate);
+            var stage = new Stage(true, delegateName, typeName);
+            Add(stage);
+        }   
+        public void Add(string methodName)
+        {
+            var typeName = PipelineType.FullName;
+            var stage = new Stage(methodName, typeName);
+            Add(stage);
         }
 
         public void Add(Stage stage)
@@ -107,30 +73,45 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
             {
                 Root = stage;
                 Stages.Add(stage);
+                stage.Index = Stages.Count - 1;
+                return;
+            }
+            if(Root != null && Stages.Count == 1)
+            {
+                Root.NextStage = stage;
+                Stages.Add(stage);
+                stage.Index = Stages.Count - 1;
                 return;
             }
 
             var last = Stages.LastOrDefault();
-            last.NextStage = stage;
             Stages.Add(stage);
+            stage.Index = Stages.Count - 1;
+            last.NextStage = stage;
+
         }
     }
 
     public class Stage
     {
-        private readonly string _name;
 
-        public Stage(StageDelegate f)
+        public Stage(string methodName, string typeFullName)
         {
-            Method = f;
-            _name = f.Method.Name;
+            MethodName = methodName;
+            TypeFullName = typeFullName;
         }
-
-        public StageDelegate Method { get; }
+        public Stage(bool isLambdaExpr, string name, string typeFullName)
+        {
+            IsLambdaExpr = true;
+            MethodName = name;
+            TypeFullName = typeFullName;
+        }
+        public int Index { get; set; }
+        public Stage OverridedStage { get; set; }
+        public string TypeFullName { get; set; }
+        public string MethodName { get; }
+        public bool IsAsync { get; set; }
+        public bool IsLambdaExpr { get; set; }
         public Stage NextStage { get; set; }
-        public string MethodName { get => _name; }
-
-        public ContentResult Invoke(MessageContext ctx)
-            => Method.Invoke(ctx);
     }
 }

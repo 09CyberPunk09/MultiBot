@@ -9,11 +9,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
     {
         public CreateReminderPipeline(ILifetimeScope scope) : base(scope)
         {
-            RegisterStage(AskName);
+            RegisterStageMethod(AskName);
             this.IntegrateChunkPipeline<ScheduleReminderChunkPipeline>();
         }
 
-        public ContentResult AskName(MessageContext ctx)
+        public ContentResult AskName()
             => Text("Enter reminder text:");
 
     }

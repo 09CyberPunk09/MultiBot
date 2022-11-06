@@ -25,7 +25,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             RegisterStage(SaveTime);
         }
 
-        public ContentResult AskDay(MessageContext ctx)
+        public ContentResult AskDay()
         {
             var buttons = new List<List<InlineKeyboardButton>>()
             {
@@ -63,11 +63,11 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             };
         }
 
-        public ContentResult AceptDateAndAskTime(MessageContext ctx)
+        public ContentResult AceptDateAndAskTime()
         {
-            if (DateTime.TryParse(ctx.Message.Text, out var date))
+            if (DateTime.TryParse(MessageContext.Message.Text, out var date))
             {
-                SetCachedValue(DATE, date, ctx.RecipientChatId);
+                SetCachedValue(DATE, date, MessageContext.RecipientChatId);
 
                 List<ushort> hours = new();
                 for (ushort i = 0; i < 24; i++)
@@ -84,14 +84,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             }
             else
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("Something went wrong.I Could not parse the date.");
             }
         }
 
-        public ContentResult AcceptTimeAndAskForMinutes(MessageContext ctx)
+        public ContentResult AcceptTimeAndAskForMinutes()
         {
-            if (byte.TryParse(ctx.Message.Text, out byte bt) && bt < 24 && bt >= 0)
+            if (byte.TryParse(MessageContext.Message.Text, out byte bt) && bt < 24 && bt >= 0)
             {
                 SetCachedValue(HOUR, bt);
                 List<ushort> hours = new();
@@ -110,14 +110,14 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             }
             else
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("Could not parse hours.Try Again");
             }
         }
 
-        public ContentResult SaveTime(MessageContext ctx)
+        public ContentResult SaveTime()
         {
-            if (byte.TryParse(ctx.Message.Text, out var bt))
+            if (byte.TryParse(MessageContext.Message.Text, out var bt))
             {
                 var mins = bt;
                 var hours = GetCachedValue<byte>(HOUR,true);
@@ -132,7 +132,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Reminder
             }
             else
             {
-                ForbidMovingNext();
+                Response.ForbidNextStageInvokation();
                 return Text("Could not parse minutes.Please,try again");
             }
         }

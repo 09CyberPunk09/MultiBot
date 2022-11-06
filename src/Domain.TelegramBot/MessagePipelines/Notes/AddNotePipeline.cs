@@ -18,19 +18,19 @@ namespace Infrastructure.TelegramBot.MessagePipelines.Notes
 
         public override void RegisterPipelineStages()
         {
-            RegisterStage(AskToEnterANote);
-            RegisterStage(SaveNote);
+            RegisterStageMethod(AskToEnterANote);
+            RegisterStageMethod(SaveNote);
             IsLooped = true;
         }
 
-        private ContentResult AskToEnterANote(MessageContext ctx)
+        private ContentResult AskToEnterANote()
         {
             return Text("Enter Note text:");
         }
 
-        private ContentResult SaveNote(MessageContext ctx)
+        private ContentResult SaveNote()
         {
-            _noteService.Create(ctx.Message.Text, GetCurrentUser().Id);
+            _noteService.Create(MessageContext.Message.Text, MessageContext.User.Id);
             return Text("✅ Note saved");
         }
     }
