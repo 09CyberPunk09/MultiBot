@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using Common.Entites;
-using LifeTracker.Web.Core.Models.IncomeModels.Notes;
+using LifeTracker.Web.Host.Models.IncomeModels.Notes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +33,7 @@ namespace LifeTracker.Web.Host.Controllers
         [HttpPost]
         public Note Create([FromBody] CreateNoteIncomeModel model)
         {
-            return _service.Create(model.Text, userId);
+            return _service.Create(userId, model.Text);
         }
 
         [HttpDelete("{id}")]

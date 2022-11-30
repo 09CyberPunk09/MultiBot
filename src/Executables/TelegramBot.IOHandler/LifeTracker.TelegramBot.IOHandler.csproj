@@ -24,18 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Application.Telegram.Implementations\Application.Telegram.Implementations.csproj" />
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
     <ProjectReference Include="..\..\Domain\Domain\Application.csproj" />
-    <ProjectReference Include="..\..\Domain\TextUI.Core\TextUI.Core.csproj" />
+    <ProjectReference Include="..\..\Domain\TextUI.Core\Application.TextCommunication.Core.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<Resource Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
+		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
+		</Content>
+		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
+
 </Project>

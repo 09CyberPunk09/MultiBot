@@ -34,7 +34,6 @@ namespace Persistence.Caching.Redis
             _dbType = dbType;
             try
             {
-                logger.Info($"Trying to connect Reis on {_host}:{_port}");
                 options = new()
                 {
                     EndPoints = { { _host, Convert.ToInt32(_port) } },
@@ -54,8 +53,7 @@ namespace Persistence.Caching.Redis
                 };
                 redis = ConnectionMultiplexer.Connect(options);           
             }
-            
-            logger.Info($"Redis succesfully connected");
+
             db = redis.GetDatabase((int)dbType);
         }
 
@@ -68,7 +66,10 @@ namespace Persistence.Caching.Redis
 
         public void Set(string key, object value)
         {
-            string valueToSet = JsonConvert.SerializeObject(value);
+            string valueToSet = JsonConvert.SerializeObject(value,settings : new()
+            {
+                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
             db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
 

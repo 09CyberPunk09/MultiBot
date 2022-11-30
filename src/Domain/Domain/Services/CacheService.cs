@@ -7,37 +7,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class CacheService : AppService
 {
-    public class CacheService : AppService
+    private readonly TelegramCache _telegramCache = new();
+    private readonly RelationalSchemaRepository<User> _userRepository;
+
+    public CacheService(RelationalSchemaRepository<User> userRepo)
     {
-        private readonly TelegramCache _telegramCache = new();
-        private readonly LifeTrackerRepository<User> _userRepository;
+        _userRepository = userRepo;
+    }
 
-        public CacheService(LifeTrackerRepository<User> userRepo)
+    public List<ApplicationAccessibilityData> GetIdleApplications()
+    {
+        var cache = new Cache(DatabaseType.ApplicationAccessibility);
+        var keys = cache.GetAllkeys();
+        var values = keys.Select(key => cache.Get<ApplicationAccessibilityData>(key));
+        return values.ToList();
+    }
+
+    public void Purge(Guid? userId = null)
+    {
+        if (userId != null)
         {
-            _userRepository = userRepo;
+            var tgId = _userRepository.GetQuery().FirstOrDefault(x => x.Id == userId).TelegramChatId;
+            _telegramCache.PurgeChatData(tgId.Value);
         }
-
-        public List<ApplicationAccessibilityData> GetIdleApplications()
+        else
         {
-            var cache = new Cache(DatabaseType.ApplicationAccessibility);
-            var keys = cache.GetAllkeys();
-            var values = keys.Select(key => cache.Get<ApplicationAccessibilityData>(key));
-            return values.ToList();
-        }
-
-        public void Purge(Guid? userId = null)
-        {
-            if (userId != null)
-            {
-                var tgId = _userRepository.GetQuery().FirstOrDefault(x => x.Id == userId).TelegramChatId;
-                _telegramCache.PurgeChatData(tgId.Value);
-            }
-            else
-            {
-                _telegramCache.PurgeDatabase();
-            }
+            _telegramCache.PurgeDatabase();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Application;
-using Autofac;
+﻿using Autofac;
 using Common;
+using Integration.Applications;
 using NLog;
 using Quartz;
 using System;

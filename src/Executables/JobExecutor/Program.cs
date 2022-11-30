@@ -1,5 +1,4 @@
-﻿using Application;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.Quartz;
 using Common;
 using Infrastructure.TelegramBot.Jobs;

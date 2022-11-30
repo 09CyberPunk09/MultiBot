@@ -40,7 +40,7 @@ namespace Persistence.Sql.Migrations
                     b.Property<DateTime?>("LastModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -58,6 +58,9 @@ namespace Persistence.Sql.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FileLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -207,6 +210,34 @@ namespace Persistence.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("Common.Entites.TelegramLogIn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("TelegramUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TelegramLogins");
                 });
 
             modelBuilder.Entity("Common.Entites.TimeTrackingActivity", b =>
@@ -366,12 +397,40 @@ namespace Persistence.Sql.Migrations
                     b.Property<long?>("TelegramChatId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("TelegramLoggedIn")
-                        .HasColumnType("bit");
+                    b.Property<long?>("TelegramUserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Common.Entites.UserFeatureFlag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FeatureFlag")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FeatureFlags");
                 });
 
             modelBuilder.Entity("NoteTag", b =>
@@ -393,7 +452,9 @@ namespace Persistence.Sql.Migrations
                 {
                     b.HasOne("Common.Entites.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -407,6 +468,17 @@ namespace Persistence.Sql.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("Common.Entites.TelegramLogIn", b =>
+                {
+                    b.HasOne("Common.Entites.User", "User")
+                        .WithMany("TelegramLogIns")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Common.Entites.ToDoItem", b =>
                 {
                     b.HasOne("Common.Entites.ToDoCategory", "ToDoCategory")
@@ -416,6 +488,17 @@ namespace Persistence.Sql.Migrations
                         .IsRequired();
 
                     b.Navigation("ToDoCategory");
+                });
+
+            modelBuilder.Entity("Common.Entites.UserFeatureFlag", b =>
+                {
+                    b.HasOne("Common.Entites.User", "User")
+                        .WithMany("FeatureFlags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoteTag", b =>
@@ -443,6 +526,13 @@ namespace Persistence.Sql.Migrations
             modelBuilder.Entity("Common.Entites.ToDoCategory", b =>
                 {
                     b.Navigation("ToDoItems");
+                });
+
+            modelBuilder.Entity("Common.Entites.User", b =>
+                {
+                    b.Navigation("FeatureFlags");
+
+                    b.Navigation("TelegramLogIns");
                 });
 #pragma warning restore 612, 618
         }

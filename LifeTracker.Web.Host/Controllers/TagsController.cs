@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using Common.Entites;
-using LifeTracker.Web.Core.Models.IncomeModels.Tags;
+using LifeTracker.Web.Host.Models.IncomeModels.Tags;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

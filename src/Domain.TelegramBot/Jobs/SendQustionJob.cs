@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Application.TelegramBot.Pipelines.IOInstances.Interfaces;
+using Common;
 using Common.Entites;
 using Domain.TelegramBot.Helpers;
 using Domain.TelegramBot.MessagePipelines.Questions;
@@ -50,13 +51,13 @@ namespace Infrastructure.TelegramBot.Jobs
         public const string Question = "question";
         public const string ChatId = "chatId";
 
-        private readonly MessageResponsePublisher _sender;
+        private readonly IMessageSender _sender;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly TelegramCache _cache = new();
 
-        public SendQustionJob()
+        public SendQustionJob(IMessageSender sender)
         {
-            _sender = new();
+            _sender = sender;
         }
 
         public virtual Task Execute(IJobExecutionContext context)

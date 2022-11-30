@@ -24,9 +24,9 @@ namespace Infrastructure.TelegramBot
             //});
 
             _ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MessagePipelineBase))).ToArray()).InstancePerLifetimeScope();
-            _ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(PipelineChunk))).ToArray()).InstancePerDependency();
+            _ = builder.RegisterTypes(GetType().Assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(PipelineChunk))).ToArray()).InstancePerLifetimeScope();
 
-            _ = builder.RegisterModule(new PersistenceModule(false));
+            _ = builder.RegisterModule(new PersistenceModule());
             _ = builder.RegisterModule<DomainModule>();
             _ = builder.RegisterType<MiddlewareHandler>().SingleInstance();
 

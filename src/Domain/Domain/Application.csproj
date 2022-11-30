@@ -14,29 +14,18 @@
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extras.Quartz" Version="7.3.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure.FileStorage\Infrastructure.FileStorage.csproj" />
     <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
-    <ProjectReference Include="..\..\Persistence\Infrastructure.Sql\Persistence.Master.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
-    <ProjectReference Include="..\TextUI.Core\TextUI.Core.csproj" />
+    <ProjectReference Include="..\TextUI.Core\Application.TextCommunication.Core.csproj" />
   </ItemGroup>
 
 </Project>

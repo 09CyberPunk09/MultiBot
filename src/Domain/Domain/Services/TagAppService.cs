@@ -1,59 +1,56 @@
 ﻿using Common.Entites;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Master;
+using Persistence.Common.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class TagAppService : AppService
 {
-    public class TagAppService : AppService
+    private IRepository<Tag> _tagRepository;
+    private IRepository<Note> _noteRepository;
+
+    public TagAppService(
+        IRepository<Tag> tagRepo, 
+        IRepository<Note> noteRepository)
     {
-        private LifeTrackerRepository<Tag> _tagRepository;
-        private LifeTrackerRepository<Note> _noteRepository;
+        _tagRepository = tagRepo;
+        _noteRepository = noteRepository;
+    }
 
-        public TagAppService(LifeTrackerRepository<Tag> tagRepo, LifeTrackerRepository<Note> noteRepository)
+    public Tag Update(Tag tag)
+    {
+        return _tagRepository.Update(tag);
+    }
+
+    public Tag Create(string name, Guid userId,bool isSystem = false)
+    {
+        return _tagRepository.Add(new()
         {
-            _tagRepository = tagRepo;
-            _noteRepository = noteRepository;
-        }
+            Name = name,
+            UserId = userId,
+            IsSystem = isSystem
+        });
+    }
 
-        public Tag Update(Tag tag)
+    public Tag Get(Guid id) 
+        => _tagRepository.Get(id);
+
+    public Tag Get(string text, Guid userId)
+        => _tagRepository.FirstOrDefault(x => x.Name == text && x.UserId == userId);
+
+    public IEnumerable<Tag> GetAll(Guid userId)
+        => _tagRepository.Where(x => x.UserId == userId);
+
+    public Note CreateNoteUnderTag(Guid tagId, string text, Guid userId)
+    {
+        var tag = _tagRepository.Get(tagId);
+        var note = _noteRepository.Add(new()
         {
-            return _tagRepository.Update(tag);
-        }
-
-        public Tag Create(string name, Guid userId)
-        {
-            return _tagRepository.Add(new()
-            {
-                Name = name,
-                UserId = userId,
-                IsSystem = true
-            });
-        }
-
-        public Tag Get(Guid id) => _tagRepository.Get(id);
-
-        public Tag Get(string text, Guid userId)
-            => _tagRepository
-                            .GetTable()
-                            .Include(x => x.Notes)
-                            .FirstOrDefault(x => x.UserId == userId && x.Name == text);
-
-        public IEnumerable<Tag> GetAll(Guid userId)
-            => _tagRepository.GetQuery().Where(x => x.UserId == userId);
-
-        public Note CreateNoteUnderTag(Guid tagId, string text, Guid userId)
-        {
-            var tag = _tagRepository.Get(tagId);
-            var note = _noteRepository.Add(new()
-            {
-                Text = text,
-                Tags = new() { tag },
-                UserId = userId
-            });
-            return note;
-        }
+            Text = text,
+            Tags = new() { tag },
+            UserId = userId
+        });
+        return note;
     }
 }

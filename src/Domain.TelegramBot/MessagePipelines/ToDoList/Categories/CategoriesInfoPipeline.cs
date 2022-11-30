@@ -19,7 +19,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList.Categories
             RegisterStage(() =>
             {
                 var userId = MessageContext.User.Id;
-                var categories = todoService.GetAllCategories(userId, true);
+                var categories = todoService.GetAllCategories(userId);
                 var sb = new StringBuilder();
                 sb.AppendLine("Your TODO items: ");
                 int counter = 0;

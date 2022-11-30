@@ -1,7 +1,6 @@
 ﻿using Application.Services;
-using Autofac.Core;
-using LifeTracker.Web.Core.Models.IncomeModels.Account;
-using LifeTracker.Web.Core.Models.IncomeModels.Users;
+using LifeTracker.Web.Host.Models.IncomeModels.Account;
+using LifeTracker.Web.Host.Models.IncomeModels.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -94,7 +93,7 @@ namespace LifeTracker.Web.Host.Controllers
 
         private ClaimsIdentity GetIdentity(string emailAddress, string password)
         {
-            var person = _service.GetUser(emailAddress);
+            var person = _service.GetUserByEmail(emailAddress);
 
             if (person != null && person.Password.Equals(password))
             {
@@ -115,9 +114,9 @@ namespace LifeTracker.Web.Host.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult SignUp(SignUpIncomeModel model)
+        public async Task<IActionResult> SignUp(SignUpIncomeModel model)
         {
-            _service.SignUp(model.Name, model.Password, model.Email);
+            await _service.SignUp(model.Name, model.Password, model.Email);
             return Ok();
         }
     }

@@ -1,5 +1,4 @@
-﻿using Application;
-using Infrastructure.TelegramBot.IOInstances;
+﻿using Infrastructure.TelegramBot.IOInstances;
 using Integration.Applications;
 using NLog;
 using SimpleScheduler;

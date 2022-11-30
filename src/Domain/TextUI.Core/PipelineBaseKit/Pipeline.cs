@@ -24,6 +24,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
         public MessageContext MessageContext { get; set; }
 
         public bool IsLooped { get; set; }
+        //TODO: Remove MessageContext 
         public Action<Stage, MessageContext, ContentResult> StagePostAction { get; set; }
         public ILifetimeScope _scope { get; set; }
 
@@ -76,6 +77,7 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
                         BindingFlags.NonPublic).Invoke(this, null) as ContentResult;
                 }
                 result.RecipientChatId = MessageContext.RecipientChatId;
+                StagePostAction?.Invoke(stage, MessageContext, result);
                 return new PipelineExecutionResponse()
                 {
                     Result = result,
@@ -94,13 +96,13 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         }
 
-        protected static RouteAttribute GetRoute<TPpileline>() where TPpileline : Pipeline
+        public static RouteAttribute GetRoute<TPpileline>() where TPpileline : Pipeline
         {
             var attr = typeof(TPpileline).GetCustomAttribute(typeof(RouteAttribute)) as RouteAttribute;
             return attr;
         }
 
-        protected static string GetAlternativeRoute<TPpileline>() where TPpileline : Pipeline
+        public static string GetAlternativeRoute<TPpileline>() where TPpileline : Pipeline
             => GetRoute<TPpileline>().AlternativeRoute;
 
         protected void InitBaseComponents()

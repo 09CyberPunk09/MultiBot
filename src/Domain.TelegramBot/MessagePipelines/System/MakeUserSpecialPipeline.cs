@@ -30,7 +30,7 @@ namespace Infrastructure.TelegramBot.MessagePipelines.System
                 var supersercretCode = (new ConfigurationAppService()).Get("SpecialSercretKey");
                 if (supersercretCode.Equals(MessageContext.Message.Text, StringComparison.OrdinalIgnoreCase))
                 {
-                    var user = _service.GetByTgId(MessageContext.RecipientChatId);
+                    var user = _service.GetByTgId(MessageContext.RecipientUserId);
                     user.IsSpecial = true;
                     _service.Update(user);
 

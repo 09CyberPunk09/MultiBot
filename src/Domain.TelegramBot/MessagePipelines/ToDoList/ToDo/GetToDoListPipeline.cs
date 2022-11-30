@@ -20,7 +20,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             RegisterStage(() =>
             {
                 var userId = MessageContext.User.Id;
-                var categories = todoService.GetAllCategories(userId, true);
+                var categories = todoService.GetAllCategories(userId);
                 var sb = new StringBuilder();
                 int counter = 0;
                 var orders = new Dictionary<int, Guid>();

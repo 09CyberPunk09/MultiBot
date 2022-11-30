@@ -67,7 +67,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
             }
             else
             {
-                _todoService.DeleteToDoItem(todoItem);
+                _todoService.DeleteToDoItem(todoItem.Id);
             }
             return Text("✅ Done");
         }

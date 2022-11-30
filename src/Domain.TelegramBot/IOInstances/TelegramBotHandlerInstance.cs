@@ -1,9 +1,17 @@
 ﻿using Application;
+using Application.TelegramBot.Pipelines.IOInstances;
+using Application.TelegramBot.Pipelines.IOInstances.Interfaces;
 using Autofac;
+using Domain.TelegramBot.Middlewares;
+using Infrastructure.FileStorage;
+using Kernel;
+using Microsoft.Extensions.Configuration;
 using NLog;
 using Persistence.Caching.Redis;
 using Persistence.Master;
+using ServiceStack.Messaging;
 using System;
+using Telegram.Bot;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {
@@ -12,13 +20,20 @@ namespace Infrastructure.TelegramBot.IOInstances
         IContainer _container;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-        private MessageHandler _messageConsumer;
+        private MessageHandler _messageHandler;
 
         private void ConfigureApplication()
         {
             var containerBuilder = new ContainerBuilder();
 
-            ConfigureHandlersAccess(containerBuilder);
+            var configuration = ConfigurationHelper.GetConfiguration();
+            containerBuilder.RegisterInstance(configuration).As<IConfigurationRoot>();
+
+            ConfigureCommunicationInfrastructure(containerBuilder);
+
+            RegisterMiddlewares(containerBuilder);
+
+            ConfigureFileStorageFunctionality(containerBuilder);
 
             ConfigurePersistence(containerBuilder);
 
@@ -32,29 +47,59 @@ namespace Infrastructure.TelegramBot.IOInstances
             ConfigureApplication();
         }
 
-        public void Stop()
+        //TODO: Temporary kostil
+        private void RegisterMiddlewares(ContainerBuilder builder)
         {
-            throw new NotImplementedException();
+            builder.RegisterType<AuthentificationMiddleware>().InstancePerLifetimeScope();
+            builder.RegisterType<UserAllowedFeatureMiddleware>().InstancePerLifetimeScope();
+        }
+        private void ApplyMiddlewares(MessageHandler messageHandler)
+        {
+            messageHandler.AddMiddleware<AuthentificationMiddleware>();
+            messageHandler.AddMiddleware<UserAllowedFeatureMiddleware>( );
+            logger.Info("Configurarion: Message handler middlewares configured");
         }
 
         private void ResolveRequiredServices(ContainerBuilder containerBuilder)
         {
             _container = containerBuilder.Build();
 
-            _messageConsumer = _container.Resolve<MessageHandler>();
+            _messageHandler = _container.Resolve<MessageHandler>();
+            ApplyMiddlewares(_messageHandler);
+            _messageHandler.StartReceiving();
         }
-
-        private void ConfigureHandlersAccess(ContainerBuilder containerBuilder)
+        private void ConfigureFileStorageFunctionality(ContainerBuilder builder)
         {
-            _ = containerBuilder.RegisterType<MessageHandler>().SingleInstance();
-            logger.Info("Handler Access Configured");
+            builder.RegisterModule<FileStorageModule>();
+            logger.Info("Configurarion: File storage registered");
+
+        }
+        private void ConfigureCommunicationInfrastructure(ContainerBuilder containerBuilder)
+        {
+            //BUG: Code repeat
+            var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appSettings.json").Build();
+            var client = new TelegramBotClient(configuration["Telegram:BotAPIKey"])
+            {
+                Timeout = TimeSpan.FromMinutes(10)
+            };
+            _ = containerBuilder.RegisterInstance(client).As<ITelegramBotClient>().SingleInstance();
+
+            _ = containerBuilder
+                .RegisterType<TelegramMessageSender>()
+                .As<IMessageSender>()
+                .SingleInstance();
+            _ = containerBuilder
+                .RegisterType<MessageHandler>()
+                .SingleInstance();
+            logger.Info("Configurarion: Communication infastructure configured");
         }
 
         private void ConfigurePersistence(ContainerBuilder builder)
         {
-            _ = builder.RegisterModule(new PersistenceModule(false));
+            _ = builder.RegisterModule(new PersistenceModule());
             _ = builder.RegisterModule<CachingModule>();
-            logger.Info("Persistence Configured");
+            logger.Info("Configuration: Persistence Configured");
 
         }
 
@@ -62,7 +107,7 @@ namespace Infrastructure.TelegramBot.IOInstances
         {
             _ = builder.RegisterModule<PipelinesModule>();
             _ = builder.RegisterModule<DomainModule>();
-            logger.Info("Domain and pipelines Configured");
+            logger.Info("Configuration: Domain and pipelines Configured");
 
         }
     }

@@ -1,11 +1,12 @@
 ﻿using Autofac;
+using Common.Enums;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
-using System.ComponentModel;
+using TextUI.Core.PipelineBaseKit;
 
 namespace Domain.TelegramBot.MessagePipelines.Hello
 {
     [Route("/hello")]
-    [Description("This is an endpoint for developers, we use it for confirming that everythinf is ok")]
+    [FeaureFlags(FeatureFlag.BasicFunctionality)]
     public class HelloMessagePipeline : MessagePipelineBase
     {
         public HelloMessagePipeline(ILifetimeScope scope) : base(scope)

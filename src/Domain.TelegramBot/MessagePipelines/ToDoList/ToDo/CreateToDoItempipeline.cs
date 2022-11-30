@@ -30,7 +30,7 @@ namespace Domain.TelegramBot.MessagePipelines.ToDoList
         {
             SetCachedValue(NOTE_TEXT_CACHEKEY, MessageContext.Message.Text);
 
-            var categories = _todoService.GetAllCategories(MessageContext.User.Id, false);
+            var categories = _todoService.GetAllCategories(MessageContext.User.Id);
             var b = new StringBuilder();
             b.AppendLine("Your Categories: ");
 

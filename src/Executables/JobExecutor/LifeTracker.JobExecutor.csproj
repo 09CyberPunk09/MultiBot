@@ -18,9 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
-    <ProjectReference Include="..\..\Domain.TelegramBot\Domain.TelegramBot.csproj" />
+    <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Pipelines.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
-    <ProjectReference Include="..\..\Persistence\Persistence.Synchronization\Persistence.Synchronization.csproj" />
   </ItemGroup>
 	<ItemGroup>
 		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">

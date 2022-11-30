@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using Common.Entites;
-using LifeTracker.Web.Core.Models.IncomeModels.Reminders;
+using LifeTracker.Web.Host.Models.IncomeModels.Reminders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,22 +1,15 @@
 ﻿using Common.Entites;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess;
-using System;
 using System.Linq;
 
-namespace Persistence.Master.Repositories
+namespace Persistence.Master.Repositories;
+
+public class TagRepository : RelationalSchemaRepository<Tag>
 {
-    public class TagRepository : LifeTrackerRepository<Tag>
-    {
-        public TagRepository(RelationalSchemaContext context) : base(context)
-        { }
+    public TagRepository(RelationalSchemaContext context) : base(context)
+    { }
 
-        private IQueryable<Tag> TagQuery => _context.Tags
-                                                    .Include(x => x.Notes);
-
-        public override Tag Get(Guid id)
-        {
-            return TagQuery.FirstOrDefault(x => x.Id == id);
-        }
-    }
+    public override IQueryable<Tag> GetQuery() => _context.Tags
+                                                .Include(x => x.Notes);
 }

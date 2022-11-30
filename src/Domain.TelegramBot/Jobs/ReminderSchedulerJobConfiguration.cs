@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Application.TelegramBot.Pipelines.IOInstances.Interfaces;
 using Autofac;
 using Common;
 using Infrastructure.TelegramBot.IOInstances;
@@ -166,9 +167,12 @@ namespace Infrastructure.TelegramBot.Jobs
         public const string CHATID = "ChatId";
         public const string REMINDERID = "ReminderId";
 
-        private readonly MessageResponsePublisher _sender = new();
+        private readonly IMessageSender _sender;
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
+        public SendReminderJob(IMessageSender sender)
+        {
+            _sender = sender;
+        }
 
         public Task Execute(IJobExecutionContext context)
         {

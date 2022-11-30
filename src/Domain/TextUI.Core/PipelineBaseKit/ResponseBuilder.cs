@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextUI.Core.PipelineBaseKit
+﻿namespace TextUI.Core.PipelineBaseKit
 {
     public class Response
     {
@@ -19,7 +13,7 @@ namespace TextUI.Core.PipelineBaseKit
         }
         public void SetPipelineEnded()
         {
-
+            PipelineEnded = true;
         }
     }
 }

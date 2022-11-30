@@ -9,6 +9,7 @@ namespace Application
     {
         protected override void Load(ContainerBuilder builder)
         {
+            //var config = config.GetSection("MyOptions").Get<MyOptions>();
             var mapper = LoadMappers(builder);
 
             LoadServices(builder, mapper);

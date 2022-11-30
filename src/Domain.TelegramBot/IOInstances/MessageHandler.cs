@@ -1,6 +1,8 @@
-﻿using Autofac;
+﻿using Application.Services;
+using Application.TelegramBot.Pipelines.IOInstances.Interfaces;
+using Autofac;
 using Domain.TelegramBot.IOInstances;
-using Infrastructure.TelegramBot.MessagePipelines;
+using Domain.TelegramBot.MessagePipelines.Start;
 using Infrastructure.TelegramBot.ResponseTypes;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 using NLog;
@@ -9,21 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TextUI.Core.PipelineBaseKit;
 
 namespace Infrastructure.TelegramBot.IOInstances
 {
     public class MessageHandler
     {
-        class PipelinewExecutionPayload
-        {
-            public string CurrentCommand { get; set; }
-            /// <summary>
-            /// method name with path to it
-            /// </summary>
-            public string Method { get; set; }
-        }
-
-
         #region Cache Keys
 
         public const string CURRENT_MESSAGEPIPELINE_STAGE_INDEX = "CurrntPipelineStageIndex";
@@ -33,9 +26,10 @@ namespace Infrastructure.TelegramBot.IOInstances
 
         #region Injected members
 
-        private readonly MessageResponsePublisher _sender;
+        private readonly IMessageSender _sender;
         private readonly ILifetimeScope _lifetimeScope;
         private readonly TelegramCache _cache;
+        private readonly UserAppService _userService;
         private MessageReceiver _receiver;
         private readonly MiddlewareHandler _middlewareHandler;
 
@@ -48,14 +42,13 @@ namespace Infrastructure.TelegramBot.IOInstances
         public MessageHandler(ILifetimeScope lifetimeScope)
         {
             _lifetimeScope = lifetimeScope;
-            _sender = new();
+            _sender = lifetimeScope.Resolve<IMessageSender>();
             _cache = new();
-
+            _userService = lifetimeScope.Resolve<UserAppService>();
             _middlewareHandler = lifetimeScope.Resolve<MiddlewareHandler>();
-            StartReceiving();
         }
 
-        private void StartReceiving()
+        public void StartReceiving()
         {
             _receiver = new(this);
             _receiver.StartReceiving();
@@ -68,29 +61,48 @@ namespace Infrastructure.TelegramBot.IOInstances
 
         public void ConsumeMessage(Message message)
         {
-            MessageContext ctx = new(message.ChatId)
-            {
-                Message = message,
-                TimeStamp = DateTime.Now
-            };
             bool firstPerPipeline = true;
             MessagePipelineBase pipeline = MatchPipeline(message.Text);
             if(pipeline == null)
             {
                 firstPerPipeline = false;
-                var alreadySetPipleineName = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_TYPE_NAME, ctx.RecipientChatId);
+                var alreadySetPipleineName = _cache.GetValueForChat<string>(CURRENT_MESSAGEPIPELINE_TYPE_NAME, message.ChatId);
                 if (alreadySetPipleineName != null)
                 {
                     pipeline = GetExisting(alreadySetPipleineName);
                 }
             }
-            ExecutePieplineStage(pipeline, ctx, firstPerPipeline);
+            ExecutePieplineStage(pipeline, message, firstPerPipeline);
         }
 
-        private void ExecutePieplineStage(MessagePipelineBase pipeline, MessageContext ctx, bool firstTimePerCommand = false)
+        public void AddMiddleware<TMiddleware>() where TMiddleware : IMessageHandlerMiddleware
+        {
+            logger.Info($"Registered middleware {typeof(TMiddleware).Name}");
+            _middlewareHandler.AddMiddleware<TMiddleware>();
+        }
+
+
+        private void ExecutePieplineStage(MessagePipelineBase pipeline, Message message, bool firstTimePerCommand = false)
         {
             if (pipeline != null)
             {
+                MessageContext ctx = new(message.ChatId)
+                {
+                    Message = message,
+                    TimeStamp = DateTime.Now,
+                    User = _userService.GetByTgId(message.UserId),
+                    RecipientUserId = message.UserId,
+                    CurrentPipeline = new()
+                    {
+                        Instance = pipeline,
+                        Type = pipeline.GetType()
+                    }
+                };
+                var middlewaresPassed = _middlewareHandler.ExecuteMiddlewares(ctx).Result;
+                if (!middlewaresPassed)
+                {
+                    return;
+                }
                 int stageIndex;
                 if (!firstTimePerCommand)
                 {
@@ -101,6 +113,7 @@ namespace Infrastructure.TelegramBot.IOInstances
                     stageIndex = -1;
                 }
                 pipeline.MessageContext = ctx;
+                pipeline.Response.CanIvokeNext = true;
                 var result = pipeline.Execute(ctx, pipeline.GetType(), stageIndex);
 
                 _sender.SendMessage(result.Result);
@@ -126,7 +139,7 @@ namespace Infrastructure.TelegramBot.IOInstances
             }
             else
             {
-                _sender.SendMessage(new TextResult("No corresponding pipeline found", ctx.RecipientChatId));
+                _sender.SendMessage(new TextResult("No corresponding pipeline found", message.ChatId));
             }
         }
         private MessagePipelineBase MatchPipeline(string text)
@@ -157,17 +170,10 @@ namespace Infrastructure.TelegramBot.IOInstances
             return _lifetimeScope.Resolve(type) as MessagePipelineBase;
         }
 
-    private static List<Type> GetPipelineTypes()
+        private static List<Type> GetPipelineTypes()
         {
             var basePipelineType = typeof(MessagePipelineBase);
             return typeof(StartPipeline).Assembly.GetTypes().Where(t => t.IsSubclassOf(basePipelineType)).ToList();
         }
-
-        #region service methods
-
-        private string GetRoute(MessagePipelineBase pipeline)
-            => (pipeline.GetType().GetCustomAttributes(true).FirstOrDefault(attr => attr as RouteAttribute != null) as RouteAttribute).Route;
-
-        #endregion service methods
     }
 }

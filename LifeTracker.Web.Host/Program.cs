@@ -2,8 +2,8 @@ using Application;
 using Application.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using LifeTracker.Web.Core.Meiddlewares;
 using LifeTracker.Web.Host;
+using LifeTracker.Web.Host.Meiddlewares;
 using Microsoft.OpenApi.Models;
 using Persistence.Master;
 
@@ -17,7 +17,7 @@ _appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
-    builder.RegisterModule(new PersistenceModule(false));
+    builder.RegisterModule(new PersistenceModule());
     builder.RegisterModule<DomainModule>();
 });
 
@@ -75,6 +75,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
+
 
 app.MapControllers();
 

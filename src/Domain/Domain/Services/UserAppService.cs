@@ -1,77 +1,129 @@
-﻿using Common.Entites;
-using Persistence.Master;
+﻿using Application.Services.Files;
+using Common.Entites;
+using Common.Enums;
+using Persistence.Caching.Redis;
+using Persistence.Common.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Services;
+
+public class UserAppService : AppService
 {
-    public class UserAppService : AppService
+    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<UserFeatureFlag> _userFeatureFlagRepository;
+    private readonly IRepository<TelegramLogIn> _telegramLoginRepository;
+    private readonly Cache _cache;
+    private readonly FileStorageService _fileStorageService;
+    public UserAppService(
+        IRepository<User> userRepository,
+        IRepository<UserFeatureFlag> userFeatureFlagRepository,
+        IRepository<TelegramLogIn> telegramLoginRepository,
+        FileStorageService fileStorageService)
     {
-        private readonly LifeTrackerRepository<User> _userRepository;
-        private readonly TagAppService _tagService;
+        _userRepository = userRepository;
+        _userFeatureFlagRepository = userFeatureFlagRepository;
+        _telegramLoginRepository = telegramLoginRepository;
+        _cache = new Cache(DatabaseType.TelegramUserCache);
+        _fileStorageService = fileStorageService;
+    }
 
-        public UserAppService(LifeTrackerRepository<User> userRepository,
-            TagAppService tagService)
+    public void TelegramLogOut(long telegramUserId)
+    {
+        var cache = new Cache(DatabaseType.TelegramLogins);
+        var user = cache.Get<Guid?>(telegramUserId.ToString(), true);
+        var telegramLogin = _telegramLoginRepository.FirstOrDefault(x => x.TelegramUserId == telegramUserId);
+        _telegramLoginRepository.RemovePhysically(telegramLogin.Id);
+    }
+
+    public bool TelegramLogin(string emailAddress, string password,long userId)
+    {
+        var user = GetUserByEmail(emailAddress);
+        if (user == null)
+            throw new Exception($"There is no user with email {emailAddress} in the system");
+        if(user.Password != password)
+            throw new Exception($"Invalid Password");
+        //todo: add telegramlogin to db
+        //add repo for it
+        //add adding here
+        //if you are in mood - move all telegram-dependent logics awaur from here to a separate service
+        var login = _telegramLoginRepository.Add(new TelegramLogIn()
         {
-            _userRepository = userRepository;
-            _tagService = tagService;
+            TelegramUserId = userId,
+            UserId = user.Id
+        });
+
+        user.TelegramLogIns.Add(login);
+
+        _userRepository.Update(user);
+        return true;
+    }
+
+    public List<User> GetAll()
+    {
+        return _userRepository.GetAll().ToList();
+    }
+
+    public User Update(User user, long? telegramUserId = null)
+    {
+        _ = _cache.Get<User>(telegramUserId.ToString(), true);
+        _cache.Set($"{user.TelegramChatId}", user);
+        return _userRepository.Update(user);
+    }
+
+    public User GetByTgId(long tgUserId)
+    {
+        User user;
+        var userFromCache = _cache.Get<User>(tgUserId.ToString());
+        if(userFromCache == null)
+        {
+            var userId = _telegramLoginRepository.FirstOrDefault( x=> x.TelegramUserId == tgUserId).UserId;
+            user = _userRepository.Get(userId);
+            _cache.Set(tgUserId.ToString(), user);
         }
-
-        public List<User> GetAll()
+        else
         {
-            return _userRepository.GetAll().ToList();
+            user = userFromCache;
         }
+        return user;
+    }
 
-        public User CreateFromTelegram(string username, long tgChatId)
+    public async Task InitializeUserEntities(Guid userId)
+    {
+        //TODO: Add here some initialization code in future
+        await _fileStorageService.InitializeUserDataStorage(FileStorageStrategy.Local,userId);
+
+    }
+
+    public User GetUserByEmail(string emailAddress)
+    {
+        return _userRepository.FirstOrDefault(x => x.EmailAddress == emailAddress);
+    }
+
+    public async Task<Guid> SignUp(string name, string email, string password)
+    {
+        var existingUser = _userRepository.FirstOrDefault(x => x.EmailAddress == email);
+
+        if (existingUser != null)
+            throw new Exception("User with this email address already exists!");
+        else
         {
-            var user = _userRepository.Add(new()
+            var newUser = new User()
             {
-                Name = username,
-                TelegramChatId = tgChatId
+                EmailAddress = email,
+                Password = password,
+                Name = name
+            };
+            var newUserId = _userRepository.Add(newUser).Id;
+            _userFeatureFlagRepository.Add(new()
+            {
+                FeatureFlag = FeatureFlag.BasicFunctionality,
+                UserId = newUserId
             });
-            InitializeUserEntities(user.Id);
-            return user;
-        }
-
-        public User Update(User user)
-        {
-            return _userRepository.Update(user);
-        }
-
-        public User GetByTgId(long tgUserId)
-        {
-            return _userRepository.GetQuery().FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId.Value == tgUserId);
-        }
-
-        public void InitializeUserEntities(Guid userId)
-        {
-            //TODO: Add here some initialization code in future
-        }
-
-        public User GetUser(string emailAddress)
-        {
-            return _userRepository.GetQuery().FirstOrDefault(x => x.EmailAddress == emailAddress);
-        }
-
-        public void SignUp(string name, string email, string password)
-        {
-            var existingUser = _userRepository.FirstOrDefault(x => x.EmailAddress == email);
-
-            if (existingUser != null)
-                throw new Exception("User with this email address already exists!");
-            else
-            {
-                var newUser = new User()
-                {
-                    EmailAddress = email,
-                    Password = password,
-                    Name = name,
-                    TelegramLoggedIn = false
-                };
-
-                _userRepository.Add(newUser);
-            }
+            await InitializeUserEntities(newUserId);
+            return newUserId;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Application;
-using Integration.Applications;
+﻿using Integration.Applications;
 using NLog;
 using SimpleScheduler;
 using System;
