@@ -1,0 +1,74 @@
+﻿using Application.Services;
+using Autofac;
+using Infrastructure.TextUI.Core.PipelineBaseKit;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Application.TelegramBot.Pipelines.Old.MessagePipelines.TimeTracker
+{
+    [Route("/track_in", "📥 Track In")]
+    public class TrackInPipeline : MessagePipelineBase
+    {
+        private const string ACTIVITIES_CACHEKEY = "activitiesDictionary";
+        private readonly TimeTrackingAppService _service;
+        public TrackInPipeline(ILifetimeScope scope) : base(scope)
+        {
+            _service = scope.Resolve<TimeTrackingAppService>();
+        }
+
+        public override void RegisterPipelineStages()
+        {
+            RegisterStage(AskForActivity);
+            RegisterStage(AcceptTrackIn);
+        }
+
+        public ContentResult AskForActivity()
+        {
+            var data = _service.GetAllActivities(MessageContext.User.Id);
+            if (data == null || data.Count == 0)
+            {
+                var activity = _service.CreateTimeTrackingActivity("Default", MessageContext.User.Id);
+                data = new() { activity };
+            }
+
+
+            var b = new StringBuilder();
+            b.AppendLine("Enter a number near the Activity you want to track in:");
+
+            var counter = 0;
+            var dictionary = new Dictionary<int, Guid>();
+
+            foreach (var item in data)
+            {
+                ++counter;
+                b.AppendLine($"🔸 {counter}. {item.Name}");
+                dictionary[counter] = item.Id;
+            }
+
+            SetCachedValue(ACTIVITIES_CACHEKEY, dictionary, MessageContext.RecipientChatId);
+
+            return new ContentResult()
+            {
+                Text = b.ToString()
+            };
+        }
+
+        public ContentResult AcceptTrackIn()
+        {
+            var dict = GetCachedValue<Dictionary<int, Guid>>(ACTIVITIES_CACHEKEY, true);
+            if (!(int.TryParse(MessageContext.Message.Text, out var number) && number >= 0 && number <= dict.Count))
+            {
+                Response.ForbidNextStageInvokation();
+                return Text("⛔️ Enter a number form the suggested list");
+            }
+
+            var id = dict[number];
+            _service.TrackIn(id, DateTime.Now, MessageContext.User.Id);
+
+            //todo: make track in possible only if the previous entries are complete
+            //todo: make track out possible only if the previous entries are not complete
+            return Text($"✅Done. Started tracking at ⏱{DateTime.Now:HH:mm dd:MM:yyyy}");
+        }
+    }
+}

@@ -1,0 +1,26 @@
+﻿using Autofac;
+using Persistence.Master;
+using System.Linq;
+using SystemUser = Common.Entites.User;
+
+namespace Infrastructure.TextUI.Core.PipelineBaseKit
+{
+    public class PipelineChunk : Pipeline
+    {
+        public PipelineChunk(ILifetimeScope scope) : base(scope)
+        {
+        }
+
+
+
+        protected SystemUser GetCurrentUser()
+        {
+            //todo: implement getting from cache
+            //todo: add caching library
+            using (var _dbContext = new LifeTrackerDbContext())
+            {
+                return _dbContext.Users.FirstOrDefault(u => u.TelegramChatId.HasValue && u.TelegramChatId == MessageContext.RecipientChatId);
+            }
+        }
+    }
+}
