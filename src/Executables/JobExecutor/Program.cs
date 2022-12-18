@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.Quartz;
 using Common;
-using Infrastructure.TelegramBot.Jobs;
 using Integration.Applications;
 using NLog;
 using System;
@@ -42,8 +41,8 @@ namespace LifeTracker.JobExecutor
         private static void StartJobs()
         {
             //AddJob<SynchronizationJobConfiguration>();
-            AddJob<QustionSchedulingJobConfiguration>();
-            AddJob<ReminderSchedulerJobConfiguration>();
+         //   AddJob<QustionSchedulingJobConfiguration>();
+       //     AddJob<ReminderSchedulerJobConfiguration>();
             AddJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.JobExecutor", InstanceIdentifier.Identifier));
         }
 

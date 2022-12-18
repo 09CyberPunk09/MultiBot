@@ -61,7 +61,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileStorage", "FileStorage"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.FileStorage", "Infrastructure.FileStorage\Infrastructure.FileStorage.csproj", "{7AEAD8B3-9A27-46F9-995B-41DB287BA67A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Telegram.Implementations", "Application.Telegram.Implementations\Application.Telegram.Implementations.csproj", "{60EC9A68-E413-4EBB-8A29-29102CCF99E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Telegram.Implementations", "Application.Telegram.Implementations\Application.Telegram.Implementations.csproj", "{60EC9A68-E413-4EBB-8A29-29102CCF99E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{10A8E77E-ACC7-4B78-9EB0-D87E3408DDB2}"
+	ProjectSection(SolutionItems) = preProject
+		Configuration\appSettings.Development.json = Configuration\appSettings.Development.json
+		Configuration\appSettings.json = Configuration\appSettings.json
+		Configuration\appSettings.Release.json = Configuration\appSettings.Release.json
+		Configuration\appSettings.Stage.json = Configuration\appSettings.Stage.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +151,10 @@ Global
 		{60EC9A68-E413-4EBB-8A29-29102CCF99E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60EC9A68-E413-4EBB-8A29-29102CCF99E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60EC9A68-E413-4EBB-8A29-29102CCF99E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +183,7 @@ Global
 		{9E864197-E5C1-4661-868B-FB3760FC6C57} = {74BBF5D3-B671-4D69-BBAD-046EA6F9FAD4}
 		{7AEAD8B3-9A27-46F9-995B-41DB287BA67A} = {9E864197-E5C1-4661-868B-FB3760FC6C57}
 		{60EC9A68-E413-4EBB-8A29-29102CCF99E0} = {81905FCE-DB1B-4BF6-BB12-E05EDA81D23E}
+		{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C} = {7021F5C1-AE52-48D1-80B0-69E69CF00B14}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80D05912-2D7B-4B13-8F4C-25DEDE32BC5B}

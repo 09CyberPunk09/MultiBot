@@ -1,4 +1,4 @@
-﻿using Application.Services;
+﻿using Application.Services.Users;
 using LifeTracker.Web.Host.Models.IncomeModels.Account;
 using LifeTracker.Web.Host.Models.IncomeModels.Users;
 using Microsoft.AspNetCore.Authorization;

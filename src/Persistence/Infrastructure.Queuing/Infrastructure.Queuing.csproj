@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common.Configuration\Common.Configuration.csproj" />
     <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
   </ItemGroup>
 

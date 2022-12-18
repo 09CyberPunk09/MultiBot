@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Configuration;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NLog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Configuration.Internal;
 using System.Linq;
 
 namespace Persistence.Caching.Redis
@@ -22,8 +24,7 @@ namespace Persistence.Caching.Redis
 
         static Cache()
         {
-            var configuration = new ConfigurationBuilder()
-              .AddJsonFile("appSettings.json").Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
             _host = configuration["Redis:Default:HostName"];
             _port = Convert.ToInt32(configuration["Redis:Default:Port"]);
           
@@ -94,6 +95,26 @@ namespace Persistence.Caching.Redis
         protected void Remove(RedisKey key)
         {
             db.KeyDelete(key);
+        }
+
+        public T GetSetField<T>(string setIdentifier,string field) where T : class
+        {
+            var result = db.HashGet(setIdentifier, field);
+            if (result != default)
+                return JsonConvert.DeserializeObject<T>(result);
+            else 
+                return null;
+        }
+        public void SetSetField<T>(string setId,string field,object value)
+        {
+            db.HashSet(setId, new[]
+            {
+                new HashEntry(field,JsonConvert.SerializeObject(value))
+            });
+        }
+        public void DeleteSetItem(string setId,string field)
+        {
+            db.HashDelete(setId, field);
         }
     }
 }

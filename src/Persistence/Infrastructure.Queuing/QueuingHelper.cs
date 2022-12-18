@@ -1,4 +1,5 @@
-﻿using Kernel;
+﻿using Common.Configuration;
+using Kernel;
 using NLog;
 
 namespace Infrastructure.Queuing

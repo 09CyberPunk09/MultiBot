@@ -1,13 +1,11 @@
 {
   "profiles": {
-    "LifeTracker.TelegramBot.IOHandler": {
+    "LifeTracker.TelegramBot.Handlers": {
       "commandName": "Project",
       "environmentVariables": {
         "ENV": "Development"
-      }
-    },
-    "Docker": {
-      "commandName": "Docker"
+      },
+      "remoteDebugEnabled": true
     }
   }
 }

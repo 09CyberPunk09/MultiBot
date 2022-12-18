@@ -4,15 +4,13 @@ namespace Application.Services;
 
 public class ConfigurationAppService : AppService
 {
-    private IConfigurationRoot _configuration;
+    private IConfiguration _configuration;
 
-    public ConfigurationAppService()
+    public ConfigurationAppService(IConfiguration configuration)
     {
-        var configurationBuilder = new ConfigurationBuilder()
-         .AddJsonFile("appSettings.json");
-        _configuration = configurationBuilder.Build();
+        _configuration = configuration;
     }
-    public IConfigurationRoot GetConfigurationRoot()
+    public IConfiguration GetConfigurationRoot()
     {
         return _configuration;
     }

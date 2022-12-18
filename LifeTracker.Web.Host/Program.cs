@@ -12,17 +12,17 @@ IConfigurationRoot _appConfiguration;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-_appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
+//_appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
     builder.RegisterModule(new PersistenceModule());
-    builder.RegisterModule<DomainModule>();
+ //   builder.RegisterModule<DomainModule>();
 });
 
 builder.Services.AddEndpointsApiExplorer();
-AuthConfigurer.Configure(builder.Services, _appConfiguration);
+//AuthConfigurer.Configure(builder.Services, _appConfiguration);
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });

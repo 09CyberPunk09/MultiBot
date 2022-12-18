@@ -1,0 +1,8 @@
+﻿using Application.TextCommunication.Core.Repsonses;
+
+namespace Application.Telegram.Implementations;
+
+public class AdressedContentResult : ContentResultV2
+{
+    public long? ChatId { get; set; }
+}

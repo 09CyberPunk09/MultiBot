@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Common.Configuration;
 using Infrastructure.Queuing;
 using Infrastructure.TextUI.Core.PipelineBaseKit;
 
@@ -10,13 +11,13 @@ namespace LifeTracker.TelegramBot.IOHandler
 
         public MessageConsumer()
         {
-            var service = new ConfigurationAppService();
-            var queueName = service.Get("Telegram:HandleMessageQueue");
+            var configuration = ConfigurationHelper.GetConfiguration();
+            var queueName = configuration["Telegram:HandleMessageQueue"];
 
             _publisher = QueuingHelper.CreatePublisher(queueName);
         }
 
-        public void ConsumeMessage(Message msg)
+        public void ConsumeMessage(TelegramMessage msg)
         {
             _publisher.Publish(msg);
         }

@@ -1,9 +1,8 @@
-﻿using Application.Services;
-using Application.Services.Files;
+﻿using Application.Services.Files;
 using Application.Services.FileStorage;
+using Application.Services.Users;
 using Autofac;
 using Common.Entites;
-using Common.Enums;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -34,7 +33,7 @@ namespace LifeTracker.TelegramBot.IOHandler
 
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Infrastructure.TextUI.Core.PipelineBaseKit.Message message = null;
+            Infrastructure.TextUI.Core.PipelineBaseKit.TelegramMessage message = null;
             switch (update.Type)
             {
                 case UpdateType.Unknown:

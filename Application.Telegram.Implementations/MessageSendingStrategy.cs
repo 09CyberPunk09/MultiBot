@@ -1,143 +1,96 @@
-﻿using Infrastructure.TextUI.Core.PipelineBaseKit;
+﻿using Application.TextCommunication.Core.Repsonses;
 using Persistence.Caching.Redis.TelegramCaching;
+using System.Net;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
-using TextUI.Core.PipelineBaseKit;
-using Message = Telegram.Bot.Types.Message;
+using static Application.TextCommunication.Core.Repsonses.Button;
+using static Application.TextCommunication.Core.Repsonses.Menu;
 
-namespace Application.Telegram.Implementations
+namespace Application.Telegram.Implementations;
+
+public class MessageSendingStrategy
 {
-    public class MessageSendingStrategy
+    private readonly ITelegramBotClient _uiClient;
+    public MessageSendingStrategy(ITelegramBotClient client)
     {
-        private readonly ITelegramBotClient _uiClient;
-        private readonly TelegramCache cache = new();
-        public MessageSendingStrategy(ITelegramBotClient client)
+        _uiClient = client;
+    }
+    public async Task SendMessage(ContentResultV2 result)
+    {
+        var contentResult = result as AdressedContentResult;
+        bool edited = contentResult.Edited;
+        bool hasPhoto = contentResult.Photo != null;
+        InputOnlineFile photo = null;
+        if (hasPhoto)
         {
-            _uiClient = client;
-        }
-        public async Task SendMessage(ContentResult contentResult)
-        {
-            bool hasPhoto = contentResult.Photo != null;
-            bool hasText = !string.IsNullOrEmpty(contentResult.Text);
-            bool hasInlineButtons = contentResult.Buttons != null;
-            bool hasMenu = contentResult.Menu != null;
-            bool isEdited = contentResult.Edited;
-            bool hasMultiMessages = contentResult.MultiMessages != null;
-
-            //validation
-            if (!hasText && !hasMenu)
+            if(contentResult.Photo.Mode == PhotResultMode.Url)
             {
-                //throw new Exception("you are trying to send an empty message");
-                Console.WriteLine("you are trying to send an empty message");
-                return;
-            }
-
-            var chatId = new ChatId(contentResult.RecipientChatId);
-            string lastMessageCacheey = "LastPipelineMessageId";
-
-            async Task<Message> SendTextMessageAsync(string text = "", IReplyMarkup markup = null)
-            {
-                var message = await _uiClient.SendTextMessageAsync(
-                chatId: chatId,
-                text: text,
-                replyMarkup: markup
-                );
-
-                //if (contentResult.Menu != null)
-                //{
-                //    await _uiClient.SendTextMessageAsync(
-                //        text: "Menu updated",
-                //        chatId: chatId,
-                //        replyMarkup: contentResult.Menu);
-                //}
-
-                cache.SetValueForChat(lastMessageCacheey, message.MessageId, contentResult.RecipientChatId);
-                return message;
-            }
-
-            async Task EditMessageAsync(ContentResult message)
-            {
-                int lastMessageId = cache.GetValueForChat<int>(lastMessageCacheey, message.RecipientChatId);
-                await _uiClient.EditMessageTextAsync(chatId, lastMessageId, message.Text);
-                await _uiClient.EditMessageReplyMarkupAsync(chatId, lastMessageId, message.Buttons);
-            }
-
-            async Task SendPhotoAsync(ContentResult message)
-            {
-                switch (message.Photo.Mode)
-                {
-                    case PhotResultMode.Url:
-                        await _uiClient.SendPhotoAsync(
-                            chatId: chatId,
-                            caption: message.Text,
-                            replyMarkup: message.Menu,
-                            photo: message.Photo.Url,
-                            parseMode: ParseMode.Html);
-                        break;
-
-                    case PhotResultMode.Content:
-                        MemoryStream mem = new(message.Photo.PhotoContent);
-                        var t = new InputOnlineFile(mem);
-                        await _uiClient.SendPhotoAsync(
-                          chatId: chatId,
-                          caption: message.Text,
-                          photo: t,
-                          parseMode: ParseMode.Html);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            try
-            {
-                if (contentResult.IsEmpty)
-                    return;
-
-                if (hasPhoto)
-                {
-                    await SendPhotoAsync(contentResult);
-                    return;
-                }
-                else if (contentResult.Edited)
-                {
-                    await EditMessageAsync(contentResult);
-                    return;
-                }
-                if (contentResult.MultiMessages != null)
-                {
-                    await SendTextMessageAsync(contentResult.Text, contentResult.Buttons);
-                    contentResult.MultiMessages.ForEach(async x => await SendTextMessageAsync(x.Text, x.Buttons));
-                    return;
-                }
-
-                if (hasInlineButtons && hasMenu)
-                {
-                    await SendTextMessageAsync(contentResult.Text, contentResult.Buttons);
-                    await SendTextMessageAsync("Menu updated", contentResult.Menu);
-                    return;
-                }
-                else if (hasMenu)
-                {
-                    await SendTextMessageAsync("Menu updated", contentResult.Menu);
-                    return;
-                }
-                else if (hasInlineButtons)
-                {
-                    await SendTextMessageAsync(contentResult.Text, contentResult.Buttons);
-                    return;
-                }
-
-                await SendTextMessageAsync(contentResult.Text, contentResult.Buttons);
-            }
-            catch (Exception ex)
-            {
-                throw;
+                using WebClient client = new WebClient();
+                byte[] data = client.DownloadData(contentResult.Photo.Url);
+                MemoryStream mem = new(data);
+                photo = new InputOnlineFile(mem);
+                //await _uiClient.SendPhotoAsync(
+                //  chatId: chatId,
+                //  caption: message.Text,
+                //  photo: t,
+                //  parseMode: ParseMode.Html);
             }
         }
+
+        bool hasMenu = contentResult.Menu != null;
+        IReplyMarkup menu = null;
+        if (hasMenu)
+        {
+            var type = contentResult.Menu.Type;
+            var menuData = contentResult.Menu.MenuScheme;
+            switch (type)
+            {
+                case MenuType.MessageMenu:
+                    menu = new InlineKeyboardMarkup(menuData.Select(x => x.Select(y =>
+                    {
+                        switch (y.Type)
+                        {
+                            case ButtonContentType.Text:
+                                return InlineKeyboardButton.WithCallbackData(y.Text, y.Text);
+                            case ButtonContentType.Url:
+                                return InlineKeyboardButton.WithUrl(y.Text, y.Url);
+                            case ButtonContentType.CallbackData:
+                                return InlineKeyboardButton.WithCallbackData(y.Text, y.CallbackData);
+                            default:
+                                throw new NotImplementedException();
+                        }
+                    })));
+                    break;
+                case MenuType.MenuKeyboard:
+                    menu = new ReplyKeyboardMarkup(menuData.Select(x => x.Select(y => new KeyboardButton(y.Text))));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //if (edited)
+        //{
+        //    var msgId = await _uiClient.Edi
+        //}
+        /*else*/ if (hasPhoto)
+        {
+            var msgId = await _uiClient.SendPhotoAsync(
+                chatId: contentResult.ChatId,
+                caption: contentResult.Text,
+                photo: photo,
+                replyMarkup: menu,
+                parseMode: ParseMode.Html);
+        }
+        else
+        {
+            var msgId = await _uiClient.SendTextMessageAsync(
+                chatId: contentResult.ChatId,
+                text: contentResult.Text,
+                replyMarkup: menu);
+        }
+
     }
 }

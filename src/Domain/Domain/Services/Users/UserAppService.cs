@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Services;
+namespace Application.Services.Users;
 
 public class UserAppService : AppService
 {
@@ -38,12 +38,12 @@ public class UserAppService : AppService
         _telegramLoginRepository.RemovePhysically(telegramLogin.Id);
     }
 
-    public bool TelegramLogin(string emailAddress, string password,long userId)
+    public bool TelegramLogin(string emailAddress, string password, long userId)
     {
         var user = GetUserByEmail(emailAddress);
         if (user == null)
             throw new Exception($"There is no user with email {emailAddress} in the system");
-        if(user.Password != password)
+        if (user.Password != password)
             throw new Exception($"Invalid Password");
         //todo: add telegramlogin to db
         //add repo for it
@@ -77,9 +77,9 @@ public class UserAppService : AppService
     {
         User user;
         var userFromCache = _cache.Get<User>(tgUserId.ToString());
-        if(userFromCache == null)
+        if (userFromCache == null)
         {
-            var userId = _telegramLoginRepository.FirstOrDefault( x=> x.TelegramUserId == tgUserId).UserId;
+            var userId = _telegramLoginRepository.FirstOrDefault(x => x.TelegramUserId == tgUserId).UserId;
             user = _userRepository.Get(userId);
             _cache.Set(tgUserId.ToString(), user);
         }
@@ -93,7 +93,7 @@ public class UserAppService : AppService
     public async Task InitializeUserEntities(Guid userId)
     {
         //TODO: Add here some initialization code in future
-        await _fileStorageService.InitializeUserDataStorage(FileStorageStrategy.Local,userId);
+        await _fileStorageService.InitializeUserDataStorage(FileStorageStrategy.Local, userId);
 
     }
 
