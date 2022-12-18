@@ -1,0 +1,38 @@
+﻿using Application.TextCommunication.Core.PipelineBaseKit;
+using System;
+using System.Collections.Generic;
+
+namespace Application.TextCommunication.Core.Routing;
+
+/// <summary>
+/// Representatin for list of routes and commands under these routes
+/// </summary>
+public class RoutingTable
+{
+    private readonly IReadOnlyDictionary<string, CommandMetadata> _routes;
+    private readonly IReadOnlyDictionary<string, Type> _stageTypes;
+    public RoutingTable(Dictionary<string, CommandMetadata> routes, IReadOnlyDictionary<string, Type> stageTypes)
+    {
+        _routes = routes;
+        _stageTypes = stageTypes;
+    }
+
+    public Type GetStageType(string typeFullname)
+    {
+        if (typeFullname == null) return null;
+        _ = _stageTypes.TryGetValue(typeFullname, out var result);
+        return result;
+    }
+
+    /// <summary>
+    /// Returns the command metadata found by route or null if no matches were found
+    /// </summary>
+    /// <param name="route"></param>
+    /// <returns></returns>
+    public CommandMetadata GetCommand(string route)
+    {
+        if (route == null) return null;
+        _routes.TryGetValue(route, out var command);
+        return command;
+    }
+}

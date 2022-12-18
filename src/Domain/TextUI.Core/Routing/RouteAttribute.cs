@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Application.TextCommunication.Core.PipelineBaseKit;
+using System;
 
-namespace Infrastructure.TextUI.Core.PipelineBaseKit
+namespace Application.TextCommunication.Core.Routing
 {
-    [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class RouteAttribute : Attribute
     {
         private readonly string _coommand;
@@ -15,5 +16,14 @@ namespace Infrastructure.TextUI.Core.PipelineBaseKit
 
         public string Route => _coommand;
         public string AlternativeRoute => _alternativeRoute;
+
+        public RouteDto GetData()
+        {
+            return new()
+            {
+                Route = Route,
+                AlternativeRoute = AlternativeRoute,
+            };
+        }
     }
 }
