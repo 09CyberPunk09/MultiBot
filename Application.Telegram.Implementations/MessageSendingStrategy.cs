@@ -1,11 +1,11 @@
-﻿using Application.TextCommunication.Core.Repsonses;
+﻿using Application.Chatting.Core.Repsonses;
 using System.Net;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
-using static Application.TextCommunication.Core.Repsonses.Button;
-using static Application.TextCommunication.Core.Repsonses.Menu;
+using static Application.Chatting.Core.Repsonses.Button;
+using static Application.Chatting.Core.Repsonses.Menu;
 
 namespace Application.Telegram.Implementations;
 
@@ -24,7 +24,7 @@ public class MessageSendingStrategy
         InputOnlineFile photo = null;
         if (hasPhoto)
         {
-            if(contentResult.Photo.Mode == PhotResultMode.Url)
+            if (contentResult.Photo.Mode == PhotResultMode.Url)
             {
                 using WebClient client = new WebClient();
                 byte[] data = client.DownloadData(contentResult.Photo.Url);
@@ -74,7 +74,8 @@ public class MessageSendingStrategy
         //{
         //    var msgId = await _uiClient.Edi
         //}
-        /*else*/ if (hasPhoto)
+        /*else*/
+        if (hasPhoto)
         {
             var msgId = await _uiClient.SendPhotoAsync(
                 chatId: contentResult.ChatId,

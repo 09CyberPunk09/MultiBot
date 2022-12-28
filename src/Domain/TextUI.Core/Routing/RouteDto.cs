@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Application.TextCommunication.Core.Routing
+﻿namespace Application.Chatting.Core.Routing
 {
     public class RouteDto
     {

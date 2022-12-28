@@ -1,4 +1,4 @@
-﻿using Application.TextCommunication.Core.Repsonses;
+﻿using Application.Chatting.Core.Repsonses;
 
 namespace Application.Telegram.Implementations;
 

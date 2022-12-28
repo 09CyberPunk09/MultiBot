@@ -11,7 +11,7 @@ public class TagAppService : AppService
     private IRepository<Note> _noteRepository;
 
     public TagAppService(
-        IRepository<Tag> tagRepo, 
+        IRepository<Tag> tagRepo,
         IRepository<Note> noteRepository)
     {
         _tagRepository = tagRepo;
@@ -23,7 +23,7 @@ public class TagAppService : AppService
         return _tagRepository.Update(tag);
     }
 
-    public Tag Create(string name, Guid userId,bool isSystem = false)
+    public Tag Create(string name, Guid userId, bool isSystem = false)
     {
         return _tagRepository.Add(new()
         {
@@ -33,7 +33,7 @@ public class TagAppService : AppService
         });
     }
 
-    public Tag Get(Guid id) 
+    public Tag Get(Guid id)
         => _tagRepository.Get(id);
 
     public Tag Get(string text, Guid userId)

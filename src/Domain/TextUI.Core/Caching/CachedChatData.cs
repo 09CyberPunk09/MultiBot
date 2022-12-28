@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Application.TextCommunication.Core.Caching;
+namespace Application.Chatting.Core.Caching;
 
 /// <summary>
 /// Serializable chat data object

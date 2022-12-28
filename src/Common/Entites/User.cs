@@ -15,6 +15,6 @@ namespace Common.Entites
         public bool IsSpecial { get; set; }
         public Guid? LastTimeTrackingEntry { get; set; }
         public List<UserFeatureFlag> FeatureFlags { get; set; }
-        public List<TelegramLogIn> TelegramLogIns { get; set; } 
+        public List<TelegramLogIn> TelegramLogIns { get; set; }
     }
 }

@@ -58,5 +58,5 @@ public class NoteAppService : AppService
         var tag = _tagRepository.Get(tagId);
         note.Tags.Add(tag);
         _noteRepository.Update(note);
-    } 
+    }
 }

@@ -1,7 +1,7 @@
-﻿using Application.TextCommunication.Core.Context;
-using Application.TextCommunication.Core.StageMap;
+﻿using Application.Chatting.Core.Context;
+using Application.Chatting.Core.StageMap;
 
-namespace Application.TextCommunication.Core.Interfaces;
+namespace Application.Chatting.Core.Interfaces;
 public interface ICommand
 {
     /// <summary>

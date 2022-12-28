@@ -1,4 +1,4 @@
-﻿using Application.TextCommunication.Core.Repsonses;
+﻿using Application.Chatting.Core.Repsonses;
 using Autofac;
 using Common.Configuration;
 using Infrastructure.FileStorage;
@@ -58,7 +58,7 @@ namespace LifeTracker.TelegramBot.IOHandler
         }
         private void ConfigureDomain(ContainerBuilder builder)
         {
-           // builder.RegisterModule<DomainModule>();
+            // builder.RegisterModule<DomainModule>();
         }
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
@@ -69,7 +69,7 @@ namespace LifeTracker.TelegramBot.IOHandler
                 Timeout = TimeSpan.FromMinutes(10)
             };
             _ = containerBuilder.RegisterInstance(client).As<ITelegramBotClient>().SingleInstance();
-         //   _ = containerBuilder.RegisterType<MessageSender>().SingleInstance();
+            //   _ = containerBuilder.RegisterType<MessageSender>().SingleInstance();
         }
 
         private void ConfigureMessageSender()

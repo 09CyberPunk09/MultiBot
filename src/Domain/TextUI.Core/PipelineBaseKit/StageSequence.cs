@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Application.TextCommunication.Core.PipelineBaseKit
+namespace Application.Chatting.Core.PipelineBaseKit
 {
     public class StageSequence
     {
         private readonly IReadOnlyList<Type> _lst;
         public StageSequence(IReadOnlyList<Type> list)
         {
-            _lst= list;
+            _lst = list;
         }
 
         public IReadOnlyList<Type> Types

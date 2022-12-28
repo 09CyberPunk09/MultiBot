@@ -1,11 +1,9 @@
 ﻿using Common.Configuration;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NLog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Configuration.Internal;
 using System.Linq;
 
 namespace Persistence.Caching.Redis
@@ -27,7 +25,7 @@ namespace Persistence.Caching.Redis
             var configuration = ConfigurationHelper.GetConfiguration();
             _host = configuration["Redis:Default:HostName"];
             _port = Convert.ToInt32(configuration["Redis:Default:Port"]);
-          
+
         }
 
         public Cache(DatabaseType dbType = DatabaseType.System)
@@ -44,7 +42,7 @@ namespace Persistence.Caching.Redis
             }
             catch (RedisConnectionException ex)
             {
-               // logger.Error(ex);
+                // logger.Error(ex);
                 logger.Info($"Failed to connect redis");
                 logger.Info($"Rettrying to connect redis on container host");
                 options = new()
@@ -52,13 +50,13 @@ namespace Persistence.Caching.Redis
                     EndPoints = { { "redis" } },
                     AllowAdmin = true
                 };
-                redis = ConnectionMultiplexer.Connect(options);           
+                redis = ConnectionMultiplexer.Connect(options);
             }
 
             db = redis.GetDatabase((int)dbType);
         }
 
-        public TResult Get<TResult>(string key,bool getThanDelete = false)
+        public TResult Get<TResult>(string key, bool getThanDelete = false)
         {
             var redisKey = new RedisKey(key);
             var data = getThanDelete ? db.StringGetDelete(redisKey) : db.StringGet(redisKey);
@@ -67,9 +65,9 @@ namespace Persistence.Caching.Redis
 
         public void Set(string key, object value)
         {
-            string valueToSet = JsonConvert.SerializeObject(value,settings : new()
+            string valueToSet = JsonConvert.SerializeObject(value, settings: new()
             {
-                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
             db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
@@ -97,22 +95,22 @@ namespace Persistence.Caching.Redis
             db.KeyDelete(key);
         }
 
-        public T GetSetField<T>(string setIdentifier,string field) where T : class
+        public T GetSetField<T>(string setIdentifier, string field) where T : class
         {
             var result = db.HashGet(setIdentifier, field);
             if (result != default)
                 return JsonConvert.DeserializeObject<T>(result);
-            else 
+            else
                 return null;
         }
-        public void SetSetField<T>(string setId,string field,object value)
+        public void SetSetField<T>(string setId, string field, object value)
         {
             db.HashSet(setId, new[]
             {
                 new HashEntry(field,JsonConvert.SerializeObject(value))
             });
         }
-        public void DeleteSetItem(string setId,string field)
+        public void DeleteSetItem(string setId, string field)
         {
             db.HashDelete(setId, field);
         }

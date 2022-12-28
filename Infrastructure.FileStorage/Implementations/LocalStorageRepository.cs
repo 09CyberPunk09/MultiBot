@@ -71,16 +71,16 @@ namespace Infrastructure.FileStorage.Implementations
 
             var temporaryDataFolder = Path(userId, $"{_avaliabilityIdentifier}{_temporaryFolderName}{_avaliabilityIdentifier}");
             Directory.CreateDirectory(temporaryDataFolder);
-            
+
             var notesFolder = Path(userId, $"{_notsFolderName}");
             Directory.CreateDirectory(notesFolder);
         }
 
-        private string Path(Guid userId,string path,string fileName = null)
+        private string Path(Guid userId, string path, string fileName = null)
         {
-            if (fileName == null) 
+            if (fileName == null)
                 return $"{_storagePath}/{userId}/{path}";
-            else 
+            else
                 return $"{_storagePath}/{userId}/{path}/{fileName}";
         }
 

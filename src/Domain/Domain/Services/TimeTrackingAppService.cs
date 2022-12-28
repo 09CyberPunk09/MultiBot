@@ -32,10 +32,10 @@ public class TimeTrackingAppService : AppService
         _activityRepo.Remove(id);
     }
 
-    public bool TrackOut(Guid activityId,DateTime trackoutTime)
+    public bool TrackOut(Guid activityId, DateTime trackoutTime)
     {
         var entry = _entryRepo
-            .Where(x => !x.Completed 
+            .Where(x => !x.Completed
                         && x.ActivityId == activityId)
              .OrderByDescending(x => x.StartTime)
             .FirstOrDefault();
@@ -52,7 +52,7 @@ public class TimeTrackingAppService : AppService
         return true;
     }
 
-    public void TrackIn(Guid activityId,DateTime startTime, Guid userId)
+    public void TrackIn(Guid activityId, DateTime startTime, Guid userId)
     {
         var entry = _entryRepo.Add(new()
         {
@@ -92,13 +92,13 @@ public class TimeTrackingAppService : AppService
     }
 
     #region Reports
-    public List<TimeTrackingReportModel> GenerateReport(DateTime startDate,DateTime endDate,Guid? activityId = null)
+    public List<TimeTrackingReportModel> GenerateReport(DateTime startDate, DateTime endDate, Guid? activityId = null)
     {
         //retrieve all activities
-        var entries = _entryRepo.Where(x =>  x.StartTime >= startDate && x.EndTime <= endDate);
+        var entries = _entryRepo.Where(x => x.StartTime >= startDate && x.EndTime <= endDate);
 
         //if concrete activity is requested in params,here we add a filter for it
-        if(activityId != null)
+        if (activityId != null)
             entries = entries.Where(x => x.ActivityId == activityId);
 
         var result = new List<TimeTrackingReportModel>();
@@ -144,7 +144,7 @@ public class TimeTrackingAppService : AppService
     }
 
 
-    private void FillWithDates(List<TimeTrackingReportModel> input,DateTime startDate,DateTime endDate)
+    private void FillWithDates(List<TimeTrackingReportModel> input, DateTime startDate, DateTime endDate)
     {
         var stepDateFoFill = startDate.Date;
         while (stepDateFoFill != endDate.Date.AddDays(1))

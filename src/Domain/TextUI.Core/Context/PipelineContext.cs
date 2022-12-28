@@ -1,6 +1,6 @@
-﻿using Application.TextCommunication.Core.PipelineBaseKit;
+﻿using Application.Chatting.Core.PipelineBaseKit;
 
-namespace Application.TextCommunication.Core.Context;
+namespace Application.Chatting.Core.Context;
 
 public class PipelineContext
 {

@@ -24,7 +24,7 @@
     <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
-    <ProjectReference Include="..\TextUI.Core\Application.TextCommunication.Core.csproj" />
+    <ProjectReference Include="..\TextUI.Core\Application.Chatting.Core.csproj" />
   </ItemGroup>
 
 </Project>

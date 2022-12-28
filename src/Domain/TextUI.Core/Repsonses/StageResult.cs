@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Application.TextCommunication.Core.Repsonses;
+namespace Application.Chatting.Core.Repsonses;
 
 public class StageResult
 {

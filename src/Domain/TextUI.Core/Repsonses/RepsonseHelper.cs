@@ -1,4 +1,4 @@
-﻿namespace Application.TextCommunication.Core.Repsonses;
+﻿namespace Application.Chatting.Core.Repsonses;
 
 public class RepsonseHelper
 {

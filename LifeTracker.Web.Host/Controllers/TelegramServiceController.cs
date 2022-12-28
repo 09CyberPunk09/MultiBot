@@ -1,5 +1,4 @@
-﻿using Autofac.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace LifeTracker.Web.Host.Controllers
 {

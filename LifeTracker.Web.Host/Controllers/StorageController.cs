@@ -19,7 +19,7 @@ namespace LifeTracker.FileStorage.Controllers
             return Ok();
         }
         [HttpGet("file/{userId}/{path}")]
-        public ActionResult T([FromRoute]Guid userId,[FromRoute] string path)
+        public ActionResult T([FromRoute] Guid userId, [FromRoute] string path)
         {
 
             return Ok();

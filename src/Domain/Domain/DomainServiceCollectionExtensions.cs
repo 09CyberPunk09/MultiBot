@@ -13,7 +13,8 @@ namespace Application
 
         public static IServiceCollection AddMappers(this IServiceCollection services)
         {
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 var profiles = AppDomain
                              .CurrentDomain
                              .GetAssemblies();

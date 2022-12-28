@@ -11,12 +11,12 @@ public class ToDoAppService : AppService
     private readonly IRepository<ToDoCategory> _todoCategoryRepository;
     public ToDoAppService(IRepository<ToDoItem> todoItemRepository,
                          IRepository<ToDoCategory> todoCategoryRepository)
-    { 
+    {
         _todoItemRepository = todoItemRepository;
         _todoCategoryRepository = todoCategoryRepository;
     }
 
-    public ToDoCategory CreateCategory(Guid userId,string name)
+    public ToDoCategory CreateCategory(Guid userId, string name)
     {
         return _todoCategoryRepository.Add(new()
         {
@@ -24,8 +24,8 @@ public class ToDoAppService : AppService
             Name = name,
             ToDoItems = new()
         });
-    }   
-    public ToDoItem CreateItem(Guid userId,Guid categoryId, string text)
+    }
+    public ToDoItem CreateItem(Guid userId, Guid categoryId, string text)
     {
         return _todoItemRepository.Add(new()
         {
@@ -43,7 +43,7 @@ public class ToDoAppService : AppService
     public ToDoItem GetToDoItem(Guid id)
     {
         return _todoItemRepository.Get(id);
-    }  
+    }
     public ToDoItem UpdateToDoItem(ToDoItem entity)
     {
         return _todoItemRepository.Update(entity);
@@ -52,7 +52,7 @@ public class ToDoAppService : AppService
     public void DeleteToDoItem(Guid id)
     {
         _todoItemRepository.Remove(id);
-    } 
+    }
 
     public void DeleteToDoCategory(Guid id)
     {
@@ -61,7 +61,7 @@ public class ToDoAppService : AppService
 
     public IEnumerable<ToDoCategory> GetAllCategories(Guid userId)
     {
-        var q = _todoCategoryRepository.Where(c => c.UserId == userId && !c.IsDeleted );
+        var q = _todoCategoryRepository.Where(c => c.UserId == userId && !c.IsDeleted);
 
         return q;
     }

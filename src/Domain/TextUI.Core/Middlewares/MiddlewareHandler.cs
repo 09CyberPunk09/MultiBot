@@ -1,11 +1,11 @@
-﻿using Application.TelegramBot.Pipelines.V2.Core.Middlewares.Interfaces;
-using Application.TextCommunication.Core.Context;
+﻿using Application.Chatting.Core.Context;
+using Application.Chatting.Core.Middlewares.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Application.TelegramBot.Pipelines.V2.Core.Middlewares
+namespace Application.Chatting.Core.Middlewares
 {
     public class BaseMiddlewareHandler<TContext> where TContext : MessageContext
     {
@@ -28,7 +28,7 @@ namespace Application.TelegramBot.Pipelines.V2.Core.Middlewares
             foreach (var middleware in _middlewares)
             {
                 bool succeeded = await middleware.ExecuteAsync(context);
-                if(!succeeded) return false;
+                if (!succeeded) return false;
             }
             return true;
         }

@@ -1,10 +1,10 @@
-﻿using Application.TextCommunication.Core.Interfaces;
-using Application.TextCommunication.Core.PipelineBaseKit;
+﻿using Application.Chatting.Core.Interfaces;
+using Application.Chatting.Core.PipelineBaseKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Application.TextCommunication.Core.Routing;
+namespace Application.Chatting.Core.Routing;
 
 /// <summary>
 /// Representatin for list of routes and commands under these routes

@@ -1,9 +1,9 @@
-﻿using Application.TextCommunication.Core.Caching;
-using Application.TextCommunication.Core.Messaging;
-using Application.TextCommunication.Core.Repsonses;
+﻿using Application.Chatting.Core.Caching;
+using Application.Chatting.Core.Messaging;
+using Application.Chatting.Core.Repsonses;
 using Common.Dto;
 
-namespace Application.TextCommunication.Core.Context;
+namespace Application.Chatting.Core.Context;
 
 public class MessageContext
 {

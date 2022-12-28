@@ -2,7 +2,6 @@
 using Common.Enums;
 using Infrastructure.FileStorage.Implementations;
 using Infrastructure.FileStorage.Interfaces;
-using NETCore.Encrypt;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -17,7 +16,7 @@ namespace Application.Services.Files
         {
             _localStorageRepository = localStorageRepository;
         }
-        
+
         private IFileRepository GetRepository(FileStorageStrategy strategy)
         {
             return strategy switch
@@ -33,7 +32,7 @@ namespace Application.Services.Files
             return repository.GetFile(userId, pathToFile);
         }
 
-        public async Task<FileDto> GetFileByHashAsync(Guid userId,string hash)
+        public async Task<FileDto> GetFileByHashAsync(Guid userId, string hash)
         {
             var decodedString = hash;
             var payload = JsonConvert.DeserializeObject<StorageItemSecurePayload>(decodedString);
@@ -41,8 +40,8 @@ namespace Application.Services.Files
 
             return new()
             {
-                 FilePath = payload.Path,
-                 Stream = stream
+                FilePath = payload.Path,
+                Stream = stream
             };
         }
 
@@ -60,11 +59,11 @@ namespace Application.Services.Files
             return encrypted;
         }
 
-        private async Task<string> UploadFileWithStrategyAsunc(Guid userId, Stream input,string fileNameWithPath, FileStorageStrategy strategy)
+        private async Task<string> UploadFileWithStrategyAsunc(Guid userId, Stream input, string fileNameWithPath, FileStorageStrategy strategy)
         {
             var repository = GetRepository(strategy);
             string pathToFile = await repository.Add(userId, input, fileNameWithPath);
-      
+
             return pathToFile;
         }
 

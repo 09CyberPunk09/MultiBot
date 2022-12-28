@@ -1,5 +1,4 @@
 ﻿using Common.Configuration;
-using Kernel;
 using NLog;
 
 namespace Infrastructure.Queuing
@@ -14,7 +13,7 @@ namespace Infrastructure.Queuing
             var hostName = configuration["Redis:Default:HostName"];
             var port = int.Parse(configuration["Redis:Default:Port"]);
 
-            return new(hostName ,port, queueName);
+            return new(hostName, port, queueName);
         }
         public static bool IsDebugMode
         {

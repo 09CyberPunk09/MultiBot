@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LifeTracker.Web.Host.Models.IncomeModels.Account
+﻿namespace LifeTracker.Web.Host.Models.IncomeModels.Account
 {
     public class LoginIncomeModel
     {

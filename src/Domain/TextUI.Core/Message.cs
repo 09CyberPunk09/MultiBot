@@ -1,7 +1,7 @@
 ﻿using Common.Entites;
 using System.Collections.Generic;
 
-namespace Infrastructure.TextUI.Core.PipelineBaseKit
+namespace Application.Chatting.Core
 {
     public class TelegramMessage
     {

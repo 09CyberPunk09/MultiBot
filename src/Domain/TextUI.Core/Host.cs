@@ -1,11 +1,11 @@
-﻿using Application.TextCommunication.Core.Interfaces;
-using Application.TextCommunication.Core.Routing;
+﻿using Application.Chatting.Core.Interfaces;
+using Application.Chatting.Core.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace Application.TextCommunication.Core;
+namespace Application.Chatting.Core;
 
 public class Host : IHost
 {

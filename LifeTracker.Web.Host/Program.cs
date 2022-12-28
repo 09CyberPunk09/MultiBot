@@ -1,8 +1,5 @@
-using Application;
-using Application.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using LifeTracker.Web.Host;
 using LifeTracker.Web.Host.Meiddlewares;
 using Microsoft.OpenApi.Models;
 using Persistence.Master;
@@ -18,7 +15,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 {
     builder.RegisterModule(new PersistenceModule());
- //   builder.RegisterModule<DomainModule>();
+    //   builder.RegisterModule<DomainModule>();
 });
 
 builder.Services.AddEndpointsApiExplorer();

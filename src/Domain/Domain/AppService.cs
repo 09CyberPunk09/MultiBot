@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace Application
+﻿namespace Application
 {
     public class AppService
     {

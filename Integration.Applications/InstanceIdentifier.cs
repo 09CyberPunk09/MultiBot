@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Integration.Applications
+﻿namespace Integration.Applications
 {
     public static class InstanceIdentifier
     {

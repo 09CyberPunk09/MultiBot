@@ -1,7 +1,7 @@
 ﻿using Common.Enums;
 using System;
 
-namespace Application.TextCommunication.Core.PipelineBaseKit;
+namespace Application.Chatting.Core.PipelineBaseKit;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public sealed class FeaureFlagsAttribute : Attribute

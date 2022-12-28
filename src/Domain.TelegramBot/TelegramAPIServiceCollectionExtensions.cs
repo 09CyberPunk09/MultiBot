@@ -3,7 +3,7 @@ using NLog;
 using System;
 using Telegram.Bot;
 
-namespace Application.TelegramBot.Pipelines
+namespace Application.TelegramBot.Commands
 {
     public static class TelegramAPIServiceCollectionExtensions
     {

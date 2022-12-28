@@ -20,7 +20,7 @@ namespace LifeTracker.Web.Host.Controllers
         [HttpPost]
         public Question Create(Question q, Guid userId)
         {
-          return _service.Create(q, userId);
+            return _service.Create(q, userId);
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace LifeTracker.Web.Host.Controllers
         {
             return _service.Get(id);
         }
-     
+
         [HttpPut]
         public Question Update(Question q)
         {
@@ -38,19 +38,19 @@ namespace LifeTracker.Web.Host.Controllers
         [HttpPost]
         public void AddSchedule(Guid questionId, string cron)
         {
-               _service.AddSchedule(questionId, cron);
+            _service.AddSchedule(questionId, cron);
         }
-     
+
         [HttpGet]
         public List<Question> GetQuestions(Guid userId)
         {
             return _service.GetQuestions(userId);
         }
-   
+
         [HttpGet]
         public List<Question> GetScheduledQuestions()
         {
-            return _service.GetScheduledQuestions();    
+            return _service.GetScheduledQuestions();
         }
     }
 

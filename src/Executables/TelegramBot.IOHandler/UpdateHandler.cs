@@ -1,4 +1,5 @@
-﻿using Application.Services.Files;
+﻿using Application.Chatting.Core;
+using Application.Services.Files;
 using Application.Services.FileStorage;
 using Application.Services.Users;
 using Autofac;
@@ -33,7 +34,7 @@ namespace LifeTracker.TelegramBot.IOHandler
 
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Infrastructure.TextUI.Core.PipelineBaseKit.TelegramMessage message = null;
+            TelegramMessage message = null;
             switch (update.Type)
             {
                 case UpdateType.Unknown:
@@ -51,7 +52,7 @@ namespace LifeTracker.TelegramBot.IOHandler
                         if (update.Message.Photo != null)
                         {
                             var userId = GetSystemUserId(update.Message.From.Id);
-                            if(userId == null)
+                            if (userId == null)
                             {
                                 break;
                             }
@@ -91,10 +92,10 @@ namespace LifeTracker.TelegramBot.IOHandler
             logger.Info($"Message '{message.Text}' recieved form {message.ChatId}");
             _messageConsumer.ConsumeMessage(message);
 
-           // return Task.CompletedTask;
+            // return Task.CompletedTask;
         }
 
-        private async Task<List<UploadedFileDto>> DownloadAndSavePhoto(Guid userId,Message message)
+        private async Task<List<UploadedFileDto>> DownloadAndSavePhoto(Guid userId, Message message)
         {
             var fileHashes = new List<UploadedFileDto>();
             var client = _container.Resolve<ITelegramBotClient>();

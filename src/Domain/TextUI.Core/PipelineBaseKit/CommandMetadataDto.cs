@@ -1,9 +1,8 @@
-﻿using Application.TextCommunication.Core.Routing;
+﻿using Application.Chatting.Core.Routing;
 using Common.Enums;
 using System;
-using System.Collections.Generic;
 
-namespace Application.TextCommunication.Core.PipelineBaseKit;
+namespace Application.Chatting.Core.PipelineBaseKit;
 
 public class CommandMetadata
 {

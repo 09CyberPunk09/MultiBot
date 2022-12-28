@@ -1,9 +1,9 @@
-﻿using Application.TextCommunication.Core.Interfaces;
+﻿using Application.Chatting.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Application.TextCommunication.Core.StageMap;
+namespace Application.Chatting.Core.StageMap;
 
 //TODO: BUG: There is a big fuckup with storing type names instead of indexes. If you register a type twice. The system will work incorrect
 public class StageMapBuilder

@@ -1,7 +1,7 @@
-﻿using Application.TextCommunication.Core.Repsonses;
+﻿using Application.Chatting.Core.Repsonses;
 using System.Threading.Tasks;
 
-namespace Application.TextCommunication.Core.Interfaces;
+namespace Application.Chatting.Core.Interfaces;
 
 public interface IMessageSender
 {

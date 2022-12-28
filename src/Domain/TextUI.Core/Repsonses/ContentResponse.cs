@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Application.TextCommunication.Core.Repsonses;
+namespace Application.Chatting.Core.Repsonses;
 
 public class ContentResponse
 {
@@ -10,7 +10,7 @@ public class ContentResponse
         {
             Content = result,
         });
-    } 
+    }
     public static Task<StageResult> Text(string text)
     {
         return Task.FromResult(new StageResult()

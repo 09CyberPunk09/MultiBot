@@ -41,8 +41,8 @@ namespace LifeTracker.JobExecutor
         private static void StartJobs()
         {
             //AddJob<SynchronizationJobConfiguration>();
-         //   AddJob<QustionSchedulingJobConfiguration>();
-       //     AddJob<ReminderSchedulerJobConfiguration>();
+            //   AddJob<QustionSchedulingJobConfiguration>();
+            //     AddJob<ReminderSchedulerJobConfiguration>();
             AddJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.JobExecutor", InstanceIdentifier.Identifier));
         }
 
@@ -63,7 +63,7 @@ namespace LifeTracker.JobExecutor
 
         private static void LoopConsoleClosing()
         {
-             //while (Console.ReadKey().Key != ConsoleKey.Escape)
+            //while (Console.ReadKey().Key != ConsoleKey.Escape)
             //{ }
             //Console.WriteLine("");
             var ended = new ManualResetEventSlim();

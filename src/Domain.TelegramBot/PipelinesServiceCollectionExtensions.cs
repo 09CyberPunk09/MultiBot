@@ -1,14 +1,14 @@
-﻿using Application.TelegramBot.Pipelines.V2.Core.Interfaces;
-using Application.TextCommunication.Core;
-using Application.TextCommunication.Core.Interfaces;
-using Application.TextCommunication.Core.Routing;
+﻿using Application.Chatting.Core;
+using Application.Chatting.Core.Interfaces;
+using Application.Chatting.Core.Routing;
+using Application.TelegramBot.Commands.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System;
 using System.Data;
 using System.Linq;
 
-namespace Application.TelegramBot.Pipelines
+namespace Application.TelegramBot.Commands
 {
     public static class PipelinesServiceCollectionExtensions
     {

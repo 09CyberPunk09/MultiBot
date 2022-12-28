@@ -7,7 +7,7 @@ namespace LifeTracker.Web.Host.Controllers
     [Route("api/[controller]/[action]")]
     public class TestController : ControllerBase
     {
-        [HttpGet,Authorize]
+        [HttpGet, Authorize]
         public string Test()
         {
             return "Test";

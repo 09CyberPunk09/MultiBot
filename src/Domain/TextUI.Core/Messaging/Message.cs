@@ -1,7 +1,7 @@
 ﻿using Common.Entites;
 using System.Collections.Generic;
 
-namespace Application.TextCommunication.Core.Messaging;
+namespace Application.Chatting.Core.Messaging;
 
 public class Message
 {

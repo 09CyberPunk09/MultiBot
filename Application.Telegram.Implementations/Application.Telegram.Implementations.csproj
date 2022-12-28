@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Domain\TextUI.Core\Application.TextCommunication.Core.csproj" />
+    <ProjectReference Include="..\src\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
   </ItemGroup>
 
 </Project>

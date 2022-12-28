@@ -1,11 +1,9 @@
 ﻿using Application;
-using Application.TelegramBot.Pipelines;
-using Application.TelegramBot.Pipelines.V2.Implementations;
-using Application.TelegramBot.Pipelines.V2.Implementations.Infrastructure;
-using Application.TextCommunication.Core.Interfaces;
+using Application.Chatting.Core.Interfaces;
+using Application.TelegramBot.Commands;
+using Application.TelegramBot.Commands.Implementations.Infrastructure;
 using Common.Configuration;
 using Integration.Applications;
-using Kernel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -45,7 +43,7 @@ internal class Program
         services.AddMappers();
         services.AddConfiguration(configuration);
         services.AddSettings();
-        services.AddScoped<IMessageHandler,TelegramBotMessageHandler>();
+        services.AddScoped<IMessageHandler, TelegramBotMessageHandler>();
         services.AddScoped<IMessageSender, TelegramMessageSender>();
 
         string botToken = configuration["Telegram:BotAPIKey"];

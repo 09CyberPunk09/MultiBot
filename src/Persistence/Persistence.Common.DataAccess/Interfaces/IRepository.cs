@@ -1,7 +1,6 @@
 ﻿using Common.BaseTypes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace Persistence.Common.DataAccess.Interfaces

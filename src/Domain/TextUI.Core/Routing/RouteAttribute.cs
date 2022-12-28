@@ -1,7 +1,6 @@
-﻿using Application.TextCommunication.Core.PipelineBaseKit;
-using System;
+﻿using System;
 
-namespace Application.TextCommunication.Core.Routing
+namespace Application.Chatting.Core.Routing
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class RouteAttribute : Attribute

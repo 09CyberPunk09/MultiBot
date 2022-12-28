@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
-    <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Pipelines.csproj" />
+    <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Commands.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
   </ItemGroup>
 	<ItemGroup>
