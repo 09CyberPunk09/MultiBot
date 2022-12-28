@@ -22,9 +22,6 @@
     <ProjectReference Include="..\..\Persistence\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

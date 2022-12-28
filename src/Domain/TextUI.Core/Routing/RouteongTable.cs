@@ -1,6 +1,8 @@
-﻿using Application.TextCommunication.Core.PipelineBaseKit;
+﻿using Application.TextCommunication.Core.Interfaces;
+using Application.TextCommunication.Core.PipelineBaseKit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.TextCommunication.Core.Routing;
 
@@ -34,5 +36,15 @@ public class RoutingTable
         if (route == null) return null;
         _routes.TryGetValue(route, out var command);
         return command;
+    }
+
+    public string AlternativeRoute<TCommand>() where TCommand : ICommand
+    {
+        var commandType = typeof(TCommand);
+        return _routes
+            .FirstOrDefault(x => x.Value.Type == commandType)
+            .Value
+            .Route
+            .AlternativeRoute;
     }
 }

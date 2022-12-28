@@ -1,4 +1,5 @@
-﻿using Application.TextCommunication.Core;
+﻿using Application.TelegramBot.Pipelines.V2.Core.Interfaces;
+using Application.TextCommunication.Core;
 using Application.TextCommunication.Core.Interfaces;
 using Application.TextCommunication.Core.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,7 @@ namespace Application.TelegramBot.Pipelines
             var routingTableBuilder = new RoutingTableBuilder();
             //routingTableBuilder
             var allTypes = typeof(PipelinesServiceCollectionExtensions).Assembly.GetTypes();
-            var commandsToRegister = allTypes.Where(t => t.GetInterfaces().Contains(typeof(ICommand)));
+            var commandsToRegister = allTypes.Where(t => t.GetInterfaces().Contains(typeof(ITelegramCommand)));
             foreach (var command in commandsToRegister)
             {
                 routingTableBuilder.AddCommand(command);
@@ -42,7 +43,7 @@ namespace Application.TelegramBot.Pipelines
 
         public static IServiceCollection AddPipelines(this IServiceCollection services)
         {
-            var command = typeof(ICommand);
+            var command = typeof(ITelegramCommand);
             var allTypes = typeof(PipelinesServiceCollectionExtensions).Assembly.GetTypes();
             var commandsToRegister = allTypes.Where(t => t.GetInterfaces().Contains(command) && t.FullName != command.FullName);
 

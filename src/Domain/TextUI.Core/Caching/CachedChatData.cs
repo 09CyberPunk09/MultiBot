@@ -28,13 +28,13 @@ public class CachedChatDataWrapper
             Data = data;
     }
     public CachedChatData Data { get; init; }
-    public T Get<T>(string key) where T : class
+    public T Get<T>(string key)
     {
         var got = Data.Data.TryGetValue(key, out var value);
 
-        return !got ? null : JsonConvert.DeserializeObject<T>(value);
+        return !got ? default : JsonConvert.DeserializeObject<T>(value);
     }
-    public T Get<T>() where T : class
+    public T Get<T>()
     {
         return Get<T>(nameof(T));
     }

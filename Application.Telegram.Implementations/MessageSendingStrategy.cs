@@ -1,5 +1,4 @@
 ﻿using Application.TextCommunication.Core.Repsonses;
-using Persistence.Caching.Redis.TelegramCaching;
 using System.Net;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;

@@ -1,4 +1,6 @@
-﻿using Application.TextCommunication.Core.Interfaces;
+﻿using Application.TelegramBot.Pipelines.V2.Core.Context;
+using Application.TelegramBot.Pipelines.V2.Core.Interfaces;
+using Application.TextCommunication.Core.Interfaces;
 using Application.TextCommunication.Core.Repsonses;
 using Application.TextCommunication.Core.Routing;
 using Application.TextCommunication.Core.StageMap;
@@ -8,7 +10,7 @@ using MessageContext = Application.TextCommunication.Core.Context.MessageContext
 namespace Application.TelegramBot.Pipelines.V2.Pipelines;
 
 [Route("/hello")]
-internal class HelloCommand : ICommand
+internal class HelloCommand : ITelegramCommand
 {
     public void DefineStages(StageMapBuilder builder)
     {
@@ -17,7 +19,7 @@ internal class HelloCommand : ICommand
             .Stage<GoodByeStage>();
     }
 
-    public Task<StageResult> Execute(MessageContext ctx)
+    public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         return StageResult.TaskContentResult(new()
         {
@@ -26,9 +28,9 @@ internal class HelloCommand : ICommand
     }
 }
 
-internal class WhatsUpStage : IStage
+internal class WhatsUpStage : ITelegramStage
 {
-    public Task<StageResult> Execute(MessageContext ctx)
+    public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         return Task.FromResult(new StageResult()
         {
@@ -41,9 +43,9 @@ internal class WhatsUpStage : IStage
     }
 }
 
-internal class WhereAreYouFromStage : IStage
+internal class WhereAreYouFromStage : ITelegramStage
 {
-    public Task<StageResult> Execute(MessageContext ctx)
+    public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         return StageResult.TaskContentResult(new()
         {
@@ -52,9 +54,9 @@ internal class WhereAreYouFromStage : IStage
     }
 }
 
-internal class GoodByeStage : IStage
+internal class GoodByeStage : ITelegramStage
 {
-    public Task<StageResult> Execute(MessageContext ctx)
+    public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         return Task.FromResult(new StageResult()
         {

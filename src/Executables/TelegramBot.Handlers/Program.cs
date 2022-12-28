@@ -1,6 +1,7 @@
 ﻿using Application;
 using Application.TelegramBot.Pipelines;
 using Application.TelegramBot.Pipelines.V2.Implementations;
+using Application.TelegramBot.Pipelines.V2.Implementations.Infrastructure;
 using Application.TextCommunication.Core.Interfaces;
 using Common.Configuration;
 using Integration.Applications;

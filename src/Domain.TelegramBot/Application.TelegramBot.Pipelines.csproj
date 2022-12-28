@@ -6,8 +6,23 @@
 
   <ItemGroup>
     <Compile Remove="V1\**" />
+    <Compile Remove="V2\Pipelines\Questions\**" />
+    <Compile Remove="V2\Pipelines\Reminder\**" />
+    <Compile Remove="V2\Pipelines\Scheduling\**" />
+    <Compile Remove="V2\Pipelines\TimeTracker\**" />
+    <Compile Remove="V2\Pipelines\ToDoList\**" />
     <EmbeddedResource Remove="V1\**" />
+    <EmbeddedResource Remove="V2\Pipelines\Questions\**" />
+    <EmbeddedResource Remove="V2\Pipelines\Reminder\**" />
+    <EmbeddedResource Remove="V2\Pipelines\Scheduling\**" />
+    <EmbeddedResource Remove="V2\Pipelines\TimeTracker\**" />
+    <EmbeddedResource Remove="V2\Pipelines\ToDoList\**" />
     <None Remove="V1\**" />
+    <None Remove="V2\Pipelines\Questions\**" />
+    <None Remove="V2\Pipelines\Reminder\**" />
+    <None Remove="V2\Pipelines\Scheduling\**" />
+    <None Remove="V2\Pipelines\TimeTracker\**" />
+    <None Remove="V2\Pipelines\ToDoList\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,8 +46,11 @@
     <ProjectReference Include="..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <Folder Include="V2\Implementations\Messaging\" />
+    <Folder Include="V2\Pipelines\SChedulingV2\Dto\" />
+    <Folder Include="V2\Pipelines\SChedulingV2\Enums\" />
+    <Folder Include="V2\Pipelines\SChedulingV2\Helpers\" />
   </ItemGroup>
 
 </Project>
