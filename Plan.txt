@@ -1,0 +1,61 @@
+Bot
+{
+    1.Notes
+    Create Notes
+    Get Notes
+    Delete Notes
+    Modify Notes
+
+    Bulk Import Notes from Telegram Conversation
+
+    2.Tags
+    Create Tags
+    Modify Tags
+    Delete Tags
+    Get Tags
+
+    3. Questionaires
+    Tags for questionaires
+    Create Questionaries
+    Schedule Questionaires
+    Enable\Disable Questionaries
+    Edit Questionaires
+    Create Single Questions
+    Schedule Single Questions
+    Modify Single Questions
+    Enable\Disable Single Questions
+
+    3.1 In-Box questionaires:
+    How was your day?
+    Mark your day by 0-10
+
+    Generate Reports
+
+    4. Reminders
+    Create Reminders
+    Schedule Reminders
+    Enable\disable Reminders
+    Structure Reminders in Categories
+
+    5. Time Tracking
+    Track-in\out
+    View\Add\Delete Time tracking activities
+    Generate reports
+
+    6. ToDo
+    Create\View\Modify\Delete ToDos
+    Set priority to todo(low\medium\high)
+    Tags for ToDos
+
+    7. Obsidian Integration
+
+    8. Google Integration
+    Calendar events
+
+    9. Settings
+
+    10. If no command parsed:
+    Suggest the user to decide how to habdle hos message: like a reminder, like note, etc
+
+    11. if a message sent from tg bot is more than 4096 characters - divide it
+}
