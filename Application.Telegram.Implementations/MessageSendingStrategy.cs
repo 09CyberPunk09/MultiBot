@@ -63,7 +63,10 @@ public class MessageSendingStrategy
                     })));
                     break;
                 case MenuType.MenuKeyboard:
-                    menu = new ReplyKeyboardMarkup(menuData.Select(x => x.Select(y => new KeyboardButton(y.Text))));
+                    menu = new ReplyKeyboardMarkup(menuData.Select(x => x.Select(y => new KeyboardButton(y.Text))))
+                    {
+                         ResizeKeyboard = true
+                    };
                     break;
                 default:
                     break;
@@ -86,10 +89,17 @@ public class MessageSendingStrategy
         }
         else
         {
-            var msgId = await _uiClient.SendTextMessageAsync(
+            try
+            {
+                var msgId = await _uiClient.SendTextMessageAsync(
                 chatId: contentResult.ChatId,
                 text: contentResult.Text,
                 replyMarkup: menu);
+            }
+            catch (Exception ex)
+            {
+
+            };
         }
 
     }

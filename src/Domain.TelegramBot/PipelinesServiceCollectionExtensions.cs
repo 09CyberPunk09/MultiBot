@@ -2,6 +2,7 @@
 using Application.Chatting.Core.Interfaces;
 using Application.Chatting.Core.Routing;
 using Application.TelegramBot.Commands.Core.Interfaces;
+using Application.TelegramBot.Commands.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System;
@@ -41,24 +42,27 @@ namespace Application.TelegramBot.Commands
             return services;
         }
 
-        public static IServiceCollection AddPipelines(this IServiceCollection services)
+        public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
         {
             var command = typeof(ITelegramCommand);
             var allTypes = typeof(PipelinesServiceCollectionExtensions).Assembly.GetTypes();
             var commandsToRegister = allTypes.Where(t => t.GetInterfaces().Contains(command) && t.FullName != command.FullName);
 
-            var stagesToRegister = allTypes.Where(t => t.GetInterfaces().Contains(typeof(IStage)) && t.FullName != command.FullName);
+            var stageType = typeof(ITelegramStage);
+            var stagesToRegister = allTypes.Where(t => t.GetInterfaces().Contains(stageType) && t.FullName != command.FullName && t.FullName != stageType.FullName);
 
             foreach (var commandType in commandsToRegister)
             {
                 services.AddTransient(commandType);
             }
             logger.Info($"Registered {commandsToRegister.Count()} commands");
-            foreach (var stageType in stagesToRegister)
+            foreach (var stageTypeToRegister in stagesToRegister)
             {
-                services.AddTransient(stageType);
+                services.AddTransient(stageTypeToRegister);
             }
             logger.Info($"Registered {stagesToRegister.Count()} stages");
+
+            services.AddSingleton<AuthentificationMiddleware>();
 
             return services;
         }

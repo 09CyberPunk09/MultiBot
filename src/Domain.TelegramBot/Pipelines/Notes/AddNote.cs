@@ -47,8 +47,8 @@ public class SaveNoteStage : ITelegramStage
             Text = "✅ Note saved. Do you want to add tags the note?",
             Menu = new(MenuType.MessageMenu, new[]
             {
-                new[] {new Button("Yes", true.ToString()) },
-                new[] {new Button("No", false.ToString()) }
+                new[] {new Button("Yes", true.ToString()) ,
+                    new Button("No", false.ToString()) }
             })
         }));
     }

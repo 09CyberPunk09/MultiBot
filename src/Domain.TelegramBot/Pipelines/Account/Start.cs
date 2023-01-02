@@ -4,6 +4,7 @@ using Application.Chatting.Core.StageMap;
 using Application.Services.Users;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
+using Common.Dto;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -79,6 +80,12 @@ public class AcceptPasswordAndSignIn : ITelegramStage
         if (success)
         {
             //TODO: Add authentificationstuff
+            var userInfoModel = new ShortUserInfoDto()
+            {
+                EmailAddress = email,
+                Id = user.Id
+            };
+            ctx.Cache.Set(userInfoModel);
             return ContentResponse.Text("Welcome!");
         }
         else

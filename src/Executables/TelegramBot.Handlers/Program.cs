@@ -37,7 +37,7 @@ internal class Program
         var configuration = ConfigurationHelper.GetConfiguration();
 
         IServiceCollection services = new ServiceCollection();
-        services.AddPipelines();
+        services.AddCommandHandlers();
         services.AddHost();
         services.AddDomain();
         services.AddMappers();

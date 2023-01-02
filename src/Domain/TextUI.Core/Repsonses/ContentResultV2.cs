@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Application.Chatting.Core.Repsonses;
 
@@ -23,12 +24,36 @@ public class Button
         CallbackData
     }
     public ButtonContentType Type { get; init; }
-    public Button(string text, string url)
+    public Button(string text, string url, bool _ = true)
     {
         Type = ButtonContentType.Url;
         Text = text;
         Url = url;
     }
+
+    public Button(ButtonContentType type, string text, string data)
+    {
+        Type = type;
+        Text = text;
+        switch(type)
+        {
+            case ButtonContentType.Text:
+                Text = text;
+                break; 
+            case ButtonContentType.Url:
+                Text = text;
+                Url = data;
+                break;
+            case ButtonContentType.CallbackData:
+                Text = text;
+                CallbackData = data;
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+
 
     /// <summary>
     /// 
@@ -36,7 +61,7 @@ public class Button
     /// <param name="text"></param>
     /// <param name="callbackData"></param>
     /// <param name="_">Sorry for this param,the c# compiler said that there is an existing constructor with the same signature</param>
-    public Button(string text, string callbackData, bool _ = true)
+    public Button(string text, string callbackData)
     {
         Type = ButtonContentType.CallbackData;
         Text = text;

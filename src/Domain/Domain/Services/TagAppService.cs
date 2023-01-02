@@ -1,5 +1,6 @@
 ﻿using Common.Entites;
 using Persistence.Common.DataAccess.Interfaces;
+using Persistence.Common.DataAccess.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -8,11 +9,11 @@ namespace Application.Services;
 public class TagAppService : AppService
 {
     private IRepository<Tag> _tagRepository;
-    private IRepository<Note> _noteRepository;
+    private INoteRepository _noteRepository;
 
     public TagAppService(
         IRepository<Tag> tagRepo,
-        IRepository<Note> noteRepository)
+        INoteRepository noteRepository)
     {
         _tagRepository = tagRepo;
         _noteRepository = noteRepository;

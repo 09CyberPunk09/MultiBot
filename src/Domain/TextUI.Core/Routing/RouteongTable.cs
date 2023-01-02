@@ -46,5 +46,14 @@ public class RoutingTable
             .Value
             .Route
             .AlternativeRoute;
+    } 
+    public string Route<TCommand>() where TCommand : ICommand
+    {
+        var commandType = typeof(TCommand);
+        return _routes
+            .FirstOrDefault(x => x.Value.Type == commandType)
+            .Value
+            .Route
+            .Route;
     }
 }

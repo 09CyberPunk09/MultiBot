@@ -2,6 +2,7 @@
 using Application.Chatting.Core.Caching;
 using Application.Chatting.Core.Interfaces;
 using Application.Chatting.Core.PipelineBaseKit;
+using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
 using Application.Telegram.Implementations;
 using Application.TelegramBot.Commands.Core.Context;
@@ -43,7 +44,7 @@ public class TelegramBotMessageHandler : IMessageHandler
         _perCommandMiddlewareHandler = new(_host.Container);
         _perMessageMiddlewareHandler = new(_host.Container);
         //TODO: Move the middleware registration away from message handler
-        _perCommandMiddlewareHandler.Add<AuthentificationMiddleware>();
+                    _perCommandMiddlewareHandler.Add<AuthentificationMiddleware>();
     }
 
     public async Task HandleMessage(TelegramMessage message)
@@ -117,14 +118,24 @@ public class TelegramBotMessageHandler : IMessageHandler
             #region Execute middlewares before stage
             if (isCommand)
             {
-                await _perCommandMiddlewareHandler.ExecuteMiddlewares(context);
+                var moveForward = await _perCommandMiddlewareHandler.ExecuteMiddlewares(context);
+                if (!moveForward)
+                    return;
             }
             await _perMessageMiddlewareHandler.ExecuteMiddlewares(context);
 
             #endregion
-
-            var stage = _host.Container.GetService(stageType) as ITelegramStage;
-            var result = await stage.Execute(context);
+            StageResult result;
+            if (isCommand)
+            {
+                var stage = (_host.Container.GetService(stageType) as ITelegramCommand);
+                result = await stage.Execute(context);
+            }
+            else
+            {
+                var stage = _host.Container.GetService(stageType) as ITelegramStage;
+                result = await stage.Execute(context);
+            }
             var contentResult = result.Content;
             _sender.SendMessage(new AdressedContentResult()
             {

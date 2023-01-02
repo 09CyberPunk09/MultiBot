@@ -22,7 +22,6 @@ public class ToDoMenuCommand : ITelegramCommand
     }
     public void DefineStages(StageMapBuilder builder)
     {
-        throw new NotImplementedException();
     }
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)

@@ -16,18 +16,15 @@ public class UserAppService : AppService
     private readonly IRepository<UserFeatureFlag> _userFeatureFlagRepository;
     private readonly IRepository<TelegramLogIn> _telegramLoginRepository;
     private readonly Cache _cache;
-    private readonly FileStorageService _fileStorageService;
     public UserAppService(
         IRepository<User> userRepository,
         IRepository<UserFeatureFlag> userFeatureFlagRepository,
-        IRepository<TelegramLogIn> telegramLoginRepository,
-        FileStorageService fileStorageService)
+        IRepository<TelegramLogIn> telegramLoginRepository)
     {
         _userRepository = userRepository;
         _userFeatureFlagRepository = userFeatureFlagRepository;
         _telegramLoginRepository = telegramLoginRepository;
         _cache = new Cache(DatabaseType.TelegramUserCache);
-        _fileStorageService = fileStorageService;
     }
 
     public void TelegramLogOut(long telegramUserId)
@@ -93,8 +90,6 @@ public class UserAppService : AppService
     public async Task InitializeUserEntities(Guid userId)
     {
         //TODO: Add here some initialization code in future
-        await _fileStorageService.InitializeUserDataStorage(FileStorageStrategy.Local, userId);
-
     }
 
     public User GetUserByEmail(string emailAddress)

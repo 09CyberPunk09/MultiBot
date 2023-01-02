@@ -36,7 +36,7 @@ public class CachedChatDataWrapper
     }
     public T Get<T>()
     {
-        return Get<T>(nameof(T));
+        return Get<T>(typeof(T).Name);
     }
 
     public void Set(string key, object value)
@@ -45,6 +45,6 @@ public class CachedChatDataWrapper
     }
     public void Set<T>(T value)
     {
-        Set(nameof(T), value);
+        Set(typeof(T).Name, value);
     }
 }
