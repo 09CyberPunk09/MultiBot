@@ -42,10 +42,3 @@ public class CreateTestScheduleCommand : ITelegramCommand
         });
     }
 }
-
-/*
-    public ContentResult AskMode()
-        {
-         
-        }
- */

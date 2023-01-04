@@ -5,6 +5,7 @@ using Application.Chatting.Core.PipelineBaseKit;
 using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
 using Application.Telegram.Implementations;
+using Application.TelegramBot.Commands.Core;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Commands.Implementations.Middlewares;
@@ -21,7 +22,7 @@ namespace Application.TelegramBot.Commands.Implementations.Infrastructure;
 public class TelegramBotMessageHandler : IMessageHandler
 {
     private readonly IHost _host;
-    private readonly IMessageSender _sender;
+    private readonly IMessageSender<SentTelegramMessage> _sender;
     private readonly Cache _cache;
     private readonly RoutingTable _routingTable;
     private readonly MessageReceiver _receiver;
@@ -32,7 +33,7 @@ public class TelegramBotMessageHandler : IMessageHandler
 
     public TelegramBotMessageHandler(
         IHost host,
-        IMessageSender sender,
+        IMessageSender<SentTelegramMessage> sender,
         RoutingTable routingTable)
     {
         _host = host;
@@ -55,7 +56,9 @@ public class TelegramBotMessageHandler : IMessageHandler
             bool isCommand = false;
             #region find chat data in cache
             var chatId = message.ChatId;
-            var cachedChatData = _cache.Get<CachedChatData>(chatId.ToString());
+
+            var cachedChatData = new CachedChatData();
+            cachedChatData.Data =  _cache.GetDictionary(chatId.ToString());
             var chatDataFacade = new CachedChatDataWrapper(cachedChatData);
             #endregion
 
@@ -137,59 +140,78 @@ public class TelegramBotMessageHandler : IMessageHandler
                 result = await stage.Execute(context);
             }
             var contentResult = result.Content;
-            _sender.SendMessage(new AdressedContentResult()
+            var response = await _sender.SendMessageAsync(new AdressedContentResult()
             {
                 ChatId = message.ChatId,
-
+                LastBotMessageId = chatDataFacade.Get<int?>(nameof(AdressedContentResult.LastBotMessageId)),
                 MultiMessages = contentResult.MultiMessages,
                 Edited = contentResult.Edited,
                 Menu = contentResult.Menu,
                 Photo = contentResult.Photo,
                 Text = contentResult.Text,
             });
+
+            chatDataFacade.Set(nameof(AdressedContentResult.LastBotMessageId), response.SentMessage.MessageId);
             #endregion
 
             #region set next pipeline stage and command
             StageDto nextStageData = new();
             var currentStageData = chatDataFacade.Get<StageDto>();
-            if (result.NextStage != null)//if a stage has defined his own next stage
+            //if the stage didnt forbid the next stage invokation
+            if (context.Response.CanIvokeNext)
             {
-                nextStageData.Stage = result.NextStage;//we set it as the next stage
-                nextStageData.Command = command.Route.Route;//and save the current route under which we execute the next stage
-
-                if (currentStageData.StageIndex != -1)
+                //we determine the next stage
+                if (result.NextStage != null)//if a stage has defined his own next stage
                 {
-                    int nextStageIndex = GetNextStageIndex(command.StagesSequence, stageType.FullName);//then, we get the next stage index for knowledge when the command map iteration should continue
-                    nextStageData.StageIndex = nextStageIndex;//and set it for save
+                    nextStageData.Stage = result.NextStage;//we set it as the next stage
+                    nextStageData.Command = command.Route.Route;//and save the current route under which we execute the next stage
+
+                    if (currentStageData.StageIndex != -1)
+                    {
+                        int nextStageIndex = GetNextStageIndex(command.StagesSequence, stageType.FullName);//then, we get the next stage index for knowledge when the command map iteration should continue
+                        nextStageData.StageIndex = nextStageIndex;//and set it for save
+                    }
+
+                }
+                else//if a stage has not defined stages by itself we do the standard stuff
+                {
+                    int nextStageIndex = -1;
+                    if (currentStageIsExternal)//if we came from the stage which is external to the stage map we dont change the next stage index, because it is initialized as a entrypoint-back to the command
+                    {
+                        nextStageIndex = currentStageData.StageIndex.Value;
+                    }
+                    else//if not - we do the standard stuff
+                    {
+                        nextStageIndex = GetNextStageIndex(command.StagesSequence, stageType.FullName);
+                    }
+
+                    if (nextStageIndex != -1)//if there are stages after current - we save the data about it in the cache
+                    {
+                        nextStageData.StageIndex = nextStageIndex;
+                        nextStageData.Command = command.Route.Route;
+                    }
+                    else//if not - we clear the stage data, that means that there is no next stage and command
+                    {
+                        nextStageData.Stage = null;
+                        nextStageData.Command = null;
+                    }
                 }
 
+                chatDataFacade.Set(nextStageData);//set the next stage data built in previous steps
             }
-            else//if a stage has not defined stages by itself we do the standard stuff
+            else
             {
-                int nextStageIndex = -1;
-                if (currentStageIsExternal)//if we came from the stage which is external to the stage map we dont change the next stage index, because it is initialized as a entrypoint-back to the command
-                {
-                    nextStageIndex = currentStageData.StageIndex.Value;
-                }
-                else//if not - we do the standard stuff
-                {
-                    nextStageIndex = GetNextStageIndex(command.StagesSequence, stageType.FullName);
-                }
-
-                if (nextStageIndex != -1)//if there are stages after current - we save the data about it in the cache
-                {
-                    nextStageData.StageIndex = nextStageIndex;
-                    nextStageData.Command = command.Route.Route;
-                }
-                else//if not - we clear the stage data, that means that there is no next stage and command
-                {
-                    nextStageData.Stage = null;
-                    nextStageData.Command = null;
-                }
+                chatDataFacade.Set(currentStageData);
             }
-            chatDataFacade.Set(nextStageData);//set the next stage data built in previous steps
 
-            _cache.Set(chatId.ToString(), chatDataFacade.Data);//save the data
+            _cache.SetDictionary(chatId.ToString(), chatDataFacade.Data.Data);//save the data
+
+            if (context.Response.InvokeNextImmediately)
+            {
+                //if we invoke immediately the next stage - his payload sould be null, so we empty the message
+                message.Text = string.Empty;
+                await HandleMessage(message);
+            }
             #endregion
         }
         catch (Exception ex)

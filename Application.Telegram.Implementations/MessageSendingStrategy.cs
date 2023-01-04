@@ -1,6 +1,7 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using System.Net;
 using Telegram.Bot;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -16,12 +17,14 @@ public class MessageSendingStrategy
     {
         _uiClient = client;
     }
-    public async Task SendMessage(ContentResultV2 result)
+    public async Task<Message> SendMessage(ContentResultV2 result)
     {
+        Message messageResponse = default;
         var contentResult = result as AdressedContentResult;
         bool edited = contentResult.Edited;
         bool hasPhoto = contentResult.Photo != null;
         InputOnlineFile photo = null;
+        //photo preparation
         if (hasPhoto)
         {
             if (contentResult.Photo.Mode == PhotResultMode.Url)
@@ -40,6 +43,7 @@ public class MessageSendingStrategy
 
         bool hasMenu = contentResult.Menu != null;
         IReplyMarkup menu = null;
+        //menu preparation
         if (hasMenu)
         {
             var type = contentResult.Menu.Type;
@@ -73,14 +77,19 @@ public class MessageSendingStrategy
             }
         }
 
-        //if (edited)
-        //{
-        //    var msgId = await _uiClient.Edi
-        //}
+        if (edited)
+        {
+            messageResponse = await _uiClient.EditMessageTextAsync(
+                contentResult.ChatId, 
+                contentResult.LastBotMessageId.Value,
+                contentResult.Text, 
+                replyMarkup: menu as InlineKeyboardMarkup);
+            return messageResponse;
+        }
         /*else*/
         if (hasPhoto)
         {
-            var msgId = await _uiClient.SendPhotoAsync(
+            messageResponse = await _uiClient.SendPhotoAsync(
                 chatId: contentResult.ChatId,
                 caption: contentResult.Text,
                 photo: photo,
@@ -91,7 +100,7 @@ public class MessageSendingStrategy
         {
             try
             {
-                var msgId = await _uiClient.SendTextMessageAsync(
+                messageResponse = await _uiClient.SendTextMessageAsync(
                 chatId: contentResult.ChatId,
                 text: contentResult.Text,
                 replyMarkup: menu);
@@ -101,6 +110,6 @@ public class MessageSendingStrategy
 
             };
         }
-
+        return messageResponse;
     }
 }
