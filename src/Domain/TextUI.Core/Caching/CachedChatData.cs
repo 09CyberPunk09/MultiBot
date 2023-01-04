@@ -28,20 +28,32 @@ public class CachedChatDataWrapper
             Data = data;
     }
     public CachedChatData Data { get; init; }
-    public T Get<T>(string key)
+
+    public void Remove(string key)
+    {
+        Data.Data.Remove(key);
+    }
+
+    public T Get<T>(string key, bool getThanDelete = false)
     {
         var got = Data.Data.TryGetValue(key, out var value);
-
+        if (got && getThanDelete)
+        {
+            Data.Data.Remove(key);
+        }
         return !got ? default : JsonConvert.DeserializeObject<T>(value);
     }
-    public T Get<T>()
+    public T Get<T>(bool getThanDelete = false)
     {
-        return Get<T>(typeof(T).Name);
+        return Get<T>(typeof(T).Name, getThanDelete);
     }
 
     public void Set(string key, object value)
     {
-        Data.Data[key] = JsonConvert.SerializeObject(value);
+        Data.Data[key] = JsonConvert.SerializeObject(value, new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
     }
     public void Set<T>(T value)
     {

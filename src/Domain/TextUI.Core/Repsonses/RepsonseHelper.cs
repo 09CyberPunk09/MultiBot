@@ -2,6 +2,7 @@
 
 public class RepsonseHelper
 {
+    public bool InvokeNextImmediately { get; set; } = false;
     public bool CanIvokeNext { get; set; } = true;
     public bool PipelineEnded { get; set; }
     public bool DeleteLastUserMessage { get; set; }

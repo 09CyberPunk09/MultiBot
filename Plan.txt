@@ -1,18 +1,18 @@
 Bot
 {
-    1.Notes
-    Create Notes
-    Get Notes
+   // 1.Notes
+    //Create Notes
+    //Get Notes
     Delete Notes
     Modify Notes
 
     Bulk Import Notes from Telegram Conversation
 
     2.Tags
-    Create Tags
+    //Create Tags
     Modify Tags
     Delete Tags
-    Get Tags
+    //Get Tags
 
     3. Questionaires
     Tags for questionaires

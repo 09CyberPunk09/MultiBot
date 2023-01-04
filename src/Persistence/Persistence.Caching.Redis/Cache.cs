@@ -67,8 +67,9 @@ namespace Persistence.Caching.Redis
         {
             string valueToSet = JsonConvert.SerializeObject(value, settings: new()
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             });
+
             db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
 
@@ -113,6 +114,25 @@ namespace Persistence.Caching.Redis
         public void DeleteSetItem(string setId, string field)
         {
             db.HashDelete(setId, field);
+        }
+
+        public void SetDictionary(string key, Dictionary<string,string> value)
+        {
+            db.KeyDelete(key);
+            HashEntry[] preparedValues = value.Select(x => new HashEntry(x.Key,x.Value)).ToArray();
+            db.HashSet(key, preparedValues);
+        }
+
+        public Dictionary<string, string> GetDictionary(string key)
+        {
+            var entries = db.HashGetAll(key);
+            if (entries == null)
+            {
+                return null;
+            }
+            Dictionary<string, string> result = entries.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+            return result;
         }
     }
 }

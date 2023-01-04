@@ -4,6 +4,7 @@ using Application.Services.FileStorage;
 using Application.Services.Users;
 using Autofac;
 using Common.Entites;
+using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -88,6 +89,11 @@ namespace LifeTracker.TelegramBot.IOHandler
 
                 default:
                     break;
+            }
+            if(message == null)
+            {
+                logger.Error($"Empty message!, update payload: {JsonConvert.SerializeObject(update)} ");
+                return;
             }
             logger.Info($"Message '{message.Text}' recieved form {message.ChatId}");
             _messageConsumer.ConsumeMessage(message);

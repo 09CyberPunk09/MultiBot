@@ -1,6 +1,8 @@
 ﻿using Application;
 using Application.Chatting.Core.Interfaces;
+using Application.Chatting.Core.Messaging;
 using Application.TelegramBot.Commands;
+using Application.TelegramBot.Commands.Core;
 using Application.TelegramBot.Commands.Implementations.Infrastructure;
 using Common.Configuration;
 using Integration.Applications;
@@ -44,7 +46,7 @@ internal class Program
         services.AddConfiguration(configuration);
         services.AddSettings();
         services.AddScoped<IMessageHandler, TelegramBotMessageHandler>();
-        services.AddScoped<IMessageSender, TelegramMessageSender>();
+        services.AddScoped<IMessageSender<SentTelegramMessage>, TelegramMessageSender>();
 
         string botToken = configuration["Telegram:BotAPIKey"];
         services.AddTelegramClient(botToken);
