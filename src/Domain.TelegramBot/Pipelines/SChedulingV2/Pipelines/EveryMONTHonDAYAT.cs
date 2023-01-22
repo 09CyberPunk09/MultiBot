@@ -3,28 +3,27 @@ using Application.Chatting.Core.Routing;
 using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Dto;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
+using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 
-[Route("/every_month_on_schedule")]
-public class EveryMONTHonDAYATCommand : ITelegramCommand
+//[Route("/every_month_on_schedule")]
+public class EveryMONTHonDAYATCommand : ITelegramStage
 {
-    public void DefineStages(StageMapBuilder builder)
-    {
-        builder.Stage<AcceptDayStage>();
-        builder.Stage<TryAcceptTimeAndSave>();
-    }
-
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        return ContentResponse.Text("Enter a number of a day on which the schedule will be triggered every month");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter a number of a day on which the schedule will be triggered every month"
+            },
+            NextStage = typeof(AcceptDayStage).FullName
+        });
     }
 }
 
@@ -39,7 +38,15 @@ public class AcceptDayStage : ITelegramStage
             return ContentResponse.Text("Enter a number of a day on which the schedule will be triggered every month");
         }
         ctx.Cache.Set(NUMBER_CACHEKEY, result);
-        return ContentResponse.Text("Enter time in format HH:MM, HH:MM,...");
+
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter time in format HH:MM, HH:MM,..."
+            },
+            NextStage = typeof(TryAcceptTimeAndSave).FullName
+        });
     }
 }
 
@@ -64,7 +71,8 @@ public class TryAcceptTimeAndSave : ITelegramStage
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
-            return ContentResponse.Text("Schedule configured");
+            ctx.Response.InvokeNextImmediately = true;
+            return Task.FromResult(new StageResult() { });
         }
         catch (ArgumentException)
         {

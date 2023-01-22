@@ -1,4 +1,5 @@
 ﻿using Common.Entites;
+using Common.Entites.Questionaires;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Common.DataAccess
@@ -7,10 +8,7 @@ namespace Persistence.Common.DataAccess
     {
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Reminder> Reminders { get; set; }
-        public virtual DbSet<PredefinedAnswer> PredefinedAnswers { get; set; }
         public virtual DbSet<TelegramLogIn> TelegramLogins { get; set; }
-        public virtual DbSet<Answer> Answers { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserFeatureFlag> FeatureFlags { get; set; }
@@ -18,6 +16,13 @@ namespace Persistence.Common.DataAccess
         public virtual DbSet<TimeTrackingEntry> TimeTrackingEntries { get; set; }
         public virtual DbSet<ToDoCategory> ToDoCategories { get; set; }
         public virtual DbSet<ToDoItem> ToDoItems { get; set; }
+
+
+        public virtual DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<PredefinedAnswer> PredefinedAnswers { get; set; }
+        public virtual DbSet<Questionaire> Questionaires { get; set; }
+        public virtual DbSet<QuestionaireSession> QuestionaireSessions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
 
     }
 }

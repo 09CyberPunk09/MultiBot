@@ -1,26 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Kernel
 {
     public static class Extensions
     {
-        public static StringBuilder ToListString(this List<string> lst, string caption)
+
+        public static T FromJson<T>(this string data)
         {
-            StringBuilder sb = new(caption);
-            int counter = 0;
-            sb.AppendLine();
-            lst.ForEach(x => sb.AppendLine($"{++counter}. {x}"));
-            return sb;
+            return JsonConvert.DeserializeObject<T>(data);
         }
 
-        public static void SmartRemove(this List<string> lst, string val)
+        public static string ToJson(this object data)
         {
-            if (lst.Count >= 1)
-            {
-                lst.Remove(lst[^1]);
-            }
+            return JsonConvert.SerializeObject(data);
         }
-
     }
 }

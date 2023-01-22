@@ -57,8 +57,10 @@ public class TelegramBotMessageHandler : IMessageHandler
             #region find chat data in cache
             var chatId = message.ChatId;
 
-            var cachedChatData = new CachedChatData();
-            cachedChatData.Data =  _cache.GetDictionary(chatId.ToString());
+            var cachedChatData = new CachedChatData
+            {
+                Data = _cache.GetDictionary(chatId.ToString())
+            };
             var chatDataFacade = new CachedChatDataWrapper(cachedChatData);
             #endregion
 
@@ -107,7 +109,7 @@ public class TelegramBotMessageHandler : IMessageHandler
             };
             #endregion
 
-            #region execute the stage
+            #region 
             if (stageType == null)
             {
                 await _sender.SendMessageAsync(new AdressedContentResult()
@@ -127,31 +129,48 @@ public class TelegramBotMessageHandler : IMessageHandler
             }
             await _perMessageMiddlewareHandler.ExecuteMiddlewares(context);
 
-            #endregion
+            #endregion execute stage and send a message
             StageResult result;
-            if (isCommand)
+            if (isCommand)//if a stage that should be executed is a command entered from a user
             {
                 var stage = (_host.Container.GetService(stageType) as ITelegramCommand);
                 result = await stage.Execute(context);
             }
-            else
+            else//if a stage is a stage
             {
-                var stage = _host.Container.GetService(stageType) as ITelegramStage;
-                result = await stage.Execute(context);
+                var stage = _host.Container.GetService(stageType) as ITelegramStage;//we try to resolve it
+                if(stage != null)//if everything is OK we exec the stage
+                {
+                    result = await stage.Execute(context);
+                }
+                else//if not - it means that 
+                {
+                    var commandStage = _host.Container.GetService(stageType) as ITelegramCommand;// the stage can be located in two ways: in the standard way,and when it is a command which is used as a stage
+                    if(commandStage == null)//it means that the stage could not found and there is an error
+                    {
+                        throw new NullReferenceException();
+                    }
+                    result = await commandStage.Execute(context);
+                }
+
             }
             var contentResult = result.Content;
-            var response = await _sender.SendMessageAsync(new AdressedContentResult()
+            if(contentResult != null)
             {
-                ChatId = message.ChatId,
-                LastBotMessageId = chatDataFacade.Get<int?>(nameof(AdressedContentResult.LastBotMessageId)),
-                MultiMessages = contentResult.MultiMessages,
-                Edited = contentResult.Edited,
-                Menu = contentResult.Menu,
-                Photo = contentResult.Photo,
-                Text = contentResult.Text,
-            });
+                var response = await _sender.SendMessageAsync(new AdressedContentResult()
+                {
+                    ChatId = message.ChatId,
+                    LastBotMessageId = chatDataFacade.Get<int?>(nameof(AdressedContentResult.LastBotMessageId)),
+                    MultiMessages = contentResult.MultiMessages,
+                    Edited = contentResult.Edited,
+                    Menu = contentResult.Menu,
+                    Photo = contentResult.Photo,
+                    Text = contentResult.Text,
+                });
 
-            chatDataFacade.Set(nameof(AdressedContentResult.LastBotMessageId), response.SentMessage.MessageId);
+                //TODO: Move to messagesender
+                chatDataFacade.Set(nameof(AdressedContentResult.LastBotMessageId), response.SentMessage.MessageId);
+            }
             #endregion
 
             #region set next pipeline stage and command
@@ -166,12 +185,15 @@ public class TelegramBotMessageHandler : IMessageHandler
                     nextStageData.Stage = result.NextStage;//we set it as the next stage
                     nextStageData.Command = command.Route.Route;//and save the current route under which we execute the next stage
 
-                    if (currentStageData.StageIndex != -1)
+                    if (currentStageData.StageIndex != -1 && !currentStageIsExternal)
                     {
                         int nextStageIndex = GetNextStageIndex(command.StagesSequence, stageType.FullName);//then, we get the next stage index for knowledge when the command map iteration should continue
                         nextStageData.StageIndex = nextStageIndex;//and set it for save
                     }
-
+                    else
+                    {
+                        nextStageData.StageIndex = currentStageData.StageIndex;
+                    }
                 }
                 else//if a stage has not defined stages by itself we do the standard stuff
                 {
@@ -268,7 +290,7 @@ class StageDto
     /// </summary>
     public string Command { get; set; }
     /// <summary>
-    /// Type name of a stage.Is used only if a stage is not in the command stage map
+    /// Type name of a stage.Is used only if a stage is not in the command stage map, eg it is external
     /// </summary>
     public string Stage { get; set; }
     /// <summary>

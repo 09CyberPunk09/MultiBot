@@ -1,4 +1,4 @@
-﻿using Common.Entites;
+﻿using Common.Entites.Questionaires;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess;
 using System.Linq;

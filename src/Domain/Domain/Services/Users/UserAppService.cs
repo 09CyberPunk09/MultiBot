@@ -35,7 +35,7 @@ public class UserAppService : AppService
         _telegramLoginRepository.RemovePhysically(telegramLogin.Id);
     }
 
-    public bool TelegramLogin(string emailAddress, string password, long userId)
+    public bool TelegramLogin(string emailAddress, string password, long userId, long chatId)
     {
         var user = GetUserByEmail(emailAddress);
         if (user == null)
@@ -49,7 +49,8 @@ public class UserAppService : AppService
         var login = _telegramLoginRepository.Add(new TelegramLogIn()
         {
             TelegramUserId = userId,
-            UserId = user.Id
+            UserId = user.Id,
+            TelegramChatId = chatId
         });
 
         user.TelegramLogIns.Add(login);

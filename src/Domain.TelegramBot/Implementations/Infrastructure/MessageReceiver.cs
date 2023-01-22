@@ -2,6 +2,7 @@
 using Application.Chatting.Core.Interfaces;
 using Common.Configuration;
 using Infrastructure.Queuing;
+using Infrastructure.Queuing.Core;
 
 namespace Application.TelegramBot.Commands.Implementations.Infrastructure
 {

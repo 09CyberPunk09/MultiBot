@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Common.Entites;
+using Common.Entites.Questionaires;
 using Persistence.Common.DataAccess;
 using Persistence.Common.DataAccess.Interfaces;
 using Persistence.Common.DataAccess.Interfaces.Repositories;

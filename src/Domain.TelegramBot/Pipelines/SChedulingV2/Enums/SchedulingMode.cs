@@ -12,6 +12,9 @@ namespace Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Enum
                  * Every [N]th day starting from today [time]
                  * Every [Month] on [day] at [time]
                  * CRON
+                 * 
+                 * On [Date] at [time...] (recurent)
+                 * 
         */
 
         public static readonly SchedulingMode EveryDayAT = new(1, "Every day at [time],...[timeN]");

@@ -3,6 +3,7 @@ using Autofac;
 using Common.Configuration;
 using Infrastructure.FileStorage;
 using Infrastructure.Queuing;
+using Infrastructure.Queuing.Core;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using Persistence.Caching.Redis;
@@ -32,7 +33,6 @@ namespace LifeTracker.TelegramBot.IOHandler
 
             ConfigureDomain(containerBuilder);
 
-            ConfigurePersistence(containerBuilder);
             var configuration = ConfigurationHelper.GetConfiguration();
             containerBuilder.RegisterInstance(configuration).As<IConfigurationRoot>();
 
@@ -41,24 +41,14 @@ namespace LifeTracker.TelegramBot.IOHandler
             var client = Container.Resolve<ITelegramBotClient>();
             client.StartReceiving(new MessageUpdateHandler(Container));
             client.GetUpdatesAsync();
-
-
-            ConfigureMessageSender();
         }
-        private void ConfigurePersistence(ContainerBuilder builder)
-        {
-            _ = builder.RegisterModule(new PersistenceModule());
-            _ = builder.RegisterModule<CachingModule>();
-            logger.Info("Persistence Configured");
-
-        }
+    
         private void ConfigureFileStorageFunctionality(ContainerBuilder builder)
         {
             builder.RegisterModule<FileStorageModule>();
         }
         private void ConfigureDomain(ContainerBuilder builder)
         {
-            // builder.RegisterModule<DomainModule>();
         }
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
@@ -69,23 +59,7 @@ namespace LifeTracker.TelegramBot.IOHandler
                 Timeout = TimeSpan.FromMinutes(10)
             };
             _ = containerBuilder.RegisterInstance(client).As<ITelegramBotClient>().SingleInstance();
-            //   _ = containerBuilder.RegisterType<MessageSender>().SingleInstance();
         }
 
-        private void ConfigureMessageSender()
-        {
-            //var service = new ConfigurationAppService();
-            //var queueName = service.Get("Telegram:MessageResponseQueue");
-            //_sender = Container.Resolve<MessageSender>();
-
-            //_queueListenner = QueuingHelper.CreateListener<ContentResult>(queueName);
-
-            //_queueListenner.AddMessageHandler(response =>
-            //{
-            //    logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");
-            //    _sender.SendMessage(response);
-            //});
-            //_queueListenner.StartConsuming();
-        }
     }
 }

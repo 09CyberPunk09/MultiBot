@@ -10,8 +10,8 @@ public class UserRepositry : RelationalSchemaRepository<User>
     public UserRepositry(RelationalSchemaContext context) : base(context)
     { }
 
-    public IQueryable<User> GetQuery() =>
-         GetQuery()
+    public override IQueryable<User> GetQuery() =>
+         GetTable()
                 .Include(x => x.FeatureFlags)
                 .Include(x => x.TelegramLogIns);
 

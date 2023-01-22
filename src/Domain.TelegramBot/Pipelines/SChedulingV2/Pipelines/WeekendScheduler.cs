@@ -4,24 +4,27 @@ using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Dto;
+using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.SChedulingV2.Pipelines;
 
-[Route("/schedule_on_weekends")]
-public class WeekendSchedulerCommand : ITelegramCommand
+//[Route("/schedule_on_weekends")]
+public class WeekendSchedulerCommand : ITelegramStage
 {
-    public void DefineStages(StageMapBuilder builder)
-    {
-        builder.Stage<WeekendSchedulerTryAcceptTime>();
-    }
-
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        return ContentResponse.Text("Enter time in format HH:MM, HH:MM,...");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter time in format HH:MM, HH:MM,..."
+            },
+            NextStage = typeof(WeekendSchedulerTryAcceptTime).FullName
+        });
+
     }
 }
 
@@ -44,7 +47,8 @@ public class WeekendSchedulerTryAcceptTime : ITelegramStage
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
-            return ContentResponse.Text("Schedule configured");
+            ctx.Response.InvokeNextImmediately = true;
+            return Task.FromResult(new StageResult() { });
         }
         catch (ArgumentException)
         {

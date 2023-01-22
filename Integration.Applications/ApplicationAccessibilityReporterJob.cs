@@ -7,7 +7,6 @@ namespace Integration.Applications
 {
     public class ApplicationAccessibilityReporterJobConfiguration : IConfiguredJob
     {
-        public IJob Job { get; set; }
         public Dictionary<string, string> AdditionalData { get; set; } = new();
 
         public ApplicationAccessibilityReporterJobConfiguration(string applicationName, Guid instanceId)

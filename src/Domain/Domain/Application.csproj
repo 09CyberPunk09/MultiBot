@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,9 +23,14 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure.FileStorage\Infrastructure.FileStorage.csproj" />
     <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
+    <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
     <ProjectReference Include="..\TextUI.Core\Application.Chatting.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\Questionaires\Scheduling\" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@
     <BaseOutputPath>bin\</BaseOutputPath>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

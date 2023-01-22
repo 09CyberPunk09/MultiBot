@@ -1,30 +1,28 @@
 ﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Dto;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
+using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 
-[Route("/on_date_at_time_schedule")]
-public class OnDateCommand : ITelegramCommand
+//[Route("/on_date_at_time_schedule")]
+public class OnDateCommand : ITelegramStage
 {
-    public void DefineStages(StageMapBuilder builder)
-    {
-        builder.Stage<AcceptDateStage>();
-        builder.Stage<AcceptTimeAndSave>();
-    }
-
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        return ContentResponse.Text("Enter date int format mm.dd.yyyy which is the future");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter date int format mm.dd.yyyy which is the future"
+            },
+            NextStage = typeof(AcceptDateStage).FullName
+        });
+
     }
 }
 
@@ -39,7 +37,14 @@ public class AcceptDateStage : ITelegramStage
             return ContentResponse.Text($"Please, enter a valid value");
         }
         ctx.Cache.Set(SELECTEDDATE_CACHEKEY, result);
-        return ContentResponse.Text("Enter time in format HH:MM, HH:MM,...");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter time in format HH:MM, HH:MM,..."
+            },
+            NextStage = typeof(AcceptTimeAndSave).FullName
+        });
     }
 }
 
@@ -61,7 +66,8 @@ public class AcceptTimeAndSave : ITelegramStage
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
-            return ContentResponse.Text("Schedule configured");
+            ctx.Response.InvokeNextImmediately = true;
+            return Task.FromResult(new StageResult() { });
         }
         catch (ArgumentException)
         {

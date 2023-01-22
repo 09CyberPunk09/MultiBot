@@ -3,24 +3,26 @@ using Application.Chatting.Core.Routing;
 using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Dto;
+using Common.Entites.Scheduling;
 using Quartz;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 
-[Route("/cron_schedule")]
-public class CronScheduleCommand : ITelegramCommand
+//[Route("/cron_schedule")]
+public class CronScheduleCommand : ITelegramStage
 {
-    public void DefineStages(StageMapBuilder builder)
-    {
-        builder.Stage<AcceptCronStage>();
-    }
-
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        return ContentResponse.Text("Enter a cron. You can use https://www.freeformatter.com/cron-expression-generator-quartz.html for building a cron schedule");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Enter a cron. You can use https://www.freeformatter.com/cron-expression-generator-quartz.html for building a cron schedule"
+            },
+            NextStage = typeof(AcceptCronStage).FullName
+        });
     }
 }
 
@@ -33,7 +35,9 @@ public class AcceptCronStage : ITelegramStage
             var schedulerConfig = new ScheduleExpressionDto(new List<string>() { ctx.Message.Text });
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
-            return ContentResponse.Text("Scheduler configured");
+          
+            ctx.Response.InvokeNextImmediately = true;
+            return Task.FromResult(new StageResult() { });
         }
         else
         {

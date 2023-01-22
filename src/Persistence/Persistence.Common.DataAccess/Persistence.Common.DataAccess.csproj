@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,10 +27,9 @@
     <ProjectReference Include="..\..\Common\Common.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
-		<Content Remove="C:\Users\1\source\repos\vasylklapatyi\MultiBot\nlog.config" />
-		<Content Remove="C:\Users\1\source\repos\vasylklapatyi\MultiBot\nlog.config" />
 		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
 	</ItemGroup>
-
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(ProjectDir)$(OutDir)" />
+	</Target>
 </Project>

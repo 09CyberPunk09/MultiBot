@@ -1,6 +1,7 @@
 ﻿using Application.Chatting.Core;
 using Common.Configuration;
 using Infrastructure.Queuing;
+using Infrastructure.Queuing.Core;
 
 namespace LifeTracker.TelegramBot.IOHandler
 {

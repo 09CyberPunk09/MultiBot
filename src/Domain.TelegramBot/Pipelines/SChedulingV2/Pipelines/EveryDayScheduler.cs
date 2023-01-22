@@ -4,24 +4,26 @@ using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling.Dto;
+using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.SChedulingV2.Pipelines;
 
-[Route("/every_day_at_schedule")]
-public class EveryDaySchedulerCommand : ITelegramCommand
+//[Route("/every_day_at_schedule")]
+public class EveryDaySchedulerCommand : ITelegramStage
 {
-    public void DefineStages(StageMapBuilder builder)
-    {
-        builder.Stage<TryAcceptTime>();
-    }
-
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        return ContentResponse.Text("Enter time in format HH:MM, HH:MM,...");
+        return Task.FromResult(new StageResult()
+        {
+            Content = new()
+            {
+                Text = "Next, enter time in format HH:MM, HH:MM,..."
+            },
+            NextStage = typeof(TryAcceptTime).FullName
+        });
     }
 }
 
@@ -45,7 +47,8 @@ public class TryAcceptTime : ITelegramStage
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
-            return ContentResponse.Text("Schedule configured");
+            ctx.Response.InvokeNextImmediately = true;
+            return Task.FromResult(new StageResult() { });
         }
         catch (ArgumentException)
         {

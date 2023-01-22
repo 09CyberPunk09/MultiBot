@@ -75,7 +75,7 @@ public class AcceptPasswordAndSignIn : ITelegramStage
         _userService.TelegramLogOut(ctx.RecipientUserId);
         var email = ctx.Cache.Get<SignInPayload>().Email;
         ctx.Response.DeleteLastUserMessage = true;
-        var success = _userService.TelegramLogin(email, ctx.Message.Text, ctx.RecipientUserId);
+        var success = _userService.TelegramLogin(email, ctx.Message.Text, ctx.RecipientUserId, ctx.RecipientChatId);
         var user = _userService.GetUserByEmail(email);
         if (success)
         {
