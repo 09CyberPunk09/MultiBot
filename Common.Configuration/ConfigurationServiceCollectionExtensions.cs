@@ -14,6 +14,13 @@ public static class ConfigurationServiceCollectionExtensions
         logger.Info("Added configuration");
         return services;
     }
+    public static IServiceCollection AddConfiguration(this IServiceCollection services)
+    {
+        var configuration = ConfigurationHelper.GetConfiguration();
+        services.AddSingleton(configuration);
+        logger.Info("Added configuration");
+        return services;
+    }
 
 
     public static IServiceCollection AddSettings(this IServiceCollection services)
