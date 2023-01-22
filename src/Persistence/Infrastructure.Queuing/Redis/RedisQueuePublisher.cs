@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using ServiceStack.Redis;
 
-namespace Infrastructure.Queuing
+namespace Infrastructure.Queuing.Redis
 {
-    public class QueuePublisher
+    public class RedisQueuePublisher
     {
         private readonly RedisClient _client;
         private readonly string _queueName;
-        public QueuePublisher(string hostName, int port, string queueName)
+        public RedisQueuePublisher(string hostName, int port, string queueName)
         {
             _client = new(hostName, port);
             _queueName = queueName;
