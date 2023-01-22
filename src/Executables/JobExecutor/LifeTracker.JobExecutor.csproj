@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <BaseOutputPath>bin\</BaseOutputPath>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,4 +27,8 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(ProjectDir)$(OutDir)" />
+	</Target>
+
 </Project>

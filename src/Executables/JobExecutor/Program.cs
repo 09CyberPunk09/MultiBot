@@ -3,62 +3,78 @@ using Autofac.Extras.Quartz;
 using Common;
 using Integration.Applications;
 using NLog;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Application.Chatting.Core.Interfaces;
+using Application.TelegramBot.Commands.Core;
+using Application.TelegramBot.Commands.Implementations.Infrastructure;
+using Application.TelegramBot.Commands;
+using Application;
+using Common.Configuration;
+using System.Configuration;
+using Application.TelegramBot.Commands.Jobs;
+using Telegram.Bot;
 
 namespace LifeTracker.JobExecutor
 {
     internal class Program
     {
-        private static ContainerBuilder _containerBuilder;
-        private static List<Type> _configurationTypes = new();
+        private static IServiceProvider _serviceProvider;
+        private static void ConfigureJobExecutor(IServiceProvider provider)
+        {
+            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
+            JobExecutorConfiguration.Scheduler = schedulerFactory.GetScheduler().Result;
+
+            JobExecutorConfiguration.Scheduler.JobFactory = new JobFactory(provider);
+            JobExecutorConfiguration.Scheduler.Start().Wait();
+        }
+
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static async Task Main(string[] args)
         {
-            _containerBuilder = new();
-            _containerBuilder.RegisterModule<JobExecutorModule>();
-            logger.Info("Configuration of job executor started");
+            IServiceCollection services = new ServiceCollection();
+            services.AddScoped<IMessageSender<SentTelegramMessage>, TelegramMessageSender>();
 
-            StartJobs();
+            var configuration = ConfigurationHelper.GetConfiguration();
+            string botToken = configuration["Telegram:BotAPIKey"];
+            services.AddTelegramClient(botToken);
+            services.AddHost();
+            services.AddDomain();
+            services.AddMappers();
+            services.AddConfiguration(configuration);
+            services.AddSettings();
+            services.AddSingleton<IJobExecutor, JobExecutor>();
 
-            var container = _containerBuilder.Build();
-            var executor = container.Resolve<IJobExecutor>();
-            _configurationTypes.ForEach(type =>
-            {
-                var obj = (IConfiguredJob)container.Resolve(type);
-                executor.ScheduleJob(obj);
+            //questionires
+            services
+                .AddSingleton<QuestionaireStartupLoader>()
+                .AddScoped<SendQuestionaireJob>();
 
-            });
+            //all additional services
+            services
+            .AddDomain()
+            .AddMappers()
+            .AddConfiguration()
+            .AddSettings();
+            _serviceProvider = services.BuildServiceProvider();
+            ConfigureJobExecutor(_serviceProvider);
+
+            var questionaireLoader = _serviceProvider.GetService<QuestionaireStartupLoader>();
+            questionaireLoader.ScheduleJobsOnStartup();
+            questionaireLoader.ScheduleJobsFromChannel();
+
+
+            var executor = _serviceProvider.GetService<IJobExecutor>();
             await executor.StartExecuting();
-
             LoopConsoleClosing();
-        }
-
-        private static void StartJobs()
-        {
-            //AddJob<SynchronizationJobConfiguration>();
-            //   AddJob<QustionSchedulingJobConfiguration>();
-            //     AddJob<ReminderSchedulerJobConfiguration>();
-            AddJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.JobExecutor", InstanceIdentifier.Identifier));
-        }
-
-        private static void AddJob<TType>() where TType : IConfiguredJob
-        {
-            _configurationTypes.Add(typeof(TType));
-            _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
-            _containerBuilder.RegisterType<TType>();
-            _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
-        }
-        private static void AddJob<TType>(TType type) where TType : class
-        {
-            _configurationTypes.Add(typeof(TType));
-            _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
-            _containerBuilder.RegisterInstance(type);
-            _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
         }
 
         private static void LoopConsoleClosing()
