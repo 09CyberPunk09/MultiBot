@@ -4,13 +4,10 @@ using Common.Entites;
 using Common.Entites.Questionaires;
 using Infrastructure.Queuing;
 using Infrastructure.Queuing.Core;
-using Infrastructure.Queuing.Redis;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Persistence.Caching.Redis;
 using Persistence.Common.DataAccess.Interfaces;
-using Persistence.Master.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +24,7 @@ public class QuestionaireService : AppService
 	private readonly IRepository<Questionaire> _questionaireRepo;
 	private readonly IRepository<PredefinedAnswer> _predefinedAnswerRepo;
 	private readonly IRepository<User> _userRepository;
+	private readonly IRepository<QuestionaireSession> _questionaireSessionRepository;
 	//TODO: Create a Type for piblishing questionaires
 	private readonly QueuePublisher _questionaireSchedulerPublisher;
 	public QuestionaireService(
@@ -35,6 +33,7 @@ public class QuestionaireService : AppService
     IRepository<Questionaire> questionaireRepo,
     IRepository<PredefinedAnswer> predefinedAnswerRepo,
     IRepository<User> userRepository,
+    IRepository<QuestionaireSession>  questionaireSessionRepository,
     IConfiguration configuration
 		)
 	{
@@ -43,6 +42,7 @@ public class QuestionaireService : AppService
 		_predefinedAnswerRepo = predefinedAnswerRepo;
 		_questionaireRepo = questionaireRepo;
 		_userRepository = userRepository;
+        _questionaireSessionRepository = questionaireSessionRepository;
 
         _questionaireSchedulerPublisher = QueuingHelper.CreatePublisher(configuration["Application:Questionaires:ScheduleQuestionaireQueueName"]);
 
@@ -67,6 +67,14 @@ public class QuestionaireService : AppService
             chatDataFacade.Set(QUESTIONAIREID_CACHEKEY, questionaireId);
             cache.SetDictionary(chatId.ToString(), chatDataFacade.Data.Data);//
         }
+    }
+
+    public QuestionaireSession CreateQuestionaireSession(Guid questionaireId)
+    {
+       return  _questionaireSessionRepository.Add(new()
+        {
+            QuestionaireId = questionaireId,
+        });
     }
 
 	public Guid Create(CreateQuestionaireDto questionaireDto,List<CreateQuestionDto> questions)

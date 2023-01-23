@@ -1,26 +1,19 @@
-﻿using Autofac;
-using Autofac.Extras.Quartz;
+﻿using Application;
+using Application.Chatting.Core.Interfaces;
+using Application.TelegramBot.Commands;
+using Application.TelegramBot.Commands.Core;
+using Application.TelegramBot.Commands.Implementations.Infrastructure;
+using Application.TelegramBot.Commands.Jobs;
 using Common;
-using Integration.Applications;
+using Common.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using Quartz.Impl;
-using Quartz.Spi;
 using Quartz;
+using Quartz.Impl;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Application.Chatting.Core.Interfaces;
-using Application.TelegramBot.Commands.Core;
-using Application.TelegramBot.Commands.Implementations.Infrastructure;
-using Application.TelegramBot.Commands;
-using Application;
-using Common.Configuration;
-using System.Configuration;
-using Application.TelegramBot.Commands.Jobs;
-using Telegram.Bot;
 
 namespace LifeTracker.JobExecutor
 {

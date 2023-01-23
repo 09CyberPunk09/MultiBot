@@ -34,6 +34,12 @@ public class CachedChatDataWrapper
         Data.Data.Remove(key);
     }
 
+    public void Remove<T>(T _)
+    {
+        Data.Data.Remove(typeof(T).Name);
+    }
+
+
     public T Get<T>(string key, bool getThanDelete = false)
     {
         var got = Data.Data.TryGetValue(key, out var value);

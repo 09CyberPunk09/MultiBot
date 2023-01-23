@@ -94,7 +94,7 @@ public class SendQuestionaireJob : IJob
             {
                 new[]
                 {
-                    new Button("🗳 Answer!","/answer_questionnaire")
+                    new Button("🗳 Answer!","/answer_questionaire")
                 }
             })
         }));

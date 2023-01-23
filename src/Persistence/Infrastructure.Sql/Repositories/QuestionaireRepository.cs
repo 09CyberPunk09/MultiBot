@@ -17,11 +17,10 @@ public class QuestionaireRepository : RelationalSchemaRepository<Questionaire>
 
     }
 
-    public override Questionaire Get(Guid id)
+    public override IQueryable<Questionaire> GetQuery()
     {
-        return GetQuery()
+        return GetTable()
             .Include(x => x.Questions)
-            .ThenInclude(x => x.PredefinedAnswers)
-            .FirstOrDefault(x => x.Id == id);
+            .ThenInclude(x => x.PredefinedAnswers);
     }
 }

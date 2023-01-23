@@ -40,7 +40,7 @@ public static class DataStorageServiceCollectionExtensions
 
         services.AddScoped<IRepository<Question>, RelationalSchemaRepository<Question>> ();
        
-        services.AddScoped<IRepository<Questionaire>, RelationalSchemaRepository<Questionaire>> ();
+        services.AddScoped<IRepository<Questionaire>, QuestionaireRepository> ();
       
         services.AddScoped<IRepository<QuestionaireSession>, RelationalSchemaRepository<QuestionaireSession>> ();
 
