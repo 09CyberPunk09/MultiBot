@@ -19,39 +19,39 @@ public class QuestionaireService : AppService
 {
     public const string QUESTIONAIREID_CACHEKEY = "QuestionaireToAnswerId";
 
-	private readonly IRepository<Answer> _answerRepo;
-	private readonly IRepository<Question> _questionRepo;
-	private readonly IRepository<Questionaire> _questionaireRepo;
-	private readonly IRepository<PredefinedAnswer> _predefinedAnswerRepo;
-	private readonly IRepository<User> _userRepository;
-	private readonly IRepository<QuestionaireSession> _questionaireSessionRepository;
-	//TODO: Create a Type for piblishing questionaires
-	private readonly QueuePublisher _questionaireSchedulerPublisher;
-	public QuestionaireService(
+    private readonly IRepository<Answer> _answerRepo;
+    private readonly IRepository<Question> _questionRepo;
+    private readonly IRepository<Questionaire> _questionaireRepo;
+    private readonly IRepository<PredefinedAnswer> _predefinedAnswerRepo;
+    private readonly IRepository<User> _userRepository;
+    private readonly IRepository<QuestionaireSession> _questionaireSessionRepository;
+    //TODO: Create a Type for piblishing questionaires
+    private readonly QueuePublisher _questionaireSchedulerPublisher;
+    public QuestionaireService(
         IRepository<Answer> answerRepo,
     IRepository<Question> questionRepo,
     IRepository<Questionaire> questionaireRepo,
     IRepository<PredefinedAnswer> predefinedAnswerRepo,
     IRepository<User> userRepository,
-    IRepository<QuestionaireSession>  questionaireSessionRepository,
+    IRepository<QuestionaireSession> questionaireSessionRepository,
     IConfiguration configuration
-		)
-	{
-		_answerRepo = answerRepo;
-		_questionRepo = questionRepo;
-		_predefinedAnswerRepo = predefinedAnswerRepo;
-		_questionaireRepo = questionaireRepo;
-		_userRepository = userRepository;
+        )
+    {
+        _answerRepo = answerRepo;
+        _questionRepo = questionRepo;
+        _predefinedAnswerRepo = predefinedAnswerRepo;
+        _questionaireRepo = questionaireRepo;
+        _userRepository = userRepository;
         _questionaireSessionRepository = questionaireSessionRepository;
 
         _questionaireSchedulerPublisher = QueuingHelper.CreatePublisher(configuration["Application:Questionaires:ScheduleQuestionaireQueueName"]);
 
     }
 
-	public Questionaire Get(Guid id)
-	{
-		return _questionaireRepo.Get(id);
-	}
+    public Questionaire Get(Guid id)
+    {
+        return _questionaireRepo.Get(id);
+    }
 
     //TODO: Create a telegram functionality service and move this method there
     public void SetQuestionaireForUser(Guid questionaireId, long[] chatIds)
@@ -71,14 +71,14 @@ public class QuestionaireService : AppService
 
     public QuestionaireSession CreateQuestionaireSession(Guid questionaireId)
     {
-       return  _questionaireSessionRepository.Add(new()
+        return _questionaireSessionRepository.Add(new()
         {
             QuestionaireId = questionaireId,
         });
     }
 
-	public Guid Create(CreateQuestionaireDto questionaireDto,List<CreateQuestionDto> questions)
-	{
+    public Guid Create(CreateQuestionaireDto questionaireDto, List<CreateQuestionDto> questions)
+    {
         #region Questionaire Creation
         var questionaire = _questionaireRepo.Add(new()
         {
@@ -126,5 +126,5 @@ public class QuestionaireService : AppService
         });
 
         return questionaire.Id;
-	}
+    }
 }

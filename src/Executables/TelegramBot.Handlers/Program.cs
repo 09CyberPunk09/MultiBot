@@ -1,6 +1,5 @@
 ﻿using Application;
 using Application.Chatting.Core.Interfaces;
-using Application.Chatting.Core.Messaging;
 using Application.TelegramBot.Commands;
 using Application.TelegramBot.Commands.Core;
 using Application.TelegramBot.Commands.Implementations.Infrastructure;

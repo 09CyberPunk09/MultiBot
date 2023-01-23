@@ -13,7 +13,7 @@ namespace Application.TelegramBot.Commands.Middlewares;
 public class AuthentificationMiddleware : ITelegramMiddleware
 {
     private readonly IMessageSender<SentTelegramMessage> _sender;
-    private readonly RoutingTable _routingTable; 
+    private readonly RoutingTable _routingTable;
     public AuthentificationMiddleware(IMessageSender<SentTelegramMessage> sender, RoutingTable routingTable)
     {
         _sender = sender;
@@ -26,8 +26,8 @@ public class AuthentificationMiddleware : ITelegramMiddleware
         var command = _routingTable.GetCommand(text);
         var startCommandRoute = _routingTable.Route<TelegramStart>();
         var registerCommandRoute = _routingTable.Route<RegisterCommand>();
-        if (command != null && 
-            command.Route.Route != startCommandRoute && 
+        if (command != null &&
+            command.Route.Route != startCommandRoute &&
             command.Route.Route != registerCommandRoute)
         {
             var userExists = context.User != null;
@@ -36,7 +36,7 @@ public class AuthentificationMiddleware : ITelegramMiddleware
                 _sender.SendMessageAsync(new AdressedContentResult()
                 {
                     Text = "Hey! Looks like you are not recognized by the system. Sign in or register to continue with the bot😉. Use /start for sign in and /register for sign up.",
-                      ChatId = context.RecipientChatId,
+                    ChatId = context.RecipientChatId,
                 });
             }
             return Task.FromResult(userExists);

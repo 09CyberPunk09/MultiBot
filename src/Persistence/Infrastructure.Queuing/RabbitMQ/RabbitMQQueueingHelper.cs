@@ -11,7 +11,7 @@ public class RabbitMQQueueingFactory : IQueuingFactory
     public static Logger _logger = LogManager.GetCurrentClassLogger();
     public QueuePublisher CreatePublisher(string queueName)
     {
-       if(_configuration == null)
+        if (_configuration == null)
         {
             _configuration = ConfigurationHelper.GetConfiguration();
         }

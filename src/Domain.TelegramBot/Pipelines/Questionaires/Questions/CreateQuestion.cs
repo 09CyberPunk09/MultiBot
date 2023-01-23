@@ -1,15 +1,12 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
 using Application.Chatting.Core.StageMap;
-using Application.Services.Questionaires.Dto;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Commands.Pipelines.Questionaires.Create;
 using Application.TelegramBot.Commands.Pipelines.Questionaires.Dto;
 using Common.Entites.Questionaires;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -54,8 +51,8 @@ public class AcceptQuesiotnNameAndAskForAnswers : ITelegramStage
     }
 }
 
-public enum ActionType 
-{ 
+public enum ActionType
+{
     RemoveLastAnswer = -314898,
     Confirm,
     AddPredefinedAnswer
@@ -90,9 +87,9 @@ public class AcceptAction : ITelegramStage
                 if (Regex.IsMatch(text, "[0-9]+ ?- ?[0-9]+"))
                 {
                     currentQuestion.AnswerType = AnswerType.Numeric;
-                    int min = int.Parse(Regex.Match(text, "[0-9]+ ?-").Value.Replace("-","").Trim());
+                    int min = int.Parse(Regex.Match(text, "[0-9]+ ?-").Value.Replace("-", "").Trim());
                     int max = int.Parse(Regex.Match(text, "- ?[0-9]+").Value.Replace("-", "").Trim());
-                    currentQuestion.NumericRange = (min,max);
+                    currentQuestion.NumericRange = (min, max);
                     ctx.Cache.Set(questionaire);
                     return await _showQuestionaireStage.Execute(ctx);
                 }

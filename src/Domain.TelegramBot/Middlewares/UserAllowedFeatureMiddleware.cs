@@ -1,12 +1,4 @@
-﻿using Application.Chatting.Core.Context;
-using Application.Chatting.Core.Interfaces;
-using Application.Chatting.Core.PipelineBaseKit;
-using Autofac;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-
-namespace Application.TelegramBot.Commands.Middlewares
+﻿namespace Application.TelegramBot.Commands.Middlewares
 {
     //public class UserAllowedFeatureMiddleware : IMessageHandlerMiddleware
     //{

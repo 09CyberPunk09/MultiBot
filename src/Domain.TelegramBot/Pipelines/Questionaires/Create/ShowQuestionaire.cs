@@ -1,6 +1,5 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
-using Application.Services.Questionaires.Dto;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Commands.Pipelines.Questionaires.Create;
@@ -22,7 +21,7 @@ public class ShowQuestionaireStage : ITelegramStage
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         var quesitonaire = ctx.Cache.Get<NewQuestionaireDto>();
-        var sb= new StringBuilder();
+        var sb = new StringBuilder();
         sb.AppendLine($"🔶 {quesitonaire.Name}");
         quesitonaire.Questions.ForEach(x =>
         {

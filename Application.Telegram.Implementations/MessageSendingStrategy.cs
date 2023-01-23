@@ -69,7 +69,7 @@ public class MessageSendingStrategy
                 case MenuType.MenuKeyboard:
                     menu = new ReplyKeyboardMarkup(menuData.Select(x => x.Select(y => new KeyboardButton(y.Text))))
                     {
-                         ResizeKeyboard = true
+                        ResizeKeyboard = true
                     };
                     break;
                 default:
@@ -80,9 +80,9 @@ public class MessageSendingStrategy
         if (edited)
         {
             messageResponse = await _uiClient.EditMessageTextAsync(
-                contentResult.ChatId, 
+                contentResult.ChatId,
                 contentResult.LastBotMessageId.Value,
-                contentResult.Text, 
+                contentResult.Text,
                 replyMarkup: menu as InlineKeyboardMarkup);
             return messageResponse;
         }

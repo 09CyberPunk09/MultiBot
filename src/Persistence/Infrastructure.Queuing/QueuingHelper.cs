@@ -1,7 +1,5 @@
-﻿using Common.Configuration;
-using Infrastructure.Queuing.Core;
+﻿using Infrastructure.Queuing.Core;
 using Infrastructure.Queuing.RabbitMQ;
-using Infrastructure.Queuing.Redis;
 using NLog;
 
 namespace Infrastructure.Queuing;

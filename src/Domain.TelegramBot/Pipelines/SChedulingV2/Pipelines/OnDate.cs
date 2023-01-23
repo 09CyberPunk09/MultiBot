@@ -31,7 +31,7 @@ public class AcceptDateStage : ITelegramStage
     public const string SELECTEDDATE_CACHEKEY = "SelectedDate";
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        if(!DateTime.TryParse(ctx.Message.Text,out var result))
+        if (!DateTime.TryParse(ctx.Message.Text, out var result))
         {
             ctx.Response.ForbidNextStageInvokation();
             return ContentResponse.Text($"Please, enter a valid value");

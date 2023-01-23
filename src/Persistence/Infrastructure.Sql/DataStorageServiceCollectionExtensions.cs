@@ -38,11 +38,11 @@ public static class DataStorageServiceCollectionExtensions
 
         services.AddScoped<IRepository<PredefinedAnswer>, RelationalSchemaRepository<PredefinedAnswer>>();
 
-        services.AddScoped<IRepository<Question>, RelationalSchemaRepository<Question>> ();
-       
-        services.AddScoped<IRepository<Questionaire>, QuestionaireRepository> ();
-      
-        services.AddScoped<IRepository<QuestionaireSession>, RelationalSchemaRepository<QuestionaireSession>> ();
+        services.AddScoped<IRepository<Question>, RelationalSchemaRepository<Question>>();
+
+        services.AddScoped<IRepository<Questionaire>, QuestionaireRepository>();
+
+        services.AddScoped<IRepository<QuestionaireSession>, RelationalSchemaRepository<QuestionaireSession>>();
 
         services.AddScoped<IRepository<Answer>, RelationalSchemaRepository<Answer>>();
 

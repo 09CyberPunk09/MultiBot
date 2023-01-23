@@ -73,7 +73,7 @@ public class AcceptScheduleExpressionAndSaveQuestionaire : ITelegramStage
         {
             Text = questionaire.Name,
             UserId = ctx.User.Id,
-            SchedulerExpression= schedulerExpression,
+            SchedulerExpression = schedulerExpression,
         },
         questionaire.Questions.Select(x => new CreateQuestionDto()
         {

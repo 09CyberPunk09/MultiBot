@@ -11,5 +11,5 @@ public interface IMessageSender
 public interface IMessageSender<TResponse> : IMessageSender where TResponse : SentMessageRepsonse
 {
     void SendMessage(ContentResultV2 result);
-    Task<TResponse> SendMessageAsync(ContentResultV2 result) ;
+    Task<TResponse> SendMessageAsync(ContentResultV2 result);
 }

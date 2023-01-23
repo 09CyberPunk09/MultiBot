@@ -10,9 +10,9 @@ public class QuestionService : AppService
 	private readonly IRepository<Answer> _answerRepository;
 	public QuestionService(IRepository<Question> repository, IRepository<Answer> answerRepository)
 	{
-        _questionRepository = repository;
-        _answerRepository = answerRepository;
-    }
+		_questionRepository = repository;
+		_answerRepository = answerRepository;
+	}
 
 	public Question Get(Guid id)
 	{
@@ -28,5 +28,5 @@ public class QuestionService : AppService
 			QuestionId = questionId,
 		});
 		return result;
-    }
+	}
 }

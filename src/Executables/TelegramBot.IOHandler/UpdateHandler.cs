@@ -90,7 +90,7 @@ namespace LifeTracker.TelegramBot.IOHandler
                 default:
                     break;
             }
-            if(message == null)
+            if (message == null)
             {
                 logger.Error($"Empty message!, update payload: {JsonConvert.SerializeObject(update)} ");
                 return;

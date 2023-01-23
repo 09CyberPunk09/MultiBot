@@ -16,18 +16,10 @@ Bot
 
     3. Questionaires
     Tags for questionaires
-    Create Questionaries
-    Schedule Questionaires
+    --Create Questionaries
+    --Schedule Questionaires
     Enable\Disable Questionaries
     Edit Questionaires
-    Create Single Questions
-    Schedule Single Questions
-    Modify Single Questions
-    Enable\Disable Single Questions
-
-    3.1 In-Box questionaires:
-    How was your day?
-    Mark your day by 0-10
 
     Generate Reports
 

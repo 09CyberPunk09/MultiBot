@@ -46,7 +46,7 @@ public class RoutingTable
             .Value
             .Route
             .AlternativeRoute;
-    } 
+    }
     public string Route<TCommand>() where TCommand : ICommand
     {
         var commandType = typeof(TCommand);

@@ -1,6 +1,5 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
@@ -47,7 +46,7 @@ public class SelectDayStage : ITelegramStage
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
         //if the message is empty - we invoked immediately the next stage after command. The selection just started and there is nothing to parse yet
-        if(ctx.Message.Text == string.Empty)
+        if (ctx.Message.Text == string.Empty)
         {
             ctx.Response.ForbidNextStageInvokation();
             return ContentResponse.New(
@@ -60,8 +59,8 @@ public class SelectDayStage : ITelegramStage
 
         var userSelectedDays = ctx.Cache.Get<List<DaysMenuAction>>(SELECTEDDAYS_CACHEKEY);
         userSelectedDays ??= new List<DaysMenuAction>();
-        
-        if(!Enum.TryParse<DaysMenuAction>(ctx.Message.Text,out var selection))
+
+        if (!Enum.TryParse<DaysMenuAction>(ctx.Message.Text, out var selection))
         {
             ctx.Response.ForbidNextStageInvokation();
             return ContentResponse.Text("PLease, select an item from menu");
@@ -77,19 +76,19 @@ public class SelectDayStage : ITelegramStage
             case DaysMenuAction.Saturday:
             case DaysMenuAction.Sunday:
                 ctx.Response.ForbidNextStageInvokation();
-              
+
                 var selectedMenuItem = DaysMenu.First(x => x.Action == selection);
                 userSelectedDays.Add(selectedMenuItem.Action);
 
                 var menuUtems = DaysMenu.Where(x => !userSelectedDays.Any(y => x.Action == y));
 
                 ctx.Cache.Set(SELECTEDDAYS_CACHEKEY, userSelectedDays);
-              
-                var sb =new StringBuilder();
+
+                var sb = new StringBuilder();
                 userSelectedDays.ForEach(x =>
                 {
                     var found = DaysMenu.FirstOrDefault(y => y.Action == x);
-                    if(found != null)
+                    if (found != null)
                     {
                         sb.AppendLine(found.DisplayName);
                     }
@@ -116,7 +115,7 @@ public class SelectDayStage : ITelegramStage
             case DaysMenuAction.CancelLastDesicion:
                 ctx.Response.ForbidNextStageInvokation();
                 var last = userSelectedDays.LastOrDefault();
-                if(last != null)
+                if (last != null)
                 {
                     userSelectedDays.Remove(last);
 
@@ -205,13 +204,13 @@ public class AcceptAsledTimesStage : ITelegramStage
             //ScheduleExpressionDto
             var crons = new List<string>();
 
-            var selectedDays = ctx.Cache.Get<List<DaysMenuAction>>(SELECTEDDAYS_CACHEKEY, true).Select(x => Enum.GetName(x).Substring(0,3).ToUpper());
+            var selectedDays = ctx.Cache.Get<List<DaysMenuAction>>(SELECTEDDAYS_CACHEKEY, true).Select(x => Enum.GetName(x).Substring(0, 3).ToUpper());
 
             var daysString = string.Join(",", selectedDays);
             foreach (var tuple in result)
             {
-                    var cron = $"0 0,{tuple.Item2} {tuple.Item1} ? * {daysString} *";
-                    crons.Add(cron);
+                var cron = $"0 0,{tuple.Item2} {tuple.Item1} ? * {daysString} *";
+                crons.Add(cron);
             }
 
             var schedulerConfig = new ScheduleExpressionDto(crons);

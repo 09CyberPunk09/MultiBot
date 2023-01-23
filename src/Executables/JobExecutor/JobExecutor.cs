@@ -1,13 +1,7 @@
-﻿using Autofac;
-using Common;
-using Infrastructure.Queuing;
+﻿using Common;
 using Integration.Applications;
-using Microsoft.Extensions.DependencyInjection;
 using NLog;
-using Quartz;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
 

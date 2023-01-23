@@ -17,17 +17,17 @@ namespace Application.TelegramBot.Commands.Jobs;
 /// </summary>
 public class QuestionaireStartupLoader
 {
-	private readonly IJobExecutor _jobExecutor;
-	private readonly IRepository<Questionaire> _questionaireRepository;
-	private QueueListener<SendQuestionaireJobPayload> _channelJobScheduler;
-	public QuestionaireStartupLoader(IJobExecutor jobExecutor, IRepository<Questionaire> repository)
-	{
-		_jobExecutor = jobExecutor;
+    private readonly IJobExecutor _jobExecutor;
+    private readonly IRepository<Questionaire> _questionaireRepository;
+    private QueueListener<SendQuestionaireJobPayload> _channelJobScheduler;
+    public QuestionaireStartupLoader(IJobExecutor jobExecutor, IRepository<Questionaire> repository)
+    {
+        _jobExecutor = jobExecutor;
         _questionaireRepository = repository;
-	}
-	public void ScheduleJobsFromChannel()
-	{
-		var configuration = ConfigurationHelper.GetConfiguration();
+    }
+    public void ScheduleJobsFromChannel()
+    {
+        var configuration = ConfigurationHelper.GetConfiguration();
         _channelJobScheduler = QueuingHelper.CreateListener<SendQuestionaireJobPayload>(configuration["Application:Questionaires:ScheduleQuestionaireQueueName"]);
         _channelJobScheduler.AddMessageHandler(channelMessage =>
         {
@@ -37,18 +37,18 @@ public class QuestionaireStartupLoader
         _channelJobScheduler.StartConsuming();
     }
     public void ScheduleJobsOnStartup()
-	{
-		//TODO: Change to service method. calling repos directly is a bad pattern
-		var questionaires = _questionaireRepository.Where(q => q.IsActive && !string.IsNullOrEmpty(q.SchedulerExpression)).ToList();
-		Parallel.ForEach(questionaires, q =>
-		{
-			var config = new SendQuestionaireJobConfiguration(new()
+    {
+        //TODO: Change to service method. calling repos directly is a bad pattern
+        var questionaires = _questionaireRepository.Where(q => q.IsActive && !string.IsNullOrEmpty(q.SchedulerExpression)).ToList();
+        Parallel.ForEach(questionaires, q =>
+        {
+            var config = new SendQuestionaireJobConfiguration(new()
             {
                 QuestionaireId = q.Id,
                 ScheduleExpression = JsonConvert.DeserializeObject<ScheduleExpressionDto>(q.SchedulerExpression),
                 QuestionaireName = q.Name,
             });
-			_jobExecutor.ScheduleJob(config);
-		});
-	}
+            _jobExecutor.ScheduleJob(config);
+        });
+    }
 }

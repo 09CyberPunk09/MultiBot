@@ -6,7 +6,6 @@ using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Commands.Pipelines.ToDo.ToDoItems;
 using Application.TelegramBot.Pipelines.V2.Pipelines.ToDo.Categories;
 using Application.TelegramBot.Pipelines.V2.Pipelines.ToDo.ToDoItems;
-using System;
 using System.Threading.Tasks;
 using static Application.Chatting.Core.Repsonses.Menu;
 

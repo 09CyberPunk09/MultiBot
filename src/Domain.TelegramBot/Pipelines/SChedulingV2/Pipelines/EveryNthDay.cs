@@ -1,6 +1,4 @@
 ﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
@@ -33,7 +31,7 @@ public class AcceptNumberStage : ITelegramStage
     public const string NUMBEROFDAYS_CACHEKEY = "NumberOfDays";
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        if(!int.TryParse(ctx.Message.Text, out var result))
+        if (!int.TryParse(ctx.Message.Text, out var result))
         {
             ctx.Response.ForbidNextStageInvokation();
             return ContentResponse.Text("Enter a number of days of the delay between schedule firings:");

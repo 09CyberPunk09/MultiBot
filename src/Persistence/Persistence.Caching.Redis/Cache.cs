@@ -116,10 +116,10 @@ namespace Persistence.Caching.Redis
             db.HashDelete(setId, field);
         }
 
-        public void SetDictionary(string key, Dictionary<string,string> value)
+        public void SetDictionary(string key, Dictionary<string, string> value)
         {
             db.KeyDelete(key);
-            HashEntry[] preparedValues = value.Select(x => new HashEntry(x.Key,x.Value)).ToArray();
+            HashEntry[] preparedValues = value.Select(x => new HashEntry(x.Key, x.Value)).ToArray();
             db.HashSet(key, preparedValues);
         }
 

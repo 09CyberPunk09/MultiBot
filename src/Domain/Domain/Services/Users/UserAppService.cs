@@ -1,5 +1,4 @@
-﻿using Application.Services.Files;
-using Common.Entites;
+﻿using Common.Entites;
 using Common.Enums;
 using Persistence.Caching.Redis;
 using Persistence.Common.DataAccess.Interfaces;

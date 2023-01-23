@@ -2,12 +2,9 @@
 using Autofac;
 using Common.Configuration;
 using Infrastructure.FileStorage;
-using Infrastructure.Queuing;
 using Infrastructure.Queuing.Core;
 using Microsoft.Extensions.Configuration;
 using NLog;
-using Persistence.Caching.Redis;
-using Persistence.Master;
 using System;
 using Telegram.Bot;
 
@@ -42,7 +39,7 @@ namespace LifeTracker.TelegramBot.IOHandler
             client.StartReceiving(new MessageUpdateHandler(Container));
             client.GetUpdatesAsync();
         }
-    
+
         private void ConfigureFileStorageFunctionality(ContainerBuilder builder)
         {
             builder.RegisterModule<FileStorageModule>();

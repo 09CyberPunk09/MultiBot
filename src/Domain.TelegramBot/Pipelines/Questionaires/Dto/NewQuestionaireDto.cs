@@ -1,6 +1,4 @@
-﻿using Application.Services.Questionaires.Dto;
-using Common.Entites.Questionaires;
-using System;
+﻿using Common.Entites.Questionaires;
 using System.Collections.Generic;
 
 namespace Application.TelegramBot.Commands.Pipelines.Questionaires.Dto;
@@ -15,15 +13,15 @@ internal class NewQuestionaireDto
 internal class QuestionDto
 {
     //for deserialization
-    public QuestionDto()  { }
+    public QuestionDto() { }
     public QuestionDto(AnswerType type)
     {
-        AnswerType= type;
+        AnswerType = type;
     }
     public string Text { get; set; }
     public AnswerType AnswerType { get; set; } = AnswerType.WithoutPredefinedAnswers;
     public List<PredefinedAnswerDto> PredefinedAnswers { get; set; } = new();
-    public (int?,int?) NumericRange { get; set; } = new();
+    public (int?, int?) NumericRange { get; set; } = new();
 }
 internal class PredefinedAnswerDto
 {

@@ -1,6 +1,4 @@
 ﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Common.Entites.Scheduling;
@@ -35,7 +33,7 @@ public class AcceptCronStage : ITelegramStage
             var schedulerConfig = new ScheduleExpressionDto(new List<string>() { ctx.Message.Text });
 
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
-          
+
             ctx.Response.InvokeNextImmediately = true;
             return Task.FromResult(new StageResult() { });
         }

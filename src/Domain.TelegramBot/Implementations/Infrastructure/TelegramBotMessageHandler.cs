@@ -45,7 +45,7 @@ public class TelegramBotMessageHandler : IMessageHandler
         _perCommandMiddlewareHandler = new(_host.Container);
         _perMessageMiddlewareHandler = new(_host.Container);
         //TODO: Move the middleware registration away from message handler
-                    _perCommandMiddlewareHandler.Add<AuthentificationMiddleware>();
+        _perCommandMiddlewareHandler.Add<AuthentificationMiddleware>();
     }
 
     public async Task HandleMessage(TelegramMessage message)
@@ -139,14 +139,14 @@ public class TelegramBotMessageHandler : IMessageHandler
             else//if a stage is a stage
             {
                 var stage = _host.Container.GetService(stageType) as ITelegramStage;//we try to resolve it
-                if(stage != null)//if everything is OK we exec the stage
+                if (stage != null)//if everything is OK we exec the stage
                 {
                     result = await stage.Execute(context);
                 }
                 else//if not - it means that 
                 {
                     var commandStage = _host.Container.GetService(stageType) as ITelegramCommand;// the stage can be located in two ways: in the standard way,and when it is a command which is used as a stage
-                    if(commandStage == null)//it means that the stage could not found and there is an error
+                    if (commandStage == null)//it means that the stage could not found and there is an error
                     {
                         throw new NullReferenceException();
                     }
@@ -155,7 +155,7 @@ public class TelegramBotMessageHandler : IMessageHandler
 
             }
             var contentResult = result.Content;
-            if(contentResult != null)
+            if (contentResult != null)
             {
                 var response = await _sender.SendMessageAsync(new AdressedContentResult()
                 {

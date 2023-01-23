@@ -35,11 +35,11 @@ public class Button
     {
         Type = type;
         Text = text;
-        switch(type)
+        switch (type)
         {
             case ButtonContentType.Text:
                 Text = text;
-                break; 
+                break;
             case ButtonContentType.Url:
                 Text = text;
                 Url = data;
