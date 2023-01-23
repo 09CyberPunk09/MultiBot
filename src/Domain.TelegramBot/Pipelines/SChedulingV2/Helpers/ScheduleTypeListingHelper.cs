@@ -10,6 +10,8 @@ public static class ScheduleTypeListingHelper
 {
     public static IReadOnlyList<(SchedulingMode, Type)> Modes = new List<(SchedulingMode, Type)>
     {
+        (SchedulingMode.TodayAt,typeof(TodayAtCommand)),
+        (SchedulingMode.TomorrowAt,typeof(TomorrowAt)),
         (SchedulingMode.EveryDayAT,typeof(EveryDaySchedulerCommand)),
         (SchedulingMode.EceryDAYSAT,typeof(EveryDaySAtCommand)),
         (SchedulingMode.EveryWEEKENDAT,typeof(WeekendSchedulerCommand)),
