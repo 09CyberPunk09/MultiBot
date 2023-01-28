@@ -25,7 +25,7 @@ public class ScheduleExpressionDto
     {
 
     }
-
+    //TODO: !ADD DESCRIPTIONS TO PIPELINES
     public string Description { get; set; }
     public int Mode { get; set; }
     public List<string> Crons { get; set; } = new();

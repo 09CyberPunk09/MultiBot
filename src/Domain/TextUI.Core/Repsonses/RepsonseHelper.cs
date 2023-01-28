@@ -8,6 +8,7 @@ public class RepsonseHelper
     public bool DeleteLastUserMessage { get; set; }
     public bool DeleteLastBotMessage { get; set; }
     //TODO: Implement in telegram message handling
+    //TODO: Make the previous message menu not deleted if forbidnextstageinvokation is used
     public void ForbidNextStageInvokation()
     {
         CanIvokeNext = false;

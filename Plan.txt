@@ -24,9 +24,9 @@ Bot
     Generate Reports
 
     4. Reminders
-    Create Reminders
-    Schedule Reminders
-    Enable\disable Reminders
+    --Create Reminders
+    --Schedule Reminders
+    --Enable\disable Reminders
     Structure Reminders in Categories
 
     5. Time Tracking

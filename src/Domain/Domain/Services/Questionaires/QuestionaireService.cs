@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Application.Services.Questionaires;
 
-//TODO: Create an interface for every,
+//TODO: Create an interface for every service
 public class QuestionaireService : AppService
 {
     public const string QUESTIONAIREID_CACHEKEY = "QuestionaireToAnswerId";
@@ -75,6 +75,11 @@ public class QuestionaireService : AppService
         {
             QuestionaireId = questionaireId,
         });
+    }
+
+    public IEnumerable<Questionaire> GetAll(Guid? userId = null)
+    {
+        return userId == null ? _questionaireRepo.GetAll() : _questionaireRepo.Where(x => x.UserId == userId);
     }
 
     public Guid Create(CreateQuestionaireDto questionaireDto, List<CreateQuestionDto> questions)

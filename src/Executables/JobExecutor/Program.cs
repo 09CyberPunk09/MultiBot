@@ -4,6 +4,7 @@ using Application.TelegramBot.Commands;
 using Application.TelegramBot.Commands.Core;
 using Application.TelegramBot.Commands.Implementations.Infrastructure;
 using Application.TelegramBot.Commands.Jobs;
+using Application.TelegramBot.Commands.Jobs.Reminders;
 using Common;
 using Common.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,11 @@ namespace LifeTracker.JobExecutor
             services
                 .AddSingleton<QuestionaireStartupLoader>()
                 .AddScoped<SendQuestionaireJob>();
+           
+            //reminders
+            services
+                .AddSingleton<RemindersLoader>()
+                .AddScoped<SendReminderJob>();
 
             //all additional services
             services
@@ -63,6 +69,10 @@ namespace LifeTracker.JobExecutor
             var questionaireLoader = _serviceProvider.GetService<QuestionaireStartupLoader>();
             questionaireLoader.ScheduleJobsOnStartup();
             questionaireLoader.ScheduleJobsFromChannel();
+            
+            var reminderLoader = _serviceProvider.GetService<RemindersLoader>();
+            reminderLoader.ScheduleJobsOnStartup();
+            reminderLoader.ScheduleJobsFromChannel();
 
 
             var executor = _serviceProvider.GetService<IJobExecutor>();

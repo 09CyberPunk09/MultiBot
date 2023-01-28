@@ -12,7 +12,12 @@ public interface IConfiguredJob
     IJobDetail BuildJob();
 }
 
-public interface IConfiguredJob<TPayload> : IConfiguredJob
+public interface IConfiguredJob<TPayload> : IConfiguredJob where TPayload : JobConfigurationPayload
 {
     TPayload Payload { get; init; }
+}
+
+public abstract class JobConfigurationPayload
+{
+
 }

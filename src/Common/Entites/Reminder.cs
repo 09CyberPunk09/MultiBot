@@ -7,8 +7,7 @@ namespace Common.Entites
     {
         public Guid UserId { get; set; }
         public string Name { get; set; }
-        public bool Recuring { get; set; }
-        public DateTime? ReminderTime { get; set; }
-        public string RecuringCron { get; set; }
+        public string SchedulerExpression { get; set; }
+        public bool IsActive { get; set; }
     }
 }

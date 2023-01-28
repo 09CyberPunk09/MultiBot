@@ -8,32 +8,26 @@
   <ItemGroup>
     <Compile Remove="Pipelines\Questions\**" />
     <Compile Remove="Pipelines\Reminder\**" />
-    <Compile Remove="Pipelines\Scheduling\**" />
     <Compile Remove="V1\Jobs\**" />
     <Compile Remove="V1\MessagePipelines\**" />
     <Compile Remove="Pipelines\Questions\**" />
     <Compile Remove="Pipelines\Reminder\**" />
-    <Compile Remove="Pipelines\Scheduling\**" />
     <Compile Remove="Pipelines\TimeTracker\**" />
     <Compile Remove="Pipelines\ToDoList\**" />
     <EmbeddedResource Remove="Pipelines\Questions\**" />
     <EmbeddedResource Remove="Pipelines\Reminder\**" />
-    <EmbeddedResource Remove="Pipelines\Scheduling\**" />
     <EmbeddedResource Remove="V1\Jobs\**" />
     <EmbeddedResource Remove="V1\MessagePipelines\**" />
     <EmbeddedResource Remove="Pipelines\Questions\**" />
     <EmbeddedResource Remove="Pipelines\Reminder\**" />
-    <EmbeddedResource Remove="Pipelines\Scheduling\**" />
     <EmbeddedResource Remove="Pipelines\TimeTracker\**" />
     <EmbeddedResource Remove="Pipelines\ToDoList\**" />
     <None Remove="Pipelines\Questions\**" />
     <None Remove="Pipelines\Reminder\**" />
-    <None Remove="Pipelines\Scheduling\**" />
     <None Remove="V1\Jobs\**" />
     <None Remove="V1\MessagePipelines\**" />
     <None Remove="Pipelines\Questions\**" />
     <None Remove="Pipelines\Reminder\**" />
-    <None Remove="Pipelines\Scheduling\**" />
     <None Remove="Pipelines\TimeTracker\**" />
     <None Remove="Pipelines\ToDoList\**" />
   </ItemGroup>
@@ -60,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pipelines\SChedulingV2\Dto\" />
+    <Folder Include="Pipelines\SCheduling\Dto\" />
     <Folder Include="V1\" />
   </ItemGroup>
 

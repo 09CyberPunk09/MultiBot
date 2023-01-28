@@ -29,8 +29,4 @@
     <ProjectReference Include="..\TextUI.Core\Application.Chatting.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Questionaires\Scheduling\" />
-  </ItemGroup>
-
 </Project>

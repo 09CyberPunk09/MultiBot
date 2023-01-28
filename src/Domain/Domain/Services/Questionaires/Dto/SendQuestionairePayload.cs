@@ -1,9 +1,10 @@
-﻿using Common.Entites.Scheduling;
+﻿using Common;
+using Common.Entites.Scheduling;
 using System;
 
 namespace Application.Services.Questionaires.Dto;
 
-public class SendQuestionaireJobPayload
+public class SendQuestionaireJobPayload : JobConfigurationPayload
 {
     public string QuestionaireName { get; set; }
     public Guid QuestionaireId { get; init; }
