@@ -1,4 +1,5 @@
 ﻿using Application.Chatting.Core.Repsonses;
+using Application.Chatting.Core.StageMap;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 
-internal class TomorrowAt : ITelegramStage
+public class TodayAtCommand : ITelegramStage
 {
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
@@ -21,12 +22,12 @@ internal class TomorrowAt : ITelegramStage
             {
                 Text = "Next, enter time in format HH:MM, HH:MM,..."
             },
-            NextStage = typeof(TryAcceptTomorrowTime).FullName
+            NextStage = typeof(TryAcceptEveryDayTime).FullName
         });
     }
 }
 
-public class TryAcceptTomorrowTime : ITelegramStage
+public class TryAcceptEveryDayTime : ITelegramStage
 {
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
@@ -34,9 +35,11 @@ public class TryAcceptTomorrowTime : ITelegramStage
         try
         {
             var result = TimeParser.Parse(text);
-
+            //0 0,35 7 ? * * *
+            //ScheduleExpressionDto
+            //TODO: Finish adding descriptions
             var time = result.FirstOrDefault();
-            var now = DateTime.Now.AddDays(1);
+            var now = DateTime.Now;
             var date = new DateTime(now.Year, now.Month, now.Day, time.Item1, time.Item2, 0);
             var schedulerConfig = new ScheduleExpressionDto(new List<DateTime>() { date });
 

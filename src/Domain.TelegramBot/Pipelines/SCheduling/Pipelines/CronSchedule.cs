@@ -31,7 +31,7 @@ public class AcceptCronStage : ITelegramStage
         if (CronExpression.IsValidExpression(ctx.Message.Text))
         {
             var schedulerConfig = new ScheduleExpressionDto(new List<string>() { ctx.Message.Text });
-
+            schedulerConfig.Description = ctx.Message.Text;
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
             ctx.Response.InvokeNextImmediately = true;

@@ -5,51 +5,61 @@ using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
 using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 
-//[Route("/every_nth_day_at")]
-public class EveryNthDayCommand : ITelegramStage
+//[Route("/on_date_at_time_schedule")]
+public class OnDateCommand : ITelegramStage
 {
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        //TODO: додати механізм вираховування періодичності відносно сьогоднішнього дня
         return Task.FromResult(new StageResult()
         {
             Content = new()
             {
-                Text = "Enter a number of days of the delay between schedule firings:"
+                Text = "Enter date int format mm.dd.yyyy or mm.dd which is in the future"
             },
-            NextStage = typeof(AcceptNumberStage).FullName
+            NextStage = typeof(AcceptDateStage).FullName
         });
+
     }
 }
 
-public class AcceptNumberStage : ITelegramStage
+public class AcceptDateStage : ITelegramStage
 {
-    public const string NUMBEROFDAYS_CACHEKEY = "NumberOfDays";
+    public const string SELECTEDDATE_CACHEKEY = "SelectedDate";
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        if (!int.TryParse(ctx.Message.Text, out var result))
+        var onlyDaysAndMonths = Regex.IsMatch(ctx.Message.Text, "^(0[1-9]|1[0-2]).(0[1-9]|1\\d|2\\d|3[01])$");
+        if (!DateTime.TryParse(ctx.Message.Text, out var result) || onlyDaysAndMonths)
         {
             ctx.Response.ForbidNextStageInvokation();
-            return ContentResponse.Text("Enter a number of days of the delay between schedule firings:");
+            return ContentResponse.Text($"Please, enter a valid value");
         }
-        ctx.Cache.Set(NUMBEROFDAYS_CACHEKEY, result);
+
+        if (onlyDaysAndMonths)
+        {
+            ctx.Cache.Set(SELECTEDDATE_CACHEKEY, DateTime.Parse($"{ctx.Message.Text}.{DateTime.Now.Year}"));
+        }
+        else
+        {
+            ctx.Cache.Set(SELECTEDDATE_CACHEKEY, result);
+        }
         return Task.FromResult(new StageResult()
         {
             Content = new()
             {
                 Text = "Enter time in format HH:MM, HH:MM,..."
             },
-            NextStage = typeof(TryAcceptTime).FullName
+            NextStage = typeof(AcceptTimeAndSave).FullName
         });
-
     }
 }
 
-public class TryAcceptTime : ITelegramStage
+public class AcceptTimeAndSave : ITelegramStage
 {
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
@@ -57,16 +67,18 @@ public class TryAcceptTime : ITelegramStage
         try
         {
             var result = TimeParser.Parse(text);
-            var crons = new List<string>();
-            int number = ctx.Cache.Get<int>(AcceptNumberStage.NUMBEROFDAYS_CACHEKEY, true);
-            foreach (var tuple in result)
+            var date = ctx.Cache.Get<DateTime>(AcceptDateStage.SELECTEDDATE_CACHEKEY, true);
+            List<DateTime> datesResult = new();
+            StringBuilder selectedTimes = new();
+            foreach (var time in result)
             {
-                //0 0 0 1/30 * ? *
-                var cron = $"0 0,{tuple.Item2} {tuple.Item1} 1/{number} * * *";
-                crons.Add(cron);
+                datesResult.Add(date.AddHours(time.Item1).AddMinutes(time.Item2));
+                selectedTimes.Append($" {time.Item1}:{time.Item2}");
             }
-            var schedulerConfig = new ScheduleExpressionDto(crons);
-
+            var schedulerConfig = new ScheduleExpressionDto(datesResult)
+            {
+                Description = $"On {date:dd.MM.yyyy} at {selectedTimes}"
+            };
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
             ctx.Response.InvokeNextImmediately = true;

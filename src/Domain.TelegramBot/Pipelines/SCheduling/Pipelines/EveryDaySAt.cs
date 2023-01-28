@@ -203,18 +203,19 @@ public class AcceptAsledTimesStage : ITelegramStage
             //0 0,35 7 ? * * *
             //ScheduleExpressionDto
             var crons = new List<string>();
-
-            var selectedDays = ctx.Cache.Get<List<DaysMenuAction>>(SELECTEDDAYS_CACHEKEY, true).Select(x => Enum.GetName(x).Substring(0, 3).ToUpper());
-
-            var daysString = string.Join(",", selectedDays);
+            var selectedDays = ctx.Cache.Get<List<DaysMenuAction>>(SELECTEDDAYS_CACHEKEY, true);
+            var selectedDaysCodes = selectedDays.Select(x => Enum.GetName(x).Substring(0, 3).ToUpper());
+            StringBuilder selectedTimes = new();
+            var daysString = string.Join(",", selectedDaysCodes);
             foreach (var tuple in result)
             {
                 var cron = $"0 0,{tuple.Item2} {tuple.Item1} ? * {daysString} *";
+                selectedTimes.Append($" {tuple.Item1}:{tuple.Item2} ");
                 crons.Add(cron);
             }
 
             var schedulerConfig = new ScheduleExpressionDto(crons);
-
+            schedulerConfig.Description = $"Every {string.Join(',', selectedDays.Select(x => Enum.GetName<DaysMenuAction>(x)))} on {selectedTimes.ToString()}";
             ctx.Cache.Set(ScheduleExpressionDto.CACHEKEY, schedulerConfig);
 
             ctx.Response.InvokeNextImmediately = true;
