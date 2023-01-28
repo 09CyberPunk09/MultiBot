@@ -13,10 +13,18 @@ public class QuestionService : AppService
 		_questionRepository = repository;
 		_answerRepository = answerRepository;
 	}
-
+	public void Update(Question question)
+	{
+		_questionRepository.Update(question);
+	}
 	public Question Get(Guid id)
 	{
 		return _questionRepository.Get(id);
+	}
+
+	public void DeleteQuestion(Guid questionId)
+	{
+		_questionRepository.Remove(questionId);
 	}
 
 	public Answer AnswerQuestion(Guid questionaireSessionId, Guid questionId, string text)
