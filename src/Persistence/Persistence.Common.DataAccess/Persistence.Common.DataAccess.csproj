@@ -29,7 +29,7 @@
 	<ItemGroup>
 		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
 	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(ProjectDir)$(OutDir)" />
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
 	</Target>
 </Project>

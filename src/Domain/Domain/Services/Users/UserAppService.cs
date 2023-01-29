@@ -14,7 +14,6 @@ public class UserAppService : AppService
     private readonly IRepository<User> _userRepository;
     private readonly IRepository<UserFeatureFlag> _userFeatureFlagRepository;
     private readonly IRepository<TelegramLogIn> _telegramLoginRepository;
-    private readonly Cache _cache;
     public UserAppService(
         IRepository<User> userRepository,
         IRepository<UserFeatureFlag> userFeatureFlagRepository,
@@ -23,15 +22,13 @@ public class UserAppService : AppService
         _userRepository = userRepository;
         _userFeatureFlagRepository = userFeatureFlagRepository;
         _telegramLoginRepository = telegramLoginRepository;
-        _cache = new Cache(DatabaseType.TelegramUserCache);
     }
 
     public void TelegramLogOut(long telegramUserId)
     {
-        var cache = new Cache(DatabaseType.TelegramLogins);
-        var user = cache.Get<Guid?>(telegramUserId.ToString(), true);
         var telegramLogin = _telegramLoginRepository.FirstOrDefault(x => x.TelegramUserId == telegramUserId);
-        _telegramLoginRepository.RemovePhysically(telegramLogin.Id);
+        if(telegramLogin != null)
+            _telegramLoginRepository.RemovePhysically(telegramLogin.Id);
     }
 
     public bool TelegramLogin(string emailAddress, string password, long userId, long chatId)
@@ -65,25 +62,14 @@ public class UserAppService : AppService
 
     public User Update(User user, long? telegramUserId = null)
     {
-        _ = _cache.Get<User>(telegramUserId.ToString(), true);
-        _cache.Set($"{user.TelegramChatId}", user);
         return _userRepository.Update(user);
     }
 
     public User GetByTgId(long tgUserId)
     {
         User user;
-        var userFromCache = _cache.Get<User>(tgUserId.ToString());
-        if (userFromCache == null)
-        {
-            var userId = _telegramLoginRepository.FirstOrDefault(x => x.TelegramUserId == tgUserId).UserId;
-            user = _userRepository.Get(userId);
-            _cache.Set(tgUserId.ToString(), user);
-        }
-        else
-        {
-            user = userFromCache;
-        }
+        var userId = _telegramLoginRepository.FirstOrDefault(x => x.TelegramUserId == tgUserId).UserId;
+        user = _userRepository.Get(userId);
         return user;
     }
 
