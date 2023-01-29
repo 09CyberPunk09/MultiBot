@@ -4,6 +4,7 @@ using Application.Chatting.Core.StageMap;
 using Application.Services;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
+using Application.TelegramBot.Commands.Pipelines.DefaultBehavior;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,6 +26,14 @@ public class CreateToDoCommand : ITelegramCommand
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
+        var todoTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY);
+        if (todoTextFromUnrecognizedCommand != null)
+        {
+            ctx.Response.InvokeNextImmediately = true;
+            ctx.Message.Text = todoTextFromUnrecognizedCommand;
+            return ContentResponse.New(null);
+        }
+
         return ContentResponse.Text("Enter note text:");
     }
 }
@@ -38,7 +47,14 @@ public class SaveTextAndAskCategory : ITelegramStage
     }
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        ctx.Cache.Set(CreateToDoCommand.NOTE_TEXT_CACHEKEY, ctx.Message.Text);
+        string noteText = ctx.Message.Text;
+        var todoTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY, true);
+        if (todoTextFromUnrecognizedCommand != null)
+        {
+            noteText = todoTextFromUnrecognizedCommand;
+        }
+
+        ctx.Cache.Set(CreateToDoCommand.NOTE_TEXT_CACHEKEY, noteText);
 
         var categories = _todoService.GetAllCategories(ctx.User.Id);
         var b = new StringBuilder();

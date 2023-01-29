@@ -15,11 +15,10 @@ Bot
     //Get Tags
 
     3. Questionaires
-    Tags for questionaires
     --Create Questionaries
     --Schedule Questionaires
-    Enable\Disable Questionaries
-    Edit Questionaires
+    --Enable\Disable Questionaries
+    --Edit Questionaires
 
     Generate Reports
 
@@ -27,11 +26,11 @@ Bot
     --Create Reminders
     --Schedule Reminders
     --Enable\disable Reminders
-    Structure Reminders in Categories
+    --Structure Reminders in Categories
 
     5. Time Tracking
-    Track-in\out
-    View\Add\Delete Time tracking activities
+    --Track-in\out
+    --View\Add\Delete Time tracking activities
     Generate reports
 
     6. ToDo

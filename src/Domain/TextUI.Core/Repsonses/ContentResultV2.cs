@@ -90,5 +90,5 @@ public class Menu
         Type = menuType;
         MenuScheme = menu;
     }
-    public IEnumerable<IEnumerable<Button>> MenuScheme { get; init; }
+    public IEnumerable<IEnumerable<Button>> MenuScheme { get; set; }
 }

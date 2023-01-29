@@ -42,15 +42,14 @@ namespace Persistence.Caching.Redis
             }
             catch (RedisConnectionException ex)
             {
-                // logger.Error(ex);
-                logger.Info($"Failed to connect redis");
-                logger.Info($"Rettrying to connect redis on container host");
-                options = new()
-                {
-                    EndPoints = { { "redis" } },
-                    AllowAdmin = true
-                };
-                redis = ConnectionMultiplexer.Connect(options);
+                logger.Fatal(ex);
+                //logger.Info($"Rettrying to connect redis on container host");
+                //options = new()
+                //{
+                //    EndPoints = { { "redis" } },
+                //    AllowAdmin = true
+                //};
+                //redis = ConnectionMultiplexer.Connect(options);
             }
 
             db = redis.GetDatabase((int)dbType);
@@ -94,26 +93,6 @@ namespace Persistence.Caching.Redis
         protected void Remove(RedisKey key)
         {
             db.KeyDelete(key);
-        }
-
-        public T GetSetField<T>(string setIdentifier, string field) where T : class
-        {
-            var result = db.HashGet(setIdentifier, field);
-            if (result != default)
-                return JsonConvert.DeserializeObject<T>(result);
-            else
-                return null;
-        }
-        public void SetSetField<T>(string setId, string field, object value)
-        {
-            db.HashSet(setId, new[]
-            {
-                new HashEntry(field,JsonConvert.SerializeObject(value))
-            });
-        }
-        public void DeleteSetItem(string setId, string field)
-        {
-            db.HashDelete(setId, field);
         }
 
         public void SetDictionary(string key, Dictionary<string, string> value)

@@ -4,6 +4,7 @@ using Application.Chatting.Core.StageMap;
 using Application.Services;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
+using Application.TelegramBot.Commands.Pipelines.DefaultBehavior;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,15 @@ public class AddNoteCommand : ITelegramCommand
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
+        //TODO: CREATE ANOTHER COMMAND FOR IT
+        //DO THE SAME FOR THIS FUNCITONALITY IN REMINDERS AND TODO
+        var noteTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY);
+        if(noteTextFromUnrecognizedCommand != null)
+        {
+            ctx.Response.InvokeNextImmediately = true;
+            ctx.Message.Text = noteTextFromUnrecognizedCommand;
+            return ContentResponse.New(null);
+        }
         return ContentResponse.Text("Enter Note text:");
     }
 }
@@ -39,7 +49,14 @@ public class SaveNoteStage : ITelegramStage
     }
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        Guid? id = _noteService.Create(ctx.User.Id, ctx.Message.Text).Id;
+        string noteText = ctx.Message.Text;
+        var noteTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY, true);
+        if (noteTextFromUnrecognizedCommand != null)
+        {
+            noteText = noteTextFromUnrecognizedCommand;
+        }
+
+        Guid? id = _noteService.Create(ctx.User.Id, noteText).Id;
         ctx.Cache.Set(NOTEID_CACHEKEY, id);
 
         return Task.FromResult(StageResult.ContentResult(new()

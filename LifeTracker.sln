@@ -67,9 +67,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{10A8E77E-ACC7-4B78-9EB0-D87E3408DDB2}"
 	ProjectSection(SolutionItems) = preProject
 		Configuration\appSettings.Development.json = Configuration\appSettings.Development.json
+		appSettings.AWA.json = appSettings.AWA.json
 		Configuration\appSettings.json = Configuration\appSettings.json
 		Configuration\appSettings.Release.json = Configuration\appSettings.Release.json
-		Configuration\appSettings.Stage.json = Configuration\appSettings.Stage.json
+		Configuration\appSettings.LocalDocker.json = Configuration\appSettings.LocalDocker.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{C29FC923-28CF-40D6-A49C-66EEAC0ECC9C}"

@@ -3,6 +3,7 @@ using Application.Chatting.Core.Interfaces;
 using Common.Configuration;
 using Infrastructure.Queuing;
 using Infrastructure.Queuing.Core;
+using NLog;
 
 namespace Application.TelegramBot.Commands.Implementations.Infrastructure
 {
@@ -10,7 +11,6 @@ namespace Application.TelegramBot.Commands.Implementations.Infrastructure
     {
         private QueueListener<TelegramMessage> _listener;
         private readonly IMessageHandler _messageHandler;
-
         public MessageReceiver(IMessageHandler handler)
         {
             _messageHandler = handler;
@@ -25,6 +25,7 @@ namespace Application.TelegramBot.Commands.Implementations.Infrastructure
         {
             _listener.AddMessageHandler(message =>
             {
+
                 _messageHandler.HandleMessage(message);
             });
             _listener.StartConsuming();

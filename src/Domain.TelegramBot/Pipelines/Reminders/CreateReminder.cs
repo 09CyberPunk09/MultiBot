@@ -4,6 +4,7 @@ using Application.Chatting.Core.StageMap;
 using Application.Services.Reminders;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
+using Application.TelegramBot.Commands.Pipelines.DefaultBehavior;
 using Application.TelegramBot.Commands.Pipelines.SChedulingV2.Helpers;
 using Common.Entites.Scheduling;
 using System;
@@ -29,6 +30,14 @@ public class CreateReminderCommand : ITelegramCommand
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
+        var reminderTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY);
+        if (reminderTextFromUnrecognizedCommand != null)
+        {
+            ctx.Response.InvokeNextImmediately = true;
+            ctx.Message.Text = reminderTextFromUnrecognizedCommand;
+            return ContentResponse.New(new());
+        }
+
         return ContentResponse.Text("Enter Reminder text:");
     }
 }
@@ -113,14 +122,22 @@ public class AcceptScheduleExpressionAndSavReminder : ITelegramStage
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
+        string reminderName = ctx.Cache.Get<string>(CreateReminderCommand.REMINDER_TEXT, true);
+
+        var reminderTextFromUnrecognizedCommand = ctx.Cache.Get<string>(SuggestActionsCommand.TEXTCONTENT_CACHEKEY, true);
+        if (reminderTextFromUnrecognizedCommand != null)
+        {
+            reminderName = reminderTextFromUnrecognizedCommand;
+        }
+
+
         var schedulerExpression = ctx.Cache.Get<ScheduleExpressionDto>(ScheduleExpressionDto.CACHEKEY, true);
-        var text = ctx.Cache.Get<string>(CreateReminderCommand.REMINDER_TEXT, true);
 
         _service.Create(new()
         {
             UserId = ctx.User.Id,
             ScheduleExpression = schedulerExpression,
-            Text = text
+            Text = reminderName
         });
 
         return ContentResponse.Text("✅ Done");

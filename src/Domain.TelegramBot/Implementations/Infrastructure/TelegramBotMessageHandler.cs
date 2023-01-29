@@ -11,6 +11,7 @@ using Application.TelegramBot.Commands.Core.Interfaces;
 using Application.TelegramBot.Commands.Implementations.Middlewares;
 using Application.TelegramBot.Commands.Middlewares;
 using Common.Dto;
+using NLog;
 using Persistence.Caching.Redis;
 using ServiceStack;
 using System;
@@ -29,6 +30,7 @@ public class TelegramBotMessageHandler : IMessageHandler
     //TODO: refactore
     private readonly TelegramMiddlewareHandler _perCommandMiddlewareHandler;
     private readonly TelegramMiddlewareHandler _perMessageMiddlewareHandler;
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 
     public TelegramBotMessageHandler(
@@ -50,6 +52,7 @@ public class TelegramBotMessageHandler : IMessageHandler
 
     public async Task HandleMessage(TelegramMessage message)
     {
+        logger.Info($"Started handling message {message.Text}");
         try
         {
             bool currentStageIsExternal = false;
@@ -157,6 +160,14 @@ public class TelegramBotMessageHandler : IMessageHandler
             var contentResult = result.Content;
             if (contentResult != null)
             {
+                //TODO: Add a filter which executes after a stage
+                if(contentResult.Menu != null && contentResult.Menu.Type == Menu.MenuType.MenuKeyboard)
+                {
+                    contentResult.Menu.MenuScheme = contentResult.Menu.MenuScheme.Append(new[]
+                    {
+                        new Button("🏠 Home")
+                    });
+                }
                 var response = await _sender.SendMessageAsync(new AdressedContentResult()
                 {
                     ChatId = message.ChatId,
@@ -238,8 +249,7 @@ public class TelegramBotMessageHandler : IMessageHandler
         }
         catch (Exception ex)
         {
-
-            throw;
+            logger.Error(ex);
         }
     }
 

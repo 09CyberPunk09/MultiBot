@@ -34,6 +34,8 @@ namespace LifeTracker.JobExecutor
 
         private static async Task Main(string[] args)
         {
+            Quartz.Logging.LogProvider.IsDisabled = true;
+
             IServiceCollection services = new ServiceCollection();
             services.AddScoped<IMessageSender<SentTelegramMessage>, TelegramMessageSender>();
 

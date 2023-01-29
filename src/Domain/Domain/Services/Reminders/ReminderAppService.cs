@@ -36,7 +36,8 @@ public class ReminderService : AppService
         {
             UserId = dto.UserId,
             Name = dto.Text,
-            SchedulerExpression = dto.ScheduleExpression.ToJson()
+            SchedulerExpression = dto.ScheduleExpression.ToJson(),
+            IsActive = true
         });
         var user = _userRepository.Get(dto.UserId);
         var chatIds = user.TelegramLogIns.Select(x => x.TelegramChatId).ToArray();
