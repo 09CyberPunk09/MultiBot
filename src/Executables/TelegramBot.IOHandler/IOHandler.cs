@@ -1,7 +1,6 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using Autofac;
 using Common.Configuration;
-using Infrastructure.FileStorage;
 using Infrastructure.Queuing.Core;
 using Microsoft.Extensions.Configuration;
 using NLog;
@@ -26,10 +25,6 @@ namespace LifeTracker.TelegramBot.IOHandler
 
             ConfigureAPIClient(containerBuilder);
 
-            ConfigureFileStorageFunctionality(containerBuilder);
-
-            ConfigureDomain(containerBuilder);
-
             var configuration = ConfigurationHelper.GetConfiguration();
             containerBuilder.RegisterInstance(configuration).As<IConfigurationRoot>();
 
@@ -38,14 +33,6 @@ namespace LifeTracker.TelegramBot.IOHandler
             var client = Container.Resolve<ITelegramBotClient>();
             client.StartReceiving(new MessageUpdateHandler(Container));
             client.GetUpdatesAsync();
-        }
-
-        private void ConfigureFileStorageFunctionality(ContainerBuilder builder)
-        {
-            builder.RegisterModule<FileStorageModule>();
-        }
-        private void ConfigureDomain(ContainerBuilder builder)
-        {
         }
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
