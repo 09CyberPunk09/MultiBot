@@ -1,25 +1,18 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using LifeTracker.Web.Host.Meiddlewares;
+using Application;
+using Common.Configuration;
 using Microsoft.OpenApi.Models;
-using Persistence.Master;
-
-IConfigurationRoot _appConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-//_appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
+var configuration = ConfigurationHelper.GetConfiguration();
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
-{
-    builder.RegisterModule(new PersistenceModule());
-    //   builder.RegisterModule<DomainModule>();
-});
+builder.Services.AddControllers();
+builder.Services.AddDomain();
+builder.Services.AddMappers();
+builder.Services.AddConfiguration(configuration);
+builder.Services.AddSettings();
 
 builder.Services.AddEndpointsApiExplorer();
-//AuthConfigurer.Configure(builder.Services, _appConfiguration);
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -51,13 +44,9 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddCors();
 var app = builder.Build();
 
+//TODO: Add a separate method for building cors options form a configuration file
 app.UseCors(builder => builder.WithOrigins(
-    "http://localhost:3000/",
-    "*",
-    "cloudiy.*",
-    "https://stellular-fairy-b304a4.netlify.app/",
-    "https://stellular-fairy-b304a4.netlify.app/*",
-    "https://stellular-fairy-b304a4.netlify.app")
+    "http://localhost:3000/")
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
@@ -71,7 +60,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
+//app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
 
 
 app.MapControllers();

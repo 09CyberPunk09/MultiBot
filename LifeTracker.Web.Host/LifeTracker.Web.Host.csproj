@@ -31,9 +31,13 @@
 		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\src\Domain\Domain\Application.csproj" />
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>
 
 </Project>

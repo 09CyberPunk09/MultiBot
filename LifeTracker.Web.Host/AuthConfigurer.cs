@@ -14,21 +14,13 @@ namespace LifeTracker.Web.Host
                          options.RequireHttpsMetadata = false;
                          options.TokenValidationParameters = new TokenValidationParameters
                          {
-                             // укзывает, будет ли валидироваться издатель при валидации токена
                              ValidateIssuer = true,
-                             // строка, представляющая издателя
                              ValidIssuer = AuthOptions.ISSUER,
-
-                             // будет ли валидироваться потребитель токена
                              ValidateAudience = true,
-                             // установка потребителя токена
                              ValidAudience = AuthOptions.AUDIENCE,
-                             // будет ли валидироваться время существования
                              ValidateLifetime = true,
 
-                             // установка ключа безопасности
                              IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                             // валидация ключа безопасности
                              ValidateIssuerSigningKey = true,
                          };
                      });
@@ -38,10 +30,10 @@ namespace LifeTracker.Web.Host
     }
     public class AuthOptions
     {
-        public const string ISSUER = "MyAuthServer"; // издатель токена
-        public const string AUDIENCE = "MyAuthClient"; // потребитель токена
-        const string KEY = "mysupersecret_secretkey!123";   // ключ для шифрации
-        public const int LIFETIME = 72; // время жизни токена - 1 минута
+        public const string ISSUER = "MyAuthServer";
+        public const string AUDIENCE = "MyAuthClient"; 
+        const string KEY = "mysupersecret_secretkey!123";
+        public const int LIFETIME = 72; // hours
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));

@@ -1,7 +1,6 @@
 ﻿using Application.Services.Users;
+using Common.Entites;
 using LifeTracker.Web.Host.Models.IncomeModels.Account;
-using LifeTracker.Web.Host.Models.IncomeModels.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,54 +19,18 @@ namespace LifeTracker.Web.Host.Controllers
             _service = service;
         }
 
-        private record Person(string Login, string Password, string Role);
-
-        //TODO: Add real user getting instead of mock
-        private List<Person> people = new List<Person>
+        [HttpPost]
+        public async Task<ActionResult>  SignUp([FromBody] SignUpDto dto)
         {
-            new Person("admin@gmail.com","12345","admin" ),
-            new Person("string","string","admin"),
-        };
+            //TODO Add SignUpDto to service method parameters ad pass there a dto
+            await _service.SignUp(dto.Name,dto.EmailAddress,dto.Password);
+            return Ok();
+        }
 
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Login(LoginIncomeModel model)
+        public ActionResult SignIn([FromBody] LoginIncomeModel model)
         {
-            #region
-            //try
-            //{
-            //    if (string.IsNullOrEmpty(loginDTO.UserName) ||
-            //    string.IsNullOrEmpty(loginDTO.Password))
-            //        return BadRequest("Username and/or Password not specified");
-            //    if (loginDTO.UserName.Equals("string") &&
-            //    loginDTO.Password.Equals("string"))
-            //    {
-            //        var secretKey = new SymmetricSecurityKey
-            //        (Encoding.ASCII.GetBytes(_configuration["LifeTracker.Web.Host:Authentification:SecurityKey"]));
-
-            //        var signinCredentials = new SigningCredentials
-            //       (secretKey, SecurityAlgorithms.HmacSha256);
-
-            //        var jwtSecurityToken = new JwtSecurityToken(
-            //            issuer: _configuration["LifeTracker.Web.Host:Authentification:Issuer"],
-            //            audience: _configuration["LifeTracker.Web.Host:Authentification:Audience"]
-            //           // claims: new List<Claim>(),
-            //         //   expires: DateTime.Now.AddMinutes(10)
-
-            //            //,signingCredentials: signinCredentials
-            //        );
-            //        return Ok(new JwtSecurityTokenHandler().
-            //        WriteToken(jwtSecurityToken));
-            //    }
-            //}
-            //catch
-            //{
-            //    return BadRequest
-            //    ("An error occurred in generating the token");
-            //}
-            //return Unauthorized();
-            #endregion
-            var identity = GetIdentity(model.EmailAddress, model.Password);
+            var (user, identity) = GetIdentity(model.EmailAddress, model.Password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -79,45 +42,35 @@ namespace LifeTracker.Web.Host.Controllers
                     audience: AuthOptions.AUDIENCE,
                     notBefore: now,
                     claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromHours(AuthOptions.LIFETIME)),
+                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             var response = new
             {
-                access_token = encodedJwt
+                access_token = encodedJwt,
             };
-
             return Ok(response);
         }
 
-        private ClaimsIdentity GetIdentity(string emailAddress, string password)
+        private (User, ClaimsIdentity) GetIdentity(string email, string password)
         {
-            var person = _service.GetUserByEmail(emailAddress);
-
-            if (person != null && person.Password.Equals(password))
+            //TODO: Make database-side checking, not taking all users from db
+            User person = _service.GetAll().FirstOrDefault(x => x.EmailAddress == email && x.Password == password);
+            if (person != null)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.EmailAddress),
                     new Claim("UserId", person.Id.ToString())
                 };
-
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                return (person, claimsIdentity);
             }
 
-            return null;
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> SignUp(SignUpIncomeModel model)
-        {
-            await _service.SignUp(model.Name, model.Password, model.Email);
-            return Ok();
+            return (null, null);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Common.Infrastructure;
 using Persistence.Caching.Redis;
 using Persistence.Caching.Redis.TelegramCaching;
+using Persistence.Common.DataAccess.Interfaces;
 using Persistence.Master;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ namespace Application.Services;
 public class CacheService : AppService
 {
     private readonly TelegramCache _telegramCache = new();
-    private readonly RelationalSchemaRepository<User> _userRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public CacheService(RelationalSchemaRepository<User> userRepo)
+    public CacheService(IRepository<User> userRepo)
     {
         _userRepository = userRepo;
     }
@@ -31,7 +32,7 @@ public class CacheService : AppService
     {
         if (userId != null)
         {
-            var tgId = _userRepository.GetQuery().FirstOrDefault(x => x.Id == userId).TelegramChatId;
+            var tgId = _userRepository.FirstOrDefault(x => x.Id == userId).TelegramChatId;
             _telegramCache.PurgeChatData(tgId.Value);
         }
         else
