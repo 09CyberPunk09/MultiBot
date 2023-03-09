@@ -47,7 +47,7 @@ public class NoteAppService : AppService
         _noteRepository.Remove(id);
     }
 
-    public IEnumerable<Note> GetByUserId(Guid userId)
+    public IEnumerable<Note> GetAllByUserId(Guid userId)
     {
         return _noteRepository.GetAllByUserId(userId);
     }

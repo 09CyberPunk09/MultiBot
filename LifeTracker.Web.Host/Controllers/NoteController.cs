@@ -45,7 +45,7 @@ namespace LifeTracker.Web.Host.Controllers
         [HttpGet]
         public IEnumerable<Note> GetAllByUserId()
         {
-            return _service.GetByUserId(userId);
+            return _service.GetAllByUserId(userId);
         }
     }
 }

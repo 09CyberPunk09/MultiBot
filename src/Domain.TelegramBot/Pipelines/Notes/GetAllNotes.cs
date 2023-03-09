@@ -28,7 +28,7 @@ public class GetAllNotesCommand : ITelegramCommand
 
     public Task<StageResult> Execute(TelegramMessageContext ctx)
     {
-        var result = _noteService.GetByUserId(ctx.User.Id);
+        var result = _noteService.GetAllByUserId(ctx.User.Id);
         StringBuilder sb = new();
         sb.AppendLine("Your notes:");
         sb.AppendLine();

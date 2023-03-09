@@ -24,7 +24,11 @@ namespace LifeTracker.Web.Host.Controllers
         {
             //TODO Add SignUpDto to service method parameters ad pass there a dto
             await _service.SignUp(dto.Name,dto.EmailAddress,dto.Password);
-            return Ok();
+            return SignIn(new()
+            {
+                EmailAddress = dto.EmailAddress,
+                Password = dto.Password,
+            });
         }
 
         [HttpPost]

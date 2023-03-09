@@ -1,5 +1,6 @@
 using Application;
 using Common.Configuration;
+using LifeTracker.Web.Host;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+AuthConfigurer.Configure(builder.Services, configuration);
 builder.Services.AddCors();
 var app = builder.Build();
 
