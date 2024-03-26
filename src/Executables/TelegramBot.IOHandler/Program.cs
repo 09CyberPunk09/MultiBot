@@ -1,8 +1,6 @@
-﻿using Application;
-using Integration.Applications;
+﻿using Integration.Applications;
 using NLog;
 using SimpleScheduler;
-using System;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;

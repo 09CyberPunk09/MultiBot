@@ -1,15 +1,23 @@
 ﻿using Quartz;
 using System.Collections.Generic;
 
-namespace Common
+namespace Common;
+
+public interface IConfiguredJob
 {
-    public interface IConfiguredJob
-    {
-        Dictionary<string, string> AdditionalData { get; set; }
-        IJob Job { get; set; }
+    Dictionary<string, string> AdditionalData { get; set; }
 
-        ITrigger GetTrigger();
+    ITrigger GetTrigger();
 
-        IJobDetail BuildJob();
-    }
+    IJobDetail BuildJob();
+}
+
+public interface IConfiguredJob<TPayload> : IConfiguredJob where TPayload : JobConfigurationPayload
+{
+    TPayload Payload { get; init; }
+}
+
+public abstract class JobConfigurationPayload
+{
+
 }

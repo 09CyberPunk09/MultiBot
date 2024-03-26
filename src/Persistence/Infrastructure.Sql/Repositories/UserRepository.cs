@@ -1,17 +1,18 @@
 ﻿using Common.Entites;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess;
-using System.Collections.Generic;
+using System.Linq;
 
-namespace Persistence.Sql.Repositories
+namespace Persistence.Master.Repositories;
+
+public class UserRepositry : RelationalSchemaRepository<User>
 {
-    public class UserRepositry : LifeTrackerRepository<User>
-    {
-        public UserRepositry(RelationalSchemaContext context) : base(context)
-        { }
+    public UserRepositry(RelationalSchemaContext context) : base(context)
+    { }
 
-        public override IEnumerable<User> GetAll()
-        {
-            return base.GetAll();
-        }
-    }
+    public override IQueryable<User> GetQuery() =>
+         GetTable()
+                .Include(x => x.FeatureFlags)
+                .Include(x => x.TelegramLogIns);
+
 }

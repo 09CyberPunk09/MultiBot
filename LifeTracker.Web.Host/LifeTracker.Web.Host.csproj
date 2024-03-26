@@ -6,30 +6,38 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>83661549-7c1f-462b-abab-48c1543ca22a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\ViewModels\**" />
+    <Content Remove="Models\ViewModels\**" />
+    <EmbeddedResource Remove="Models\ViewModels\**" />
+    <None Remove="Models\ViewModels\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Autofac.WebApi2" Version="6.1.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.19.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
   </ItemGroup>
 	<ItemGroup>
-		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\LifeTracker.Web.Core\LifeTracker.Web.Core.csproj" />
 	  <ProjectReference Include="..\src\Domain\Domain\Application.csproj" />
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>
 
 </Project>

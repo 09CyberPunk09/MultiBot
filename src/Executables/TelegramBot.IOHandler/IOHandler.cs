@@ -1,7 +1,7 @@
-﻿using Application.Services;
+﻿using Application.Chatting.Core.Repsonses;
 using Autofac;
-using Infrastructure.Queuing;
-using Infrastructure.TextUI.Core.PipelineBaseKit;
+using Common.Configuration;
+using Infrastructure.Queuing.Core;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
@@ -11,9 +11,8 @@ namespace LifeTracker.TelegramBot.IOHandler
 {
     public class IOHandler
     {
-        private IContainer _container;
-        private QueueListener<ContentResult> _queueListenner;
-        private MessageSender _sender;
+        public IContainer Container { get; set; }
+        private QueueListener<ContentResultV2> _queueListenner;
         private readonly Logger logger;
         public IOHandler()
         {
@@ -23,42 +22,28 @@ namespace LifeTracker.TelegramBot.IOHandler
         public void Start()
         {
             var containerBuilder = new ContainerBuilder();
+
             ConfigureAPIClient(containerBuilder);
 
-            _container = containerBuilder.Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
+            containerBuilder.RegisterInstance(configuration).As<IConfigurationRoot>();
 
-            ConfigureMessageSender();
+            Container = containerBuilder.Build();
+
+            var client = Container.Resolve<ITelegramBotClient>();
+            client.StartReceiving(new MessageUpdateHandler(Container));
+            client.GetUpdatesAsync();
         }
 
         private void ConfigureAPIClient(ContainerBuilder containerBuilder)
         {
-            var configuration = new ConfigurationBuilder()
-             .AddJsonFile("appSettings.json").Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
             var client = new TelegramBotClient(configuration["Telegram:BotAPIKey"])
             {
                 Timeout = TimeSpan.FromMinutes(10)
             };
-            client.StartReceiving<MessageUpdateHandler>();
-            client.GetUpdatesAsync();
-
             _ = containerBuilder.RegisterInstance(client).As<ITelegramBotClient>().SingleInstance();
-            _ = containerBuilder.RegisterType<MessageSender>().SingleInstance();
         }
 
-        private void ConfigureMessageSender()
-        {
-            var service = new ConfigurationAppService();
-            var queueName = service.Get("Telegram:MessageResponseQueue");
-            _sender = _container.Resolve<MessageSender>();
-
-            _queueListenner = QueuingHelper.CreateListener<ContentResult>(queueName);
-
-            _queueListenner.AddMessageHandler(response =>
-            {
-                logger.Info($"Message '{response.Text}' sent to { response.RecipientChatId}");
-                _sender.SendMessage(response);
-            });
-            _queueListenner.StartConsuming();
-        }
     }
 }

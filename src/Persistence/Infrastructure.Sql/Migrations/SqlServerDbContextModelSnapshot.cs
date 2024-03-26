@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistence.Sql;
+using Persistence.Master;
 
 #nullable disable
 
@@ -22,34 +22,6 @@ namespace Persistence.Sql.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Common.Entites.Answer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Answers");
-                });
-
             modelBuilder.Entity("Common.Entites.Note", b =>
                 {
                     b.Property<Guid>("Id")
@@ -58,6 +30,9 @@ namespace Persistence.Sql.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FileLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -76,14 +51,11 @@ namespace Persistence.Sql.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("Common.Entites.PredefinedAnswer", b =>
+            modelBuilder.Entity("Common.Entites.Questionaires.Answer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -94,8 +66,40 @@ namespace Persistence.Sql.Migrations
                     b.Property<DateTime?>("LastModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionaireSessionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("Common.Entites.Questionaires.PredefinedAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -104,22 +108,56 @@ namespace Persistence.Sql.Migrations
                     b.ToTable("PredefinedAnswers");
                 });
 
-            modelBuilder.Entity("Common.Entites.Question", b =>
+            modelBuilder.Entity("Common.Entites.Questionaires.Question", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("AnswersAsInt")
-                        .HasColumnType("bit");
+                    b.Property<int>("AnswerType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CronExpression")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("QuestionaireId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("RangeMax")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RangeMin")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("HasPredefinedAnswers")
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionaireId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Common.Entites.Questionaires.Questionaire", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -128,10 +166,10 @@ namespace Persistence.Sql.Migrations
                     b.Property<DateTime?>("LastModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("SchedulerInstanceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("SchedulerExpression")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -139,7 +177,32 @@ namespace Persistence.Sql.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questionaires");
+                });
+
+            modelBuilder.Entity("Common.Entites.Questionaires.QuestionaireSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("QuestionaireId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionaireId");
+
+                    b.ToTable("QuestionaireSessions");
                 });
 
             modelBuilder.Entity("Common.Entites.Reminder", b =>
@@ -151,6 +214,9 @@ namespace Persistence.Sql.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -160,14 +226,8 @@ namespace Persistence.Sql.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Recuring")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RecuringCron")
+                    b.Property<string>("SchedulerExpression")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ReminderTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("SchedulerInstanceId")
                         .HasColumnType("uniqueidentifier");
@@ -192,6 +252,9 @@ namespace Persistence.Sql.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModificationDate")
                         .HasColumnType("datetime2");
 
@@ -204,6 +267,37 @@ namespace Persistence.Sql.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("Common.Entites.TelegramLogIn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("TelegramChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TelegramUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TelegramLogins");
                 });
 
             modelBuilder.Entity("Common.Entites.TimeTrackingActivity", b =>
@@ -267,6 +361,69 @@ namespace Persistence.Sql.Migrations
                     b.ToTable("TimeTrackingEntries");
                 });
 
+            modelBuilder.Entity("Common.Entites.ToDoCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoCategories");
+                });
+
+            modelBuilder.Entity("Common.Entites.ToDoItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("Priority")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ToDoCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ToDoCategoryId");
+
+                    b.ToTable("ToDoItems");
+                });
+
             modelBuilder.Entity("Common.Entites.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -300,12 +457,40 @@ namespace Persistence.Sql.Migrations
                     b.Property<long?>("TelegramChatId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("TelegramLoggedIn")
-                        .HasColumnType("bit");
+                    b.Property<long?>("TelegramUserId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Common.Entites.UserFeatureFlag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FeatureFlag")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FeatureFlags");
                 });
 
             modelBuilder.Entity("NoteTag", b =>
@@ -323,22 +508,66 @@ namespace Persistence.Sql.Migrations
                     b.ToTable("NoteTag");
                 });
 
-            modelBuilder.Entity("Common.Entites.Answer", b =>
+            modelBuilder.Entity("Common.Entites.Questionaires.PredefinedAnswer", b =>
                 {
-                    b.HasOne("Common.Entites.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-
-                    b.Navigation("Question");
+                    b.HasOne("Common.Entites.Questionaires.Question", null)
+                        .WithMany("PredefinedAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Common.Entites.PredefinedAnswer", b =>
+            modelBuilder.Entity("Common.Entites.Questionaires.Question", b =>
                 {
-                    b.HasOne("Common.Entites.Question", "Question")
-                        .WithMany("PredefinedAnswers")
-                        .HasForeignKey("QuestionId");
+                    b.HasOne("Common.Entites.Questionaires.Questionaire", "Questionaire")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuestionaireId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Question");
+                    b.Navigation("Questionaire");
+                });
+
+            modelBuilder.Entity("Common.Entites.Questionaires.QuestionaireSession", b =>
+                {
+                    b.HasOne("Common.Entites.Questionaires.Questionaire", "Questionaire")
+                        .WithMany()
+                        .HasForeignKey("QuestionaireId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Questionaire");
+                });
+
+            modelBuilder.Entity("Common.Entites.TelegramLogIn", b =>
+                {
+                    b.HasOne("Common.Entites.User", null)
+                        .WithMany("TelegramLogIns")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Common.Entites.ToDoItem", b =>
+                {
+                    b.HasOne("Common.Entites.ToDoCategory", "ToDoCategory")
+                        .WithMany("ToDoItems")
+                        .HasForeignKey("ToDoCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ToDoCategory");
+                });
+
+            modelBuilder.Entity("Common.Entites.UserFeatureFlag", b =>
+                {
+                    b.HasOne("Common.Entites.User", "User")
+                        .WithMany("FeatureFlags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoteTag", b =>
@@ -356,11 +585,26 @@ namespace Persistence.Sql.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Common.Entites.Question", b =>
+            modelBuilder.Entity("Common.Entites.Questionaires.Question", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("PredefinedAnswers");
+                });
+
+            modelBuilder.Entity("Common.Entites.Questionaires.Questionaire", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Common.Entites.ToDoCategory", b =>
+                {
+                    b.Navigation("ToDoItems");
+                });
+
+            modelBuilder.Entity("Common.Entites.User", b =>
+                {
+                    b.Navigation("FeatureFlags");
+
+                    b.Navigation("TelegramLogIns");
                 });
 #pragma warning restore 612, 618
         }

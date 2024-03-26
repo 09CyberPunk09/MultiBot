@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-
-namespace Application
+﻿namespace Application
 {
     public class AppService
     {
-        protected IMapper Mapper { get; set; }
     }
 }

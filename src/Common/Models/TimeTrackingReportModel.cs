@@ -4,7 +4,7 @@ namespace Common.Models
 {
     public class TimeTrackingReportModel
     {
-        public TimeTrackingReportModel(DateTime d,TimeSpan t)
+        public TimeTrackingReportModel(DateTime d, TimeSpan t)
         {
             Date = d;
             TrackedTime = t;

@@ -4,42 +4,32 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <BaseOutputPath>bin\</BaseOutputPath>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="MethodTimer.Fody" Version="3.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0-alpha.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common.Configuration\Common.Configuration.csproj" />
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
-    <ProjectReference Include="..\..\Domain.TelegramBot\Domain.TelegramBot.csproj" />
+    <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Commands.csproj" />
+    <ProjectReference Include="..\..\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>
 
 </Project>

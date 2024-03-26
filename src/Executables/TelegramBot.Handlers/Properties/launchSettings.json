@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "LifeTracker.TelegramBot.Handlers": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENV": "Development"
+      },
+      "remoteDebugEnabled": true
+    }
+  }
+}

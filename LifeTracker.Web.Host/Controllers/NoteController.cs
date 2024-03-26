@@ -1,6 +1,6 @@
 ﻿using Application.Services;
 using Common.Entites;
-using LifeTracker.Web.Core.Models.IncomeModels.Notes;
+using LifeTracker.Web.Host.Models.IncomeModels.Notes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ namespace LifeTracker.Web.Host.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class NoteController : ControllerBase
+    public class NoteController : LifeTrackerController
     {
         private readonly NoteAppService _service;
 
@@ -25,27 +25,27 @@ namespace LifeTracker.Web.Host.Controllers
         }
 
         [HttpPut]
-        public Note Update([FromBody] Note note)
+        public Note Update([FromBody] UpdateNoteIncomeModel model)
         {
-            return _service.Update(note);
+            return _service.Update(model.Id, model.Text);
         }
 
         [HttpPost]
         public Note Create([FromBody] CreateNoteIncomeModel model)
         {
-            return _service.Create(model.Text, model.UserId);
+            return _service.Create(userId, model.Text);
         }
 
-        [HttpDelete]
-        public void RemovePhysically(Note entity)
+        [HttpDelete("{id}")]
+        public void Remove(Guid id)
         {
-            _service.RemovePhysically(entity);
+            _service.Remove(id);
         }
 
         [HttpGet]
-        public IEnumerable<Note> GetByUserId([FromQuery] Guid userId)
+        public IEnumerable<Note> GetAllByUserId()
         {
-            return _service.GetByUserId(userId);
+            return _service.GetAllByUserId(userId);
         }
     }
 }

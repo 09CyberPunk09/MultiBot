@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <BaseOutputPath>bin\</BaseOutputPath>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,22 +14,21 @@
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
     <PackageReference Include="Quartz" Version="3.4.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
-    <ProjectReference Include="..\..\Domain.TelegramBot\Domain.TelegramBot.csproj" />
+    <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Commands.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Common.DataAccess\Persistence.Common.DataAccess.csproj" />
-    <ProjectReference Include="..\..\Persistence\Persistence.Synchronization\Persistence.Synchronization.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<Content Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>
+
 </Project>

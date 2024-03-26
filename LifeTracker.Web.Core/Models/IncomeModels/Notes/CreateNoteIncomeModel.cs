@@ -3,6 +3,5 @@
     public class CreateNoteIncomeModel
     {
         public string Text { get; set; }
-        public Guid UserId { get; set; }
     }
 }

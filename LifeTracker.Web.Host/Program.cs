@@ -1,27 +1,19 @@
 using Application;
-using Application.Services;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using Common.Configuration;
 using LifeTracker.Web.Host;
 using Microsoft.OpenApi.Models;
-using Persistence.Sql;
-
-IConfigurationRoot _appConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-_appConfiguration = (new ConfigurationAppService()).GetConfigurationRoot();
+var configuration = ConfigurationHelper.GetConfiguration();
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
-{
-    builder.RegisterModule(new PersistenceModule(false));
-    builder.RegisterModule<DomainModule>();
-});
+builder.Services.AddControllers();
+builder.Services.AddDomain();
+builder.Services.AddMappers();
+builder.Services.AddConfiguration(configuration);
+builder.Services.AddSettings();
 
 builder.Services.AddEndpointsApiExplorer();
-AuthConfigurer.Configure(builder.Services, _appConfiguration);
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -50,7 +42,17 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+AuthConfigurer.Configure(builder.Services, configuration);
+builder.Services.AddCors();
 var app = builder.Build();
+
+//TODO: Add a separate method for building cors options form a configuration file
+app.UseCors(builder => builder.WithOrigins(
+    "http://localhost:3000/")
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -59,6 +61,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+//app.UseMiddleware(typeof(ErrorHandlingMiddleWare));
+
 
 app.MapControllers();
 

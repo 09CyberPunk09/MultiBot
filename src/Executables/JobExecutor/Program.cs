@@ -1,12 +1,17 @@
 ﻿using Application;
-using Autofac;
-using Autofac.Extras.Quartz;
+using Application.Chatting.Core.Interfaces;
+using Application.TelegramBot.Commands;
+using Application.TelegramBot.Commands.Core;
+using Application.TelegramBot.Commands.Implementations.Infrastructure;
+using Application.TelegramBot.Commands.Jobs;
+using Application.TelegramBot.Commands.Jobs.Reminders;
 using Common;
-using Infrastructure.TelegramBot.Jobs;
-using Integration.Applications;
+using Common.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
+using Quartz;
+using Quartz.Impl;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,57 +20,71 @@ namespace LifeTracker.JobExecutor
 {
     internal class Program
     {
-        private static ContainerBuilder _containerBuilder;
-        private static List<Type> _configurationTypes = new();
+        private static IServiceProvider _serviceProvider;
+        private static void ConfigureJobExecutor(IServiceProvider provider)
+        {
+            ISchedulerFactory schedulerFactory = new StdSchedulerFactory();
+            JobExecutorConfiguration.Scheduler = schedulerFactory.GetScheduler().Result;
+
+            JobExecutorConfiguration.Scheduler.JobFactory = new JobFactory(provider);
+            JobExecutorConfiguration.Scheduler.Start().Wait();
+        }
+
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private static async Task Main(string[] args)
         {
-            _containerBuilder = new();
-            _containerBuilder.RegisterModule<JobExecutorModule>();
-            logger.Info("Configuration of job executor started");
+            Quartz.Logging.LogProvider.IsDisabled = true;
 
-            StartJobs();
+            IServiceCollection services = new ServiceCollection();
+            services.AddScoped<IMessageSender<SentTelegramMessage>, TelegramMessageSender>();
 
-            var container = _containerBuilder.Build();
-            var executor = container.Resolve<IJobExecutor>();
-            _configurationTypes.ForEach(type =>
-            {
-                var obj = (IConfiguredJob)container.Resolve(type);
-                executor.ScheduleJob(obj);
+            var configuration = ConfigurationHelper.GetConfiguration();
+            string botToken = configuration["Telegram:BotAPIKey"];
+            services.AddTelegramClient(botToken);
+            services.AddHost();
+            services.AddDomain();
+            services.AddMappers();
+            services.AddConfiguration(configuration);
+            services.AddSettings();
+            services.AddSingleton<IJobExecutor, JobExecutor>();
 
-            });
+            //questionires
+            services
+                .AddSingleton<QuestionaireStartupLoader>()
+                .AddScoped<SendQuestionaireJob>();
+           
+            //reminders
+            services
+                .AddSingleton<RemindersLoader>()
+                .AddScoped<SendReminderJob>();
+
+            //all additional services
+            services
+            .AddDomain()
+            .AddMappers()
+            .AddConfiguration()
+            .AddSettings();
+            _serviceProvider = services.BuildServiceProvider();
+            ConfigureJobExecutor(_serviceProvider);
+
+            var questionaireLoader = _serviceProvider.GetService<QuestionaireStartupLoader>();
+            questionaireLoader.ScheduleJobsOnStartup();
+            questionaireLoader.ScheduleJobsFromChannel();
+            
+            var reminderLoader = _serviceProvider.GetService<RemindersLoader>();
+            reminderLoader.ScheduleJobsOnStartup();
+            reminderLoader.ScheduleJobsFromChannel();
+
+
+            var executor = _serviceProvider.GetService<IJobExecutor>();
             await executor.StartExecuting();
-
             LoopConsoleClosing();
-        }
-
-        private static void StartJobs()
-        {
-            //AddJob<SynchronizationJobConfiguration>();
-            AddJob<QustionSchedulingJobConfiguration>();
-            AddJob<ReminderSchedulerJobConfiguration>();
-            AddJob(new ApplicationAccessibilityReporterJobConfiguration("LifeTracker.JobExecutor", InstanceIdentifier.Identifier));
-        }
-
-        private static void AddJob<TType>() where TType : IConfiguredJob
-        {
-            _configurationTypes.Add(typeof(TType));
-            _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
-            _containerBuilder.RegisterType<TType>();
-            _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
-        }
-        private static void AddJob<TType>(TType type) where TType : class
-        {
-            _configurationTypes.Add(typeof(TType));
-            _containerBuilder.RegisterAssemblyModules(typeof(TType).Assembly);
-            _containerBuilder.RegisterInstance(type);
-            _containerBuilder.RegisterModule(new QuartzAutofacJobsModule(typeof(TType).Assembly));
         }
 
         private static void LoopConsoleClosing()
         {
-             //while (Console.ReadKey().Key != ConsoleKey.Escape)
+            //while (Console.ReadKey().Key != ConsoleKey.Escape)
             //{ }
             //Console.WriteLine("");
             var ended = new ManualResetEventSlim();

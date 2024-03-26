@@ -6,6 +6,7 @@
     <BaseOutputPath>bin\</BaseOutputPath>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="NLog" Version="4.7.15" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0-alpha.3" />
     <PackageReference Include="Telegram.Bot.CommandHandler" Version="1.5.0" />
     <PackageReference Include="Telegram.Bot.Enforcer" Version="13.0.13" />
@@ -25,18 +25,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Application.Telegram.Implementations\Application.Telegram.Implementations.csproj" />
+    <ProjectReference Include="..\..\..\Common.Configuration\Common.Configuration.csproj" />
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
     <ProjectReference Include="..\..\Domain\Domain\Application.csproj" />
-    <ProjectReference Include="..\..\Domain\TextUI.Core\TextUI.Core.csproj" />
+    <ProjectReference Include="..\..\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<Resource Include="$(SolutionDir)appSettings.json" CopyToPublishDirectory="Always" LinkBase="\">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
-		<Resource Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
+		<Content Include="$(SolutionDir)nlog.config" CopyToPublishDirectory="Always" LinkBase="\">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Resource>
+		</Content>
 	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>	
 </Project>

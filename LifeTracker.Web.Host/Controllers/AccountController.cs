@@ -1,14 +1,10 @@
-﻿using Application.Services;
-using Autofac.Core;
-using LifeTracker.Web.Core.Models.IncomeModels.Account;
-using LifeTracker.Web.Core.Models.IncomeModels.Users;
-using Microsoft.AspNetCore.Authorization;
+﻿using Application.Services.Users;
+using Common.Entites;
+using LifeTracker.Web.Host.Models.IncomeModels.Account;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace LifeTracker.Web.Host.Controllers
 {
@@ -23,54 +19,22 @@ namespace LifeTracker.Web.Host.Controllers
             _service = service;
         }
 
-        private record Person(string Login, string Password, string Role);
-
-        //TODO: Add real user getting instead of mock
-        private List<Person> people = new List<Person>
+        [HttpPost]
+        public async Task<ActionResult>  SignUp([FromBody] SignUpDto dto)
         {
-            new Person("admin@gmail.com","12345","admin" ),
-            new Person("string","string","admin"),
-        };
+            //TODO Add SignUpDto to service method parameters ad pass there a dto
+            await _service.SignUp(dto.Name,dto.EmailAddress,dto.Password);
+            return SignIn(new()
+            {
+                EmailAddress = dto.EmailAddress,
+                Password = dto.Password,
+            });
+        }
 
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Login(LoginIncomeModel model)
+        public ActionResult SignIn([FromBody] LoginIncomeModel model)
         {
-            #region
-            //try
-            //{
-            //    if (string.IsNullOrEmpty(loginDTO.UserName) ||
-            //    string.IsNullOrEmpty(loginDTO.Password))
-            //        return BadRequest("Username and/or Password not specified");
-            //    if (loginDTO.UserName.Equals("string") &&
-            //    loginDTO.Password.Equals("string"))
-            //    {
-            //        var secretKey = new SymmetricSecurityKey
-            //        (Encoding.ASCII.GetBytes(_configuration["LifeTracker.Web.Host:Authentification:SecurityKey"]));
-
-            //        var signinCredentials = new SigningCredentials
-            //       (secretKey, SecurityAlgorithms.HmacSha256);
-
-            //        var jwtSecurityToken = new JwtSecurityToken(
-            //            issuer: _configuration["LifeTracker.Web.Host:Authentification:Issuer"],
-            //            audience: _configuration["LifeTracker.Web.Host:Authentification:Audience"]
-            //           // claims: new List<Claim>(),
-            //         //   expires: DateTime.Now.AddMinutes(10)
-
-            //            //,signingCredentials: signinCredentials
-            //        );
-            //        return Ok(new JwtSecurityTokenHandler().
-            //        WriteToken(jwtSecurityToken));
-            //    }
-            //}
-            //catch
-            //{
-            //    return BadRequest
-            //    ("An error occurred in generating the token");
-            //}
-            //return Unauthorized();
-            #endregion
-            var identity = GetIdentity(model.EmailAddress, model.Password);
+            var (user, identity) = GetIdentity(model.EmailAddress, model.Password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -89,37 +53,28 @@ namespace LifeTracker.Web.Host.Controllers
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
             };
-
             return Ok(response);
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private (User, ClaimsIdentity) GetIdentity(string email, string password)
         {
-            Person person = people.FirstOrDefault(x => x.Login == username && x.Password == password);
+            //TODO: Make database-side checking, not taking all users from db
+            User person = _service.GetAll().FirstOrDefault(x => x.EmailAddress == email && x.Password == password);
             if (person != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, person.Role)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.EmailAddress),
+                    new Claim("UserId", person.Id.ToString())
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                return (person, claimsIdentity);
             }
 
-            return null;
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult SignUp(SignUpIncomeModel model)
-        {
-            _service.SignUp(model.Name, model.Password, model.Email);
-            return Ok();
+            return (null, null);
         }
     }
 }

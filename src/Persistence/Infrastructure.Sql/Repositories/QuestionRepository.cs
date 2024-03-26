@@ -1,19 +1,17 @@
-﻿using Common.Entites;
+﻿using Common.Entites.Questionaires;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Common.DataAccess;
-using System;
 using System.Linq;
 
-namespace Persistence.Sql.Repositories
-{
-    public class QuestionRepository : LifeTrackerRepository<Question>
-    {
-        public QuestionRepository(RelationalSchemaContext context) : base(context)
-        { }
+namespace Persistence.Master.Repositories;
 
-        public override Question Get(Guid id)
-        {
-            return GetTable().Include(q => q.PredefinedAnswers).FirstOrDefault(q => q.Id == id);
-        }
+public class QuestionRepository : RelationalSchemaRepository<Question>
+{
+    public QuestionRepository(RelationalSchemaContext context) : base(context)
+    { }
+
+    public override IQueryable<Question> GetQuery()
+    {
+        return GetTable().Include(q => q.PredefinedAnswers);
     }
 }

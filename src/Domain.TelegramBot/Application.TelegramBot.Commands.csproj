@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pipelines\Questions\**" />
+    <Compile Remove="Pipelines\Reminder\**" />
+    <Compile Remove="V1\Jobs\**" />
+    <Compile Remove="V1\MessagePipelines\**" />
+    <Compile Remove="Pipelines\Questions\**" />
+    <Compile Remove="Pipelines\Reminder\**" />
+    <Compile Remove="Pipelines\TimeTracker\**" />
+    <Compile Remove="Pipelines\ToDoList\**" />
+    <EmbeddedResource Remove="Pipelines\Questions\**" />
+    <EmbeddedResource Remove="Pipelines\Reminder\**" />
+    <EmbeddedResource Remove="V1\Jobs\**" />
+    <EmbeddedResource Remove="V1\MessagePipelines\**" />
+    <EmbeddedResource Remove="Pipelines\Questions\**" />
+    <EmbeddedResource Remove="Pipelines\Reminder\**" />
+    <EmbeddedResource Remove="Pipelines\TimeTracker\**" />
+    <EmbeddedResource Remove="Pipelines\ToDoList\**" />
+    <None Remove="Pipelines\Questions\**" />
+    <None Remove="Pipelines\Reminder\**" />
+    <None Remove="V1\Jobs\**" />
+    <None Remove="V1\MessagePipelines\**" />
+    <None Remove="Pipelines\Questions\**" />
+    <None Remove="Pipelines\Reminder\**" />
+    <None Remove="Pipelines\TimeTracker\**" />
+    <None Remove="Pipelines\ToDoList\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.SmartEnum" Version="2.1.0" />
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extras.Quartz" Version="7.3.0" />
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.15" />
+    <PackageReference Include="Telegram.Bot" Version="18.0.0-alpha.3" />
+    <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application.Telegram.Implementations\Application.Telegram.Implementations.csproj" />
+    <ProjectReference Include="..\Domain\Domain\Application.csproj" />
+    <ProjectReference Include="..\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
+    <ProjectReference Include="..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
+    <ProjectReference Include="..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pipelines\SCheduling\Dto\" />
+    <Folder Include="V1\" />
+  </ItemGroup>
+
+</Project>

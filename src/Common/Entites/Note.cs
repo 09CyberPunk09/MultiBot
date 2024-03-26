@@ -9,5 +9,6 @@ namespace Common.Entites
         public Guid UserId { get; set; }
         public string Text { get; set; }
         public List<Tag> Tags { get; set; }
+        public string FileLink { get; set; }
     }
 }

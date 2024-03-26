@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Configuration;
 using Newtonsoft.Json;
 using NLog;
 using StackExchange.Redis;
@@ -20,14 +20,12 @@ namespace Persistence.Caching.Redis
         private static int _port;
         private static string _host;
 
-
         static Cache()
         {
-            var configuration = new ConfigurationBuilder()
-              .AddJsonFile("appSettings.json").Build();
+            var configuration = ConfigurationHelper.GetConfiguration();
             _host = configuration["Redis:Default:HostName"];
             _port = Convert.ToInt32(configuration["Redis:Default:Port"]);
-          
+
         }
 
         public Cache(DatabaseType dbType = DatabaseType.System)
@@ -35,7 +33,6 @@ namespace Persistence.Caching.Redis
             _dbType = dbType;
             try
             {
-                logger.Info($"Trying to connect Reis on {_host}:{_port}");
                 options = new()
                 {
                     EndPoints = { { _host, Convert.ToInt32(_port) } },
@@ -45,22 +42,20 @@ namespace Persistence.Caching.Redis
             }
             catch (RedisConnectionException ex)
             {
-               // logger.Error(ex);
-                logger.Info($"Failed to connect redis");
-                logger.Info($"Rettrying to connect redis on container host");
-                options = new()
-                {
-                    EndPoints = { { "redis" } },
-                    AllowAdmin = true
-                };
-                redis = ConnectionMultiplexer.Connect(options);           
+                logger.Fatal(ex);
+                //logger.Info($"Rettrying to connect redis on container host");
+                //options = new()
+                //{
+                //    EndPoints = { { "redis" } },
+                //    AllowAdmin = true
+                //};
+                //redis = ConnectionMultiplexer.Connect(options);
             }
-            
-            logger.Info($"Redis succesfully connected");
+
             db = redis.GetDatabase((int)dbType);
         }
 
-        public TResult Get<TResult>(string key,bool getThanDelete = false)
+        public TResult Get<TResult>(string key, bool getThanDelete = false)
         {
             var redisKey = new RedisKey(key);
             var data = getThanDelete ? db.StringGetDelete(redisKey) : db.StringGet(redisKey);
@@ -69,7 +64,11 @@ namespace Persistence.Caching.Redis
 
         public void Set(string key, object value)
         {
-            string valueToSet = JsonConvert.SerializeObject(value);
+            string valueToSet = JsonConvert.SerializeObject(value, settings: new()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            });
+
             db.StringSet(new RedisKey(key), new RedisValue(valueToSet), TimeSpan.FromDays(90));
         }
 
@@ -94,6 +93,25 @@ namespace Persistence.Caching.Redis
         protected void Remove(RedisKey key)
         {
             db.KeyDelete(key);
+        }
+
+        public void SetDictionary(string key, Dictionary<string, string> value)
+        {
+            db.KeyDelete(key);
+            HashEntry[] preparedValues = value.Select(x => new HashEntry(x.Key, x.Value)).ToArray();
+            db.HashSet(key, preparedValues);
+        }
+
+        public Dictionary<string, string> GetDictionary(string key)
+        {
+            var entries = db.HashGetAll(key);
+            if (entries == null)
+            {
+                return null;
+            }
+            Dictionary<string, string> result = entries.ToDictionary(x => x.Name.ToString(), x => x.Value.ToString());
+
+            return result;
         }
     }
 }

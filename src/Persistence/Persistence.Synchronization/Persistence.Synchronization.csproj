@@ -12,7 +12,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.Sql\Persistence.Master.csproj" />
-    <ProjectReference Include="..\Persistence.Caching.SqlLite\Persistence.Caching.SqlLite.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Jobs\" />
   </ItemGroup>
 
 </Project>

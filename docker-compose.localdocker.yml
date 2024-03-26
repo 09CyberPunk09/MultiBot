@@ -1,0 +1,102 @@
+version: '3.8'
+# TODO: навести порядок з проектами, де вони знаходяться і їх немінгами
+services:
+  lifetracker-migrator:
+    build:
+      context: ./
+      dockerfile: ./LifeTracker.Migrator/Dockerfile
+    environment:
+    - ENV=LocalDocker
+    depends_on:
+    - mssql
+    links:
+      - mssql  
+    networks:
+      - localnetwork
+  lifetracker-iohandler:
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./src/Executables/TelegramBot.IOHandler/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+    - ENV=LocalDocker
+    depends_on:
+      - redis
+      - rabbitmq
+    links:
+      - redis
+      - rabbitmq    
+    networks:
+      - localnetwork
+  lifetracker-handlers:
+    environment:
+      - ENV=LocalDocker
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./src/Executables/TelegramBot.Handlers/Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+      - mssql
+    links:
+      - redis
+      - rabbitmq    
+    networks:
+      - localnetwork
+  lifetracker-jobexecutor:
+    environment:
+      - ENV=LocalDocker
+    restart: on-failure
+    build:
+      context: ./
+      dockerfile: ./src/Executables/JobExecutor/Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    links:
+      - redis
+      - rabbitmq    
+    networks:
+      - localnetwork
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    # volumes:
+    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - localnetwork
+  redis:
+    image: redis:6.2-alpine
+    networks:
+      - localnetwork
+    #restart: always
+    ports:
+      - '6379:6379'
+    # command: ["redis-server", "--bind", "redis", "--port", "6379"]
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+      - 1432:1433
+    volumes:
+      - ~/apps/mssql/data:/var/lib/mssqlql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=mssql1Ipw
+    networks:
+      - localnetwork
+volumes:
+  cache:
+    driver: local
+  mssql:
+    driver: local
+networks:
+  localnetwork:
+    driver: bridge

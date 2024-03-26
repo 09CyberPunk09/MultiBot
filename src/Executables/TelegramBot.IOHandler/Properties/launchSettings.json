@@ -1,7 +1,10 @@
 {
   "profiles": {
     "LifeTracker.TelegramBot.IOHandler": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENV": "Development"
+      }
     },
     "Docker": {
       "commandName": "Docker"

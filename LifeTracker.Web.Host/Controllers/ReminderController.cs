@@ -1,6 +1,6 @@
-﻿using Application.Services;
+﻿using Application.Services.Reminders;
 using Common.Entites;
-using LifeTracker.Web.Core.Models.IncomeModels.Reminders;
+using LifeTracker.Web.Host.Models.IncomeModels.Reminders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +11,9 @@ namespace LifeTracker.Web.Host.Controllers
     [Route("api/[controller]/[action]")]
     public class ReminderController : ControllerBase
     {
-        private readonly ReminderAppService _service;
+        private readonly ReminderService _service;
 
-        public ReminderController(ReminderAppService service)
+        public ReminderController(ReminderService service)
         {
             _service = service;
         }
@@ -22,12 +22,6 @@ namespace LifeTracker.Web.Host.Controllers
         public List<Reminder> GetAll()
         {
             return _service.GetAll();
-        }
-
-        [HttpPost]
-        public Reminder Create([FromBody] CreateReminderIncomeModel model)
-        {
-            return _service.Create(model.Reminder, model.UserId);
         }
 
         [HttpPut]

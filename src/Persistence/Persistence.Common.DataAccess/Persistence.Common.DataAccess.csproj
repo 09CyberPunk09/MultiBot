@@ -2,16 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BaseTypes\**" />
+    <Compile Remove="Jobs\**" />
+    <EmbeddedResource Remove="BaseTypes\**" />
+    <EmbeddedResource Remove="Jobs\**" />
+    <None Remove="BaseTypes\**" />
+    <None Remove="Jobs\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="NLog" Version="4.7.15" />
@@ -22,12 +27,9 @@
     <ProjectReference Include="..\..\Common\Common.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<None Include="$(SolutionDir)appSettings.json" CopyToOutputDirectory="Always" LinkBase="\" />
 		<Content Include="$(SolutionDir)nlog.config" CopyToOutputDirectory="PreserveNewest" LinkBase="\" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="BaseTypes\" />
-	  <Folder Include="Jobs\" />
-	</ItemGroup>
-
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+		<Exec Command="xcopy /y $(SolutionDir)Configuration  $(OutDir)" />
+	</Target>
 </Project>
