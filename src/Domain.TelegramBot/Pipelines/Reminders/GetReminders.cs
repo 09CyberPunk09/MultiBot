@@ -6,9 +6,9 @@ using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Common.Entites;
 using Common.Entites.Scheduling;
-using Kernel;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Application.TelegramBot.Commands.Pipelines.Reminders;
 

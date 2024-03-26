@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;SatrtAll</Configurations>
   </PropertyGroup>
 
@@ -17,11 +17,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="NETCore.Encrypt" Version="2.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />

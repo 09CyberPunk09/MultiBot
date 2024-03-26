@@ -5,7 +5,7 @@ using Application.Services.Questionaires;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
 using Common.Entites.Scheduling;
-using Kernel;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Text;

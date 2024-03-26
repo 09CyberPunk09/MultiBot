@@ -1,19 +1,17 @@
 ﻿using Application.Chatting.Core.Repsonses;
 using Application.Chatting.Core.Routing;
 using Application.Chatting.Core.StageMap;
+using Application.Services.Reminders;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Common.Entites.Scheduling;
+using Application.TelegramBot.Commands.Pipelines.Reminders.Options;
 using Common.Entites;
+using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Services.Reminders;
-using Kernel;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Application.TelegramBot.Commands.Pipelines.Reminders.Options;
+using Common;
 
 namespace Application.TelegramBot.Commands.Pipelines.Reminders;
 

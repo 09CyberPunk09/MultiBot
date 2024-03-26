@@ -1,10 +1,8 @@
 ﻿using Application.Chatting.Core.Interfaces;
-using Application.Services.Questionaires;
 using Application.Services.Reminders.Dto;
 using Application.Telegram.Implementations;
 using Application.TelegramBot.Commands.Core;
 using Common;
-using Kernel;
 using Quartz;
 using System.Collections.Generic;
 using System.Linq;

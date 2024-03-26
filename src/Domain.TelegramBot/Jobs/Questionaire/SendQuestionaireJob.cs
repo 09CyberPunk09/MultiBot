@@ -5,7 +5,6 @@ using Application.Services.Questionaires.Dto;
 using Application.Telegram.Implementations;
 using Application.TelegramBot.Commands.Core;
 using Common;
-using Kernel;
 using Quartz;
 using System;
 using System.Collections.Generic;

@@ -4,13 +4,12 @@ using Application.Chatting.Core.StageMap;
 using Application.Services.Questionaires;
 using Application.TelegramBot.Commands.Core.Context;
 using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Commands.Pipelines.Questionaires.Dto;
 using Application.TelegramBot.Commands.Pipelines.SChedulingV2.Helpers;
 using Common.Entites.Scheduling;
-using Kernel;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 
 namespace Application.TelegramBot.Commands.Pipelines.Questionaires.Options;
 

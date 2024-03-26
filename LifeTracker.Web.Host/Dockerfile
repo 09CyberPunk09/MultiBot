@@ -12,6 +12,6 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 WORKDIR /app
-COPY --from=build /src/LifeTracker.Web.Host/bin/Release/net6.0 ./
+COPY --from=build /src/LifeTracker.Web.Host/bin/Release/net8.0 ./
 EXPOSE 5005
 ENTRYPOINT ["dotnet", "LifeTracker.Web.Host.dll"]

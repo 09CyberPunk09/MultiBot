@@ -1,8 +1,8 @@
 ﻿using Application.Services.Reminders.Dto;
+using Common;
 using Common.Entites;
 using Infrastructure.Queuing;
 using Infrastructure.Queuing.Core;
-using Kernel;
 using Microsoft.Extensions.Configuration;
 using Persistence.Common.DataAccess.Interfaces;
 using System;
