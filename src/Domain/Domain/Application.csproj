@@ -25,7 +25,7 @@
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis.TelegramCaching\Persistence.Caching.Redis.TelegramCaching.csproj" />
     <ProjectReference Include="..\..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
-    <ProjectReference Include="..\TextUI.Core\Application.Chatting.Core.csproj" />
+    <ProjectReference Include="..\TextUI.Core\TelegramBot.ChatEngine.csproj" />
   </ItemGroup>
 
 </Project>

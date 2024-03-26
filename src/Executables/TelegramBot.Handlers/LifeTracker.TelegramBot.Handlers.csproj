@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
     <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Commands.csproj" />
-    <ProjectReference Include="..\..\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
+    <ProjectReference Include="..\..\Domain\TextUI.Core\TelegramBot.ChatEngine.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
   </ItemGroup>
 	<ItemGroup>

@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LifeTracker.TelegramBot.IOH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\Domain\Domain\Application.csproj", "{1B1212AA-A1AD-4A8B-A3DF-B115CE541FB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Chatting.Core", "src\Domain\TextUI.Core\Application.Chatting.Core.csproj", "{0DEB8C2D-9885-468E-953D-584089EA5351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot.ChatEngine", "src\Domain\TextUI.Core\TelegramBot.ChatEngine.csproj", "{0DEB8C2D-9885-468E-953D-584089EA5351}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{9ABFF7CC-071F-4BDB-B0EB-C9DC02AF418B}"
 EndProject

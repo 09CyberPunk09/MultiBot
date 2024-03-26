@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Domain\TextUI.Core\Application.Chatting.Core.csproj" />
+    <ProjectReference Include="..\src\Domain\TextUI.Core\TelegramBot.ChatEngine.csproj" />
   </ItemGroup>
 
 </Project>
