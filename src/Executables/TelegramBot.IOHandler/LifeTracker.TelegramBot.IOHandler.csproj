@@ -25,12 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Application.Telegram.Implementations\Application.Telegram.Implementations.csproj" />
     <ProjectReference Include="..\..\..\Common.Configuration\Common.Configuration.csproj" />
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
     <ProjectReference Include="..\..\Domain\Domain\Application.csproj" />
-    <ProjectReference Include="..\..\Domain\TextUI.Core\TelegramBot.ChatEngine.csproj" />
     <ProjectReference Include="..\..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
   </ItemGroup>
 	<ItemGroup>

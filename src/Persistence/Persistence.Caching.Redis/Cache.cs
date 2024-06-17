@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Persistence.Caching.Redis
 {
-    public class Cache : ICache
+    public class Cache : IBotCache
     {
         private readonly ConnectionMultiplexer redis;
         private readonly IDatabase db;

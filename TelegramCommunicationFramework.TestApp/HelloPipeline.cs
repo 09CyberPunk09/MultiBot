@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using TelegramBot.ChatEngine;
 using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Routing;
 
-namespace Application.TelegramBot.Commands.Pipelines;
+namespace TelegramCommunicationFramework.TestApp;
+
 
 [Route("/hello")]
 internal class HelloCommand : ITelegramCommand

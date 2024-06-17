@@ -1,0 +1,35 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands.Interfaces;
+
+namespace TelegramBot.ChatEngine.Commands.Middlewares
+{
+    public class BaseMiddlewareHandler<TContext> where TContext : TelegramMessageContext
+    {
+        private readonly IServiceProvider _serviceProvider;
+        private List<IMiddleware<TContext>> _middlewares = new();
+        public BaseMiddlewareHandler(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        //TODO: Add default realization with generic parameter of an context
+        public void Add<TMiddleware>() where TMiddleware : IMiddleware<TContext>
+        {
+            var resolved = _serviceProvider.GetService<TMiddleware>();
+            _middlewares.Add(resolved);
+        }
+
+        public async Task<bool> ExecuteMiddlewares(TContext context)
+        {
+            foreach (var middleware in _middlewares)
+            {
+                bool succeeded = await middleware.ExecuteAsync(context);
+                if (!succeeded) return false;
+            }
+            return true;
+        }
+    }
+}

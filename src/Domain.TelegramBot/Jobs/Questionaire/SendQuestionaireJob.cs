@@ -10,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Implementation.Dro;
 using static Application.Chatting.Core.Repsonses.Menu;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Commands.Jobs;
 

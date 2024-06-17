@@ -1,5 +1,4 @@
 ﻿using Application;
-using Application.Chatting.Core.Interfaces;
 using Application.TelegramBot.Commands;
 using Application.TelegramBot.Commands.Core;
 using Application.TelegramBot.Commands.Implementations.Infrastructure;
@@ -12,6 +11,10 @@ using SimpleScheduler;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands.Interfaces;
+using TelegramBot.ChatEngine.Implementation;
+using TelegramBot.ChatEngine.Implementation.Dro;
+using TelegramBot.ChatEngine.Infrastructure;
 
 namespace LifeTracker.TelegramBot.Handlers;
 

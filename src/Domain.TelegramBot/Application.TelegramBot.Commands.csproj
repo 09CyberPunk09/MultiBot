@@ -46,14 +46,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Application.Telegram.Implementations\Application.Telegram.Implementations.csproj" />
+    <ProjectReference Include="..\..\TelegramCommunicationFramework\TelegramBot.ChatEngine.csproj" />
     <ProjectReference Include="..\Domain\Domain\Application.csproj" />
-    <ProjectReference Include="..\Domain\TextUI.Core\TelegramBot.ChatEngine.csproj" />
     <ProjectReference Include="..\Persistence\Infrastructure.Queuing\Infrastructure.Queuing.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.Caching.Redis\Persistence.Caching.Redis.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Core\" />
     <Folder Include="Pipelines\SCheduling\Dto\" />
     <Folder Include="V1\" />
   </ItemGroup>
