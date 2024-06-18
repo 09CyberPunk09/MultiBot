@@ -1,35 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TelegramBot.ChatEngine.Commands.Interfaces;
+﻿namespace TelegramBot.ChatEngine.Commands.Middlewares;
 
-namespace TelegramBot.ChatEngine.Commands.Middlewares
+public class MiddlewareHandler
 {
-    public class BaseMiddlewareHandler<TContext> where TContext : TelegramMessageContext
+    private readonly IServiceProvider _serviceProvider;
+    private readonly List<Type> _middlewareTypes = [];
+    public MiddlewareHandler(IServiceProvider serviceProvider, List<Type> middlewareTypes)
     {
-        private readonly IServiceProvider _serviceProvider;
-        private List<IMiddleware<TContext>> _middlewares = new();
-        public BaseMiddlewareHandler(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        _middlewareTypes = middlewareTypes;
+        _serviceProvider = serviceProvider;
+    }
 
-        //TODO: Add default realization with generic parameter of an context
-        public void Add<TMiddleware>() where TMiddleware : IMiddleware<TContext>
+    public async Task<bool> ExecuteMiddlewares(TelegramMessageContext context)
+    {
+        foreach (var middlewareType in _middlewareTypes)
         {
-            var resolved = _serviceProvider.GetService<TMiddleware>();
-            _middlewares.Add(resolved);
+            var resolvedMiddleware = _serviceProvider.GetService(middlewareType) as ITelegramMiddleware 
+                                                                                ?? throw new NullReferenceException($"Type {middlewareType.FullName} was not registered into service provider.");
+            bool succeeded = await resolvedMiddleware.ExecuteAsync(context);
+            if (!succeeded) return false;
         }
-
-        public async Task<bool> ExecuteMiddlewares(TContext context)
-        {
-            foreach (var middleware in _middlewares)
-            {
-                bool succeeded = await middleware.ExecuteAsync(context);
-                if (!succeeded) return false;
-            }
-            return true;
-        }
+        return true;
     }
 }

@@ -4,6 +4,7 @@ using TelegramBot.ChatEngine.Commands.Caching;
 using TelegramBot.ChatEngine.Commands.Context;
 using TelegramBot.ChatEngine.Commands.Dto;
 using TelegramBot.ChatEngine.Commands.Interfaces;
+using TelegramBot.ChatEngine.Commands.Middlewares;
 using TelegramBot.ChatEngine.Commands.PipelineBaseKit;
 using TelegramBot.ChatEngine.Commands.Repsonses;
 using TelegramBot.ChatEngine.Commands.Routing;
@@ -19,14 +20,19 @@ public class TelegramBotMessageHandler : IMessageHandler
     private readonly IServiceProvider _serviceProvider;
     private readonly IBotCache _cache;
     private readonly RoutingTable _routingTable;
-    private readonly TelegramMiddlewareHandler _perCommandMiddlewareHandler;
-    private readonly TelegramMiddlewareHandler _perMessageMiddlewareHandler;
+    private readonly MiddlewareHandler _perCommandMiddlewareHandler;
+    private readonly MiddlewareHandler _perMessageMiddlewareHandler;
     //NOW: GET LOGGER FROM LOGGING BUILDER
 
 
     public TelegramBotMessageHandler(
-        IServiceProvider serviceProvider, Func<ContentResultV2, Task<SentTelegramMessage>> senderAction)
+        IServiceProvider serviceProvider, 
+        Func<ContentResultV2, Task<SentTelegramMessage>> senderAction,
+        MiddlewareHandler perCommandMiddleware,
+        MiddlewareHandler perMessageMiddleware)
     {
+        _perCommandMiddlewareHandler = perCommandMiddleware;
+        _perMessageMiddlewareHandler = perMessageMiddleware;
         _sender = senderAction;
         _serviceProvider = serviceProvider;
 #pragma warning disable CS8601 // Possible null reference assignment.
@@ -120,13 +126,15 @@ public class TelegramBotMessageHandler : IMessageHandler
             }
 
             #region Execute middlewares before stage
-            //if (isCommand)
-            //{
-            //    var moveForward = await _perCommandMiddlewareHandler.ExecuteMiddlewares(context);
-            //    if (!moveForward)
-            //        return;
-            //}
-            //await _perMessageMiddlewareHandler.ExecuteMiddlewares(context);
+            if (isCommand)
+            {
+                var moveForward = await _perCommandMiddlewareHandler.ExecuteMiddlewares(context);
+                if (!moveForward)
+                    return;
+            }
+            var middlewareExecutedSuccessfully = await _perMessageMiddlewareHandler.ExecuteMiddlewares(context);
+            if (!middlewareExecutedSuccessfully)
+                return;
 
             #endregion execute stage and send a message
             StageResult result;

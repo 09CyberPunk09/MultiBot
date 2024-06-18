@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\**" />
     <Compile Remove="Pipelines\Questions\**" />
     <Compile Remove="Pipelines\Reminder\**" />
     <Compile Remove="V1\Jobs\**" />
@@ -14,6 +15,7 @@
     <Compile Remove="Pipelines\Reminder\**" />
     <Compile Remove="Pipelines\TimeTracker\**" />
     <Compile Remove="Pipelines\ToDoList\**" />
+    <EmbeddedResource Remove="Core\**" />
     <EmbeddedResource Remove="Pipelines\Questions\**" />
     <EmbeddedResource Remove="Pipelines\Reminder\**" />
     <EmbeddedResource Remove="V1\Jobs\**" />
@@ -22,6 +24,7 @@
     <EmbeddedResource Remove="Pipelines\Reminder\**" />
     <EmbeddedResource Remove="Pipelines\TimeTracker\**" />
     <EmbeddedResource Remove="Pipelines\ToDoList\**" />
+    <None Remove="Core\**" />
     <None Remove="Pipelines\Questions\**" />
     <None Remove="Pipelines\Reminder\**" />
     <None Remove="V1\Jobs\**" />
@@ -53,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
     <Folder Include="Pipelines\SCheduling\Dto\" />
     <Folder Include="V1\" />
   </ItemGroup>
