@@ -9,7 +9,7 @@ public class MessageTransportationBuilder
 {
     public bool SenderDefined { get; private set; }
     private Func<ContentResultV2, Task<SentTelegramMessage>> _senderAction;
-    public MessageTransportationBuilder( )
+    public MessageTransportationBuilder()
     {
         SenderDefined = false;
     }

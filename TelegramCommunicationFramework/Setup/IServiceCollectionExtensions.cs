@@ -4,11 +4,11 @@ using TelegramBot.ChatEngine.Commands.Routing;
 
 namespace TelegramBot.ChatEngine.Setup;
 
-public static class  IServiceCollectionExtensions
+public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddCommandsAndStages(this IServiceCollection services)
     {
-       // logger.Info("Host configured");
+        // logger.Info("Host configured");
 
         var routingTableBuilder = new RoutingTableBuilder();
         //routingTableBuilder
@@ -55,7 +55,7 @@ public static class  IServiceCollectionExtensions
         }
         //logger.Info($"Registered {stagesToRegister.Count()} stages");
 
-       // services.AddSingleton<AuthentificationMiddleware>();
+        // services.AddSingleton<AuthentificationMiddleware>();
 
         return services;
     }

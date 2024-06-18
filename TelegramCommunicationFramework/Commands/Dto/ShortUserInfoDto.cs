@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TelegramBot.ChatEngine.Commands.Dto;
+﻿namespace TelegramBot.ChatEngine.Commands.Dto;
 
 public class ShortUserInfoDto
 {

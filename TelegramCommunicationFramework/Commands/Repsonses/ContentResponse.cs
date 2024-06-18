@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace TelegramBot.ChatEngine.Commands.Repsonses;
+﻿namespace TelegramBot.ChatEngine.Commands.Repsonses;
 
 public class ContentResponse
 {

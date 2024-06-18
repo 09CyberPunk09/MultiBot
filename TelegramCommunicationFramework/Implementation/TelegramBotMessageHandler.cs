@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TelegramBot.ChatEngine.Commands;
 using TelegramBot.ChatEngine.Commands.Caching;
-using TelegramBot.ChatEngine.Commands.Context;
-using TelegramBot.ChatEngine.Commands.Dto;
 using TelegramBot.ChatEngine.Commands.Interfaces;
 using TelegramBot.ChatEngine.Commands.Middlewares;
 using TelegramBot.ChatEngine.Commands.PipelineBaseKit;
@@ -10,7 +8,7 @@ using TelegramBot.ChatEngine.Commands.Repsonses;
 using TelegramBot.ChatEngine.Commands.Routing;
 using TelegramBot.ChatEngine.Core;
 using TelegramBot.ChatEngine.Implementation.Dro;
-using TelegramBot.ChatEngine.Implementation.Middlewares;
+using TelegramBot.ChatEngine.Setup;
 
 namespace TelegramBot.ChatEngine.Implementation;
 
@@ -22,14 +20,17 @@ public class TelegramBotMessageHandler : IMessageHandler
     private readonly RoutingTable _routingTable;
     private readonly MiddlewareHandler _perCommandMiddlewareHandler;
     private readonly MiddlewareHandler _perMessageMiddlewareHandler;
+    //TODO: ADDMESSAGE DEFAULTS AS ERROR TEXT
+    private readonly MessagingDefaults _messageDefaults;
     //NOW: GET LOGGER FROM LOGGING BUILDER
 
 
     public TelegramBotMessageHandler(
-        IServiceProvider serviceProvider, 
+        IServiceProvider serviceProvider,
         Func<ContentResultV2, Task<SentTelegramMessage>> senderAction,
         MiddlewareHandler perCommandMiddleware,
-        MiddlewareHandler perMessageMiddleware)
+        MiddlewareHandler perMessageMiddleware,
+        MessagingDefaults messagingDefaults)
     {
         _perCommandMiddlewareHandler = perCommandMiddleware;
         _perMessageMiddlewareHandler = perMessageMiddleware;
@@ -67,7 +68,7 @@ public class TelegramBotMessageHandler : IMessageHandler
                 //2.If we didnt find any matches - we take the existing user cache data
                 var commandPayload = chatDataFacade.Get<StageDto>();
 
-                if(commandPayload == null)// if commandPayload is nill, that means thatthe cache does not contain any info about the command and the text is not recognized as command as well
+                if (commandPayload == null)// if commandPayload is nill, that means thatthe cache does not contain any info about the command and the text is not recognized as command as well
                 {
                     await _sender(new ContentResultV2()
                     {
@@ -105,7 +106,6 @@ public class TelegramBotMessageHandler : IMessageHandler
                     Files = message.Files,
                     Text = message.Text,
                 },
-                User = chatDataFacade.Get<ShortUserInfoDto>(),
                 Cache = chatDataFacade,
                 PipelineContext = new()
                 {
@@ -120,7 +120,7 @@ public class TelegramBotMessageHandler : IMessageHandler
                 ////NOW: ADD IN BUILDER DEFAULT ERROR MESSAGE
                 await _sender(new ContentResultV2()
                 {
-                    Text = "Could not recognize text as command", 
+                    Text = "Could not recognize text as command",
                     ChatId = chatId
                 });
             }

@@ -11,11 +11,11 @@ public class MessageHandlerBuilder
     public MessageTransportationBuilder MessageTransportation { get; }
     public CachingBuilder Caching { get; }
     public LoggingBuilder Logging { get; }
-
+    public MessagingDefaults MessagingDefaults { get; set; }
     public MessageHandlerBuilder()
     {
         Services = new ServiceCollection();
-        MessageTransportation = new ();
+        MessageTransportation = new();
         Caching = new(Services);
         Logging = new();
     }

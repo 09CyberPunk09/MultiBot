@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TelegramBot.ChatEngine.Commands.PipelineBaseKit
+﻿namespace TelegramBot.ChatEngine.Commands.PipelineBaseKit
 {
     public class StageSequence
     {

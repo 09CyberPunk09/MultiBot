@@ -14,7 +14,7 @@ public class CachingBuilder
     internal void EnsureCacheRegistered()
     {
         var customCacheRegistered = _services.Any(x => x.ServiceType == typeof(IBotCache));
-        if (!customCacheRegistered) 
+        if (!customCacheRegistered)
         {
             RegisterDefaultCacheImplementation();
         }

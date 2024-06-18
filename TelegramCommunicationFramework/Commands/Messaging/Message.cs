@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TelegramBot.ChatEngine.Commands.Dto;
+﻿using TelegramBot.ChatEngine.Commands.Dto;
 
 namespace TelegramBot.ChatEngine.Commands.Messaging;
 

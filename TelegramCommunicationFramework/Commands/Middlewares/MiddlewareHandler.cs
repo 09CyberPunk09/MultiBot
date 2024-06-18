@@ -14,7 +14,7 @@ public class MiddlewareHandler
     {
         foreach (var middlewareType in _middlewareTypes)
         {
-            var resolvedMiddleware = _serviceProvider.GetService(middlewareType) as ITelegramMiddleware 
+            var resolvedMiddleware = _serviceProvider.GetService(middlewareType) as ITelegramMiddleware
                                                                                 ?? throw new NullReferenceException($"Type {middlewareType.FullName} was not registered into service provider.");
             bool succeeded = await resolvedMiddleware.ExecuteAsync(context);
             if (!succeeded) return false;

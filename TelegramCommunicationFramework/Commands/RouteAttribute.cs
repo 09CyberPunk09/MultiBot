@@ -2,6 +2,9 @@
 
 namespace TelegramBot.ChatEngine.Commands;
 
+/// <summary>
+/// Attribute for command definition.
+/// </summary>
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public sealed class RouteAttribute : Attribute
 {

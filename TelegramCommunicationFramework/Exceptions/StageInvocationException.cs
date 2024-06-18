@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TelegramBot.ChatEngine.Exceptions;
 
-namespace TelegramBot.ChatEngine.Exceptions
+//todo: add into source code
+internal class StageInvocationException
 {
-    internal class StageInvocationException
-    {
-    }
 }

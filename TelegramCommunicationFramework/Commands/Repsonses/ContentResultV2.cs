@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TelegramBot.ChatEngine.Commands.Repsonses;
+﻿namespace TelegramBot.ChatEngine.Commands.Repsonses;
 
 public class ContentResultV2
 {
