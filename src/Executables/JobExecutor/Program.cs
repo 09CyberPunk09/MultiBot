@@ -1,8 +1,5 @@
 ﻿using Application;
-using Application.Chatting.Core.Interfaces;
 using Application.TelegramBot.Commands;
-using Application.TelegramBot.Commands.Core;
-using Application.TelegramBot.Commands.Implementations.Infrastructure;
 using Application.TelegramBot.Commands.Jobs;
 using Application.TelegramBot.Commands.Jobs.Reminders;
 using Common;
@@ -15,6 +12,8 @@ using System;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands.Interfaces;
+using TelegramBot.ChatEngine.Infrastructure;
 
 namespace LifeTracker.JobExecutor
 {
@@ -37,12 +36,11 @@ namespace LifeTracker.JobExecutor
             Quartz.Logging.LogProvider.IsDisabled = true;
 
             IServiceCollection services = new ServiceCollection();
-            services.AddScoped<IMessageSender<SentTelegramMessage>, TelegramMessageSender>();
+            services.AddScoped<IMessageSender, TelegramMessageSender>();
 
             var configuration = ConfigurationHelper.GetConfiguration();
             string botToken = configuration["Telegram:BotAPIKey"];
             services.AddTelegramClient(botToken);
-            services.AddHost();
             services.AddDomain();
             services.AddMappers();
             services.AddConfiguration(configuration);

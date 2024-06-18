@@ -1,10 +1,8 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using System.Threading.Tasks;
-using static Application.Chatting.Core.Repsonses.Menu;
+﻿using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Commands.Routing;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.TagsV2;
 
@@ -33,11 +31,10 @@ public class TagMenuCommand : ITelegramCommand
                    new Button(_routingTable.AlternativeRoute<AddTagCommand>()),
                    new Button(_routingTable.AlternativeRoute<GetAllTagsCommand>()),
                },
-               new[]
-               {
+               [
                    new Button(_routingTable.AlternativeRoute<GettagDataCommand>()),
                    new Button(_routingTable.AlternativeRoute<AddNoteUnderTagCommand>()),
-               }
+               ]
             })
         });
     }

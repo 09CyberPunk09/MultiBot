@@ -1,13 +1,11 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
+﻿using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
 using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 

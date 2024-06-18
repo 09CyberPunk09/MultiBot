@@ -1,29 +1,24 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services.Users;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
+﻿using Application.Services.Users;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
 
-namespace Application.TelegramBot.Commands.Pipelines.Account
+namespace Application.TelegramBot.Commands.Pipelines.Account;
+
+[Route("/logout")]
+public class LogoutCommand : ITelegramCommand
 {
-    [Route("/logout")]
-    public class LogoutCommand : ITelegramCommand
+    private UserAppService _userService;
+    public LogoutCommand(UserAppService userService)
     {
-        private UserAppService _userService;
-        public LogoutCommand(UserAppService userService)
-        {
-            _userService = userService;
-        }
-        public void DefineStages(StageMapBuilder builder)
-        {
-        }
+        _userService = userService;
+    }
+    public void DefineStages(StageMapBuilder builder)
+    {
+    }
 
-        public Task<StageResult> Execute(TelegramMessageContext ctx)
-        {
-            _userService.TelegramLogOut(ctx.RecipientUserId);
-            return ContentResponse.Text("Done");
-        }
+    public Task<StageResult> Execute(TelegramMessageContext ctx)
+    {
+        _userService.TelegramLogOut(ctx.RecipientUserId);
+        return ContentResponse.Text("Done");
     }
 }

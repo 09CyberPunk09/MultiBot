@@ -1,16 +1,14 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
+﻿using Application.Services;
 using Application.TelegramBot.Pipelines.V2.Pipelines.ToDo.ToDoItems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Application.Chatting.Core.Repsonses.Menu;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Commands.Routing;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Commands.Pipelines.ToDo.ToDoItems
 {

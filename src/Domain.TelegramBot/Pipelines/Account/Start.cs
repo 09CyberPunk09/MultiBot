@@ -1,13 +1,8 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services.Users;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Common.Dto;
+﻿using Application.Services.Users;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.Account;
 
@@ -80,12 +75,12 @@ public class AcceptPasswordAndSignIn : ITelegramStage
         if (success)
         {
             //TODO: Add authentificationstuff
-            var userInfoModel = new ShortUserInfoDto()
-            {
-                EmailAddress = email,
-                Id = user.Id
-            };
-            ctx.Cache.Set(userInfoModel);
+            //var userInfoModel = new ShortUserInfoDto()
+            //{
+            //    EmailAddress = email,
+            //    Id = user.Id
+            //};
+            //ctx.Cache.Set(userInfoModel);
             return ContentResponse.Text("Welcome!");
         }
         else

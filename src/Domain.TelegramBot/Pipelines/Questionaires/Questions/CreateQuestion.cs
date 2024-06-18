@@ -1,15 +1,12 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Commands.Pipelines.Questionaires.Dto;
+﻿using Application.TelegramBot.Commands.Pipelines.Questionaires.Dto;
 using Common.Entites.Questionaires;
 using System;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
 
 namespace Application.TelegramBot.Commands.Pipelines.Questionaires.Questions;
 

@@ -1,14 +1,12 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Commands.Pipelines.Timetracking.TimeTracking;
+﻿using Application.TelegramBot.Commands.Pipelines.Timetracking.TimeTracking;
 using Application.TelegramBot.Pipelines.V2.Pipelines.Timetracking.Activities;
 using Application.TelegramBot.Pipelines.V2.Pipelines.Timetracking.Reports;
 using Application.TelegramBot.Pipelines.V2.Pipelines.Timetracking.TimeTracking;
 using System.Threading.Tasks;
-using static Application.Chatting.Core.Repsonses.Menu;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Commands.Routing;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.Timetracking;
 

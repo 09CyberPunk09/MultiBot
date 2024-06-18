@@ -30,7 +30,7 @@ public class MessageHandlerBuilder
         var poerCommandMiddlewares = Middleware.PerCommandMiddleware.Build(serviceProvider);
         var poerMessageMiddlewares = Middleware.PerMessageMiddleware.Build(serviceProvider);
 
-        var result = new TelegramBotMessageHandler(serviceProvider, senderAction, poerCommandMiddlewares, poerMessageMiddlewares);
+        var result = new TelegramBotMessageHandler(serviceProvider, senderAction, poerCommandMiddlewares, poerMessageMiddlewares, MessagingDefaults);
         return result;
     }
 }

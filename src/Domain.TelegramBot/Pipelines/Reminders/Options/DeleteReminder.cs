@@ -1,11 +1,8 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services.Reminders;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
+﻿using Application.Services.Reminders;
 using System;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
 
 namespace Application.TelegramBot.Commands.Pipelines.Reminders.Options;
 
@@ -24,7 +21,7 @@ public class DeleteReminder : ITelegramCommand
             Text = "Do you want to delete the reminder?",
             Menu = new Menu(Menu.MenuType.MessageMenu, new[]
             {
-                new[] { new Button("Yes", true.ToString() )},
+                [new Button("Yes", true.ToString() )],
                 new[] { new Button("No", false.ToString() )}
             })
         });   

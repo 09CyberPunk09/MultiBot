@@ -1,12 +1,10 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Commands.Pipelines.Reminders;
+﻿using Application.TelegramBot.Commands.Pipelines.Reminders;
 using Application.TelegramBot.Pipelines.V2.Pipelines.NotesV2;
 using Application.TelegramBot.Pipelines.V2.Pipelines.ToDo.ToDoItems;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Commands.Routing;
 
 namespace Application.TelegramBot.Commands.Pipelines.DefaultBehavior;
 

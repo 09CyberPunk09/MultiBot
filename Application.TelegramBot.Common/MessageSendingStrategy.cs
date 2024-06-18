@@ -19,7 +19,7 @@ public class MessageSendingStrategy
     public async Task<Message> SendMessage(ContentResultV2 result)
     {
         Message messageResponse = default;
-        var contentResult = result as AdressedContentResult;
+        var contentResult = result;
         bool edited = contentResult.Edited;
         bool hasPhoto = contentResult.Photo != null;
         InputFile photo = null;
@@ -31,11 +31,12 @@ public class MessageSendingStrategy
                 using WebClient client = new WebClient();
                 byte[] data = client.DownloadData(contentResult.Photo.Url);
                 MemoryStream mem = new(data);
-                photo = new InputFile(mem);
+                photo = InputFile.FromStream(mem);
+                var chatId = new ChatId(result.ChatId.Value);
                 await _uiClient.SendPhotoAsync(
                   chatId: chatId,
-                  caption: message.Text,
-                  photo: t,
+                  caption: result.Text,
+                  photo: photo,
                   parseMode: ParseMode.Html);
             }
         }

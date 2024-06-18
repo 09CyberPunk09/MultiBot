@@ -1,18 +1,17 @@
-﻿using Application.Chatting.Core;
-using Application.Services.Users;
+﻿using Application.Services.Users;
 using Autofac;
-using Common.Entites;
 using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Dto;
 
 namespace LifeTracker.TelegramBot.IOHandler
 {
@@ -99,7 +98,7 @@ namespace LifeTracker.TelegramBot.IOHandler
             // return Task.CompletedTask;
         }
 
-        private async Task<List<UploadedFileDto>> DownloadAndSavePhoto(Guid userId, Message message)
+        public async Task<List<UploadedFileDto>> DownloadAndSavePhoto(Guid userId, Message message)
         {
             var fileHashes = new List<UploadedFileDto>();
             var client = _container.Resolve<ITelegramBotClient>();
@@ -149,6 +148,11 @@ namespace LifeTracker.TelegramBot.IOHandler
         {
             var userService = _container.Resolve<UserAppService>();
             return userService.GetByTgId(userId).Id;
+        }
+
+        public Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Autofac;
+﻿using Autofac;
 using Common.Configuration;
 using Infrastructure.Queuing.Core;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
 using Telegram.Bot;
+using TelegramBot.ChatEngine.Commands.Repsonses;
 
 namespace LifeTracker.TelegramBot.IOHandler
 {

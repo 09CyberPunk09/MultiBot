@@ -1,9 +1,4 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services.Reminders;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
+﻿using Application.Services.Reminders;
 using Application.TelegramBot.Commands.Pipelines.DefaultBehavior;
 using Application.TelegramBot.Commands.Pipelines.SChedulingV2.Helpers;
 using Common.Entites.Scheduling;
@@ -11,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
 using static Application.TelegramBot.Commands.Pipelines.Reminders.AcceptReminderTextAndAskFiringType;
 
 namespace Application.TelegramBot.Commands.Pipelines.Reminders;
@@ -135,7 +132,7 @@ public class AcceptScheduleExpressionAndSavReminder : ITelegramStage
 
         _service.Create(new()
         {
-            UserId = ctx.User.Id,
+            //UserId = ctx.User.Id,
             ScheduleExpression = schedulerExpression,
             Text = reminderName
         });

@@ -1,7 +1,7 @@
-﻿using Application.Chatting.Core;
-using Common.Configuration;
+﻿using Common.Configuration;
 using Infrastructure.Queuing;
 using Infrastructure.Queuing.Core;
+using TelegramBot.ChatEngine.Commands;
 
 namespace LifeTracker.TelegramBot.IOHandler
 {

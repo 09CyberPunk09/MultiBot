@@ -1,10 +1,8 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Common.Entites.Scheduling;
+﻿using Common.Entites.Scheduling;
 using Quartz;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 

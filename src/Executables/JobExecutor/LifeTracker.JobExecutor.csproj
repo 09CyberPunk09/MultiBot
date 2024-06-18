@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Application.TelegramBot.Common\Application.TelegramBot.Common.csproj" />
     <ProjectReference Include="..\..\..\Integration.Applications\Integration.Applications.csproj" />
     <ProjectReference Include="..\..\..\SimpleScheduler\SimpleJobScheduler.csproj" />
     <ProjectReference Include="..\..\Domain.TelegramBot\Application.TelegramBot.Commands.csproj" />

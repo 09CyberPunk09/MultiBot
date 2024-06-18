@@ -1,16 +1,15 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
-using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
+﻿using Application.TelegramBot.Pipelines.Old.MessagePipelines.Scheduling;
 using Common.Entites.Scheduling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Application.Chatting.Core.Repsonses.Menu;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Commands.Routing;
 using static Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines.SelectDayStage;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Commands.Pipelines.SChedulingV2.Pipelines;
 

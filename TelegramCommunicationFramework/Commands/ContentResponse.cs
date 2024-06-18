@@ -1,4 +1,6 @@
-﻿namespace TelegramBot.ChatEngine.Commands.Repsonses;
+﻿using TelegramBot.ChatEngine.Commands.Repsonses;
+
+namespace TelegramBot.ChatEngine.Commands;
 
 public class ContentResponse
 {

@@ -1,12 +1,12 @@
-﻿using Application.Chatting.Core.Interfaces;
-using Application.Services.Reminders.Dto;
-using Application.Telegram.Implementations;
-using Application.TelegramBot.Commands.Core;
+﻿using Application.Services.Reminders.Dto;
 using Common;
 using Quartz;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TelegramBot.ChatEngine.Commands.Interfaces;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using TelegramBot.ChatEngine.Implementation.Dro;
 
 namespace Application.TelegramBot.Commands.Jobs.Reminders;
 
@@ -64,9 +64,9 @@ public class SendReminderJobConfiguration : IConfiguredJob<SendReminderJobPayloa
 
 public class SendReminderJob : IJob
 {
-    private readonly IMessageSender<SentTelegramMessage> _sender;
+    private readonly IMessageSender _sender;
 
-    public SendReminderJob(IMessageSender<SentTelegramMessage> sender)
+    public SendReminderJob(IMessageSender sender)
     {
         _sender = sender;
     }
@@ -77,7 +77,7 @@ public class SendReminderJob : IJob
         List<Task> tasks = new();
         for (int i = 0; i < 4; i++)
         {
-            tasks.AddRange(chatIds.Select(x => _sender.SendMessageAsync(new AdressedContentResult()
+            tasks.AddRange(chatIds.Select(x => _sender.SendMessageAsync(new ContentResultV2()
             {
                 ChatId = x,
                 Text = $@"

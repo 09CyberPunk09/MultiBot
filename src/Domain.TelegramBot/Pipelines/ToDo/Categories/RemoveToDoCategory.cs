@@ -1,13 +1,10 @@
-﻿using Application.Chatting.Core.Repsonses;
-using Application.Chatting.Core.Routing;
-using Application.Chatting.Core.StageMap;
-using Application.Services;
-using Application.TelegramBot.Commands.Core.Context;
-using Application.TelegramBot.Commands.Core.Interfaces;
+﻿using Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static Application.Chatting.Core.Repsonses.Menu;
+using TelegramBot.ChatEngine.Commands;
+using TelegramBot.ChatEngine.Commands.Repsonses;
+using static TelegramBot.ChatEngine.Commands.Repsonses.Menu;
 
 namespace Application.TelegramBot.Pipelines.V2.Pipelines.ToDo.Categories;
 
